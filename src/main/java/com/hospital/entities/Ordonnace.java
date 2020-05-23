@@ -1,5 +1,6 @@
 package com.hospital.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,5 +17,6 @@ public class Ordonnace implements Serializable {
     private Long id;
 
     @ManyToOne
+    @JsonIgnoreProperties("ordonnances")
     private DosMedical dosMedical;
 }

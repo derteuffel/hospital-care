@@ -1,5 +1,6 @@
 package com.hospital.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,5 +16,6 @@ public class Incubator implements Serializable {
     private Long id;
 
     @ManyToOne
+    @JsonIgnoreProperties("incubators")
     private Hospital hospital;
 }

@@ -1,5 +1,6 @@
 package com.hospital.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,5 +20,6 @@ public class BloodBank implements Serializable {
     private Boolean state;
 
     @ManyToOne
+    @JsonIgnoreProperties("bloodBanks")
     private Hospital hospital;
 }

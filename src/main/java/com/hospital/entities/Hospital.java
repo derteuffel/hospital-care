@@ -2,6 +2,10 @@ package com.hospital.entities;
 
 
 import lombok.Data;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,8 +25,13 @@ public class Hospital implements Serializable {
     private String province;
 
     @OneToMany(mappedBy = "hospital")
+    @OnDelete(action= OnDeleteAction.NO_ACTION)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<BloodBank>bloodBanks;
+
     @OneToMany(mappedBy = "hospital")
+    @OnDelete(action= OnDeleteAction.NO_ACTION)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Incubator>incubators;
 
 }
