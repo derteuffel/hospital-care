@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface CompteRepository extends JpaRepository<Compte, Long> {
     Compte findByUsername(String username);
-    Optional<Compte>findByPersonnal_Id(Long id);
+
 }
