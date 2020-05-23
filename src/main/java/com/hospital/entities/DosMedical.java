@@ -8,7 +8,7 @@ import java.util.Collection;
 
 @Entity
 @Data
-@Table(name = "dossier_medical")
+@Table(name = "DosMedical")
 public class DosMedical implements Serializable {
 
     @Id
@@ -24,8 +24,8 @@ public class DosMedical implements Serializable {
     private String code;
 
 
-    @OneToMany(mappedBy = "dossier_medical")
+    @OneToMany(mappedBy = "DosMedical")
     private Collection<Consultation>consultations;
-    @OneToMany(mappedBy = "dossier_medical")
+    @OneToMany(mappedBy = "DosMedical")
     private Collection<Ordonnace>ordonnaces;
 }

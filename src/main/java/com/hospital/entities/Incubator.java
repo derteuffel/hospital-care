@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = "couveuse")
+@Table(name = "incubator")
 public class Incubator implements Serializable {
 
     @Id

@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = "blood_bank")
+@Table(name = "BloodBank")
 public class BloodBank implements Serializable {
 
     @Id
