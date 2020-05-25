@@ -23,6 +23,6 @@ public class BloodBank implements Serializable {
 
 
     @ManyToOne
-    @JsonIgnoreProperties("bloodBanks")
+    @JsonIgnoreProperties("bloodbanks")
     private Hospital hospital;
 }

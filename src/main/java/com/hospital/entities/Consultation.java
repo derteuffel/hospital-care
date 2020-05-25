@@ -1,15 +1,11 @@
 package com.hospital.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-<<<<<<< HEAD
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.OnDeleteAction;
-=======
 import org.springframework.format.annotation.DateTimeFormat;
->>>>>>> fix-errors
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -30,12 +26,6 @@ public class Consultation implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date date;
-
-
-    @ManyToOne
-    @JsonIgnoreProperties("consultations")
-    private DosMedical dosMedical;
-
 
     @OneToMany(mappedBy = "consultation")
     @OnDelete(action= OnDeleteAction.NO_ACTION)

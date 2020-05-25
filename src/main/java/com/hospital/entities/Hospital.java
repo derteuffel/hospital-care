@@ -36,13 +36,10 @@ public class Hospital implements Serializable {
     private Collection<Personnel> personnels;
 
     @OneToMany(mappedBy = "hospital")
-<<<<<<< HEAD
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<BloodBank>bloodBanks;
-=======
-    private Collection<BloodBank> bloodBanks;
->>>>>>> fix-errors
+
 
     @OneToMany(mappedBy = "hospital")
     @OnDelete(action= OnDeleteAction.NO_ACTION)

@@ -34,21 +34,14 @@ public class DosMedical implements Serializable {
     @OneToOne
     private Compte compte;
 
-<<<<<<< HEAD
-    @OneToMany(mappedBy = "DosMedical")
+    @OneToMany(mappedBy = "dosMedical")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Consultation>consultations;
 
-    @OneToMany(mappedBy = "DosMedical")
-    @OnDelete(action= OnDeleteAction.NO_ACTION)
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-=======
-    @OneToMany(mappedBy = "dosMedical")
-    private Collection<Consultation>consultations;
+
 
     @OneToMany(mappedBy = "dosMedical")
->>>>>>> fix-errors
     private Collection<Ordonnace>ordonnaces;
 
 }

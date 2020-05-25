@@ -23,6 +23,6 @@ public class Examen implements Serializable {
     private Date date;
 
     @ManyToOne
-    @JsonIgnoreProperties("examen")
+    @JsonIgnoreProperties("examens")
     private Consultation consultation;
 }
