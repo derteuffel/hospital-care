@@ -1,10 +1,7 @@
 package com.hospital.entities;
 
 import lombok.Data;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.OnDeleteAction;
+
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -34,14 +31,10 @@ public class DosMedical implements Serializable {
     @OneToOne
     private Compte compte;
 
-    @OneToMany(mappedBy = "dosMedical")
-    @OnDelete(action= OnDeleteAction.NO_ACTION)
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @OneToMany
     private Collection<Consultation>consultations;
 
-
-
-    @OneToMany(mappedBy = "dosMedical")
+    @OneToMany
     private Collection<Ordonnace>ordonnaces;
 
 }
