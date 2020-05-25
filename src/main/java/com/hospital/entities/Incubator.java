@@ -7,15 +7,22 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Data
 @Table(name = "incubator")
+@Data
 public class Incubator implements Serializable {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Integer quantity;
+
+    private Boolean status;
+
     @ManyToOne
     @JsonIgnoreProperties("incubators")
     private Hospital hospital;
+
+
 }

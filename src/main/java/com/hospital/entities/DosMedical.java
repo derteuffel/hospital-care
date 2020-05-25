@@ -10,24 +10,31 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 
+
 @Entity
 @Data
-@Table(name = "DosMedical")
 public class DosMedical implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String rh;
-    private String size;
-    private String weight;
-    private String age;
-    private String hereditaryDisease;
+    private String rhesus;
+
+    private Integer weight;
+
+    private Integer age;
+
+    private String hereditaryDiseases;
+
     private String description;
+
     private String code;
 
+    @OneToOne
+    private Compte compte;
 
+<<<<<<< HEAD
     @OneToMany(mappedBy = "DosMedical")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -36,5 +43,12 @@ public class DosMedical implements Serializable {
     @OneToMany(mappedBy = "DosMedical")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+=======
+    @OneToMany(mappedBy = "dosMedical")
+    private Collection<Consultation>consultations;
+
+    @OneToMany(mappedBy = "dosMedical")
+>>>>>>> fix-errors
     private Collection<Ordonnace>ordonnaces;
+
 }

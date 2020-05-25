@@ -6,18 +6,21 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 
-
 @Entity
+@Table(name = "bloodbank")
 @Data
-@Table(name = "BloodBank")
 public class BloodBank implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String reference;
+
     private Integer quantity;
-    private Boolean state;
+
+    private Boolean status;
+
 
     @ManyToOne
     @JsonIgnoreProperties("bloodBanks")
