@@ -6,26 +6,34 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 
+
 @Entity
 @Data
-@Table(name = "DosMedical")
 public class DosMedical implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String rh;
-    private String size;
-    private String weight;
-    private String age;
-    private String hereditaryDisease;
+    private String rhesus;
+
+    private Integer weight;
+
+    private Integer age;
+
+    private String hereditaryDiseases;
+
     private String description;
+
     private String code;
 
+    @OneToOne
+    private Compte compte;
 
-    @OneToMany(mappedBy = "DosMedical")
+    @OneToMany(mappedBy = "dosMedical")
     private Collection<Consultation>consultations;
-    @OneToMany(mappedBy = "DosMedical")
+
+    @OneToMany(mappedBy = "dosMedical")
     private Collection<Ordonnace>ordonnaces;
+
 }
