@@ -1,6 +1,8 @@
 package com.hospital.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,6 +11,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "compte")
 @Data
+@AllArgsConstructor @NoArgsConstructor
 public class Compte implements Serializable {
 
     @Id
@@ -34,4 +37,10 @@ public class Compte implements Serializable {
     private Personnel personnel;
 
 
+    public Compte(String username, String email, Boolean status) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.status = status;
+    }
 }
