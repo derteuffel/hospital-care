@@ -1,12 +1,13 @@
 package com.hospital.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+
 
 @Entity
 @Data
@@ -22,13 +23,9 @@ public class Examen implements Serializable {
 
     private String testType;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.DATE)
-    private Date deliverDate;
+    private String deliverDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.DATE)
-    private Date dateOfTesting;
+    private String dateOfTesting;
 
     private String results;
 

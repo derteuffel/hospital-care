@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 
+
 @Entity
 @Table(name = "incubator")
 @Data
@@ -17,6 +18,10 @@ public class Incubator implements Serializable {
     private Long id;
 
     private Integer quantity;
+
+    private String incubartorNo;
+
+    private String dateObtained;
 
     private Boolean status;
 
