@@ -12,15 +12,27 @@ import java.util.Date;
 @Data
 public class Examen implements Serializable {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
+    private String testType;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date date;
+    private Date deliverDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfTesting;
+
+    private String results;
+
+    private String description;
 
     @ManyToOne
     @JsonIgnoreProperties("examens")

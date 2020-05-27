@@ -13,7 +13,11 @@ public class Personnel implements Serializable {
 
     private String lastName;
     private String firstName;
+    private String email;
     private String phone;
     private String city;
-    private String fuction;
+    private String function;
+    private String gender;
+    private Integer age;
+    private String address;
 }
