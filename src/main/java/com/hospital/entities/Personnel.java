@@ -1,10 +1,13 @@
 package com.hospital.entities;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "personnel")
+@Data
 public class Personnel implements Serializable {
 
     @Id
@@ -20,4 +23,5 @@ public class Personnel implements Serializable {
     private String gender;
     private Integer age;
     private String address;
+    private String avatar;
 }
