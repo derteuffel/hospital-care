@@ -5,7 +5,7 @@ import com.hospital.entities.Hospital;
 import com.hospital.entities.Incubator;
 import com.hospital.helpers.IncubatorHelper;
 import com.hospital.repository.HospitalRepository;
-import com.hospital.repository.IncubartorRepository;
+import com.hospital.repository.IncubatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import javax.validation.Valid;
@@ -23,11 +23,11 @@ import java.util.Date;
 
 @Controller
 @RequestMapping("/hospital-care/incubator")
-public class IncubartorController {
+public class IncubatorController {
 
 
     @Autowired
-    private IncubartorRepository incubartorRepository;
+    private IncubatorRepository incubatorRepository;
 
     @Autowired
     private HospitalRepository hospitalRepository;
@@ -43,11 +43,11 @@ public class IncubartorController {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy/mm/dd hh:mm");
         incubator.setDateObtained(dateFormat.format(date));
-        incubator.setIncubartorNo(incubatorHelper.getIncubartorNo());
+        incubator.setIncubatorNo(incubatorHelper.getIncubatorNo());
         incubator.setQuantity(incubatorHelper.getQuantity());
         incubator.setStatus(incubatorHelper.getStatus());
-        incubator.setHospital(hospital);
-        incubartorRepository.save(incubator);
+        //incubator.setHospital(hospital);
+        incubatorRepository.save(incubator);
 
         return ""; /**** ici on va voir la vue qu'il faut mettre *****/
 
@@ -57,9 +57,9 @@ public class IncubartorController {
     @GetMapping("/detail/{id}")
     public String getIncubator(@PathVariable Long id, Model model){
 
-        Incubator incubator = incubartorRepository.getOne(id);
+       // Incubator incubator = incubartorRepository.getOne(id);
 
-        model.addAttribute("incubator", incubator);
+       // model.addAttribute("incubator", incubator);
 
         return ""; /**** ici on va voir la vue qu'il faut mettre *****/
     }

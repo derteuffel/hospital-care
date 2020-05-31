@@ -37,13 +37,13 @@ public class ExamenController {
         Examen examen = new Examen();
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy/mm/dd hh:mm");
-        examen.setDateOfTesting(dateFormat.format(date));
-        examen.setDeliverDate(dateFormat.format(date));
-        examen.setName(examenHelper.getName());
-        examen.setResults(examenHelper.getResults());
-        examen.setTestType(examenHelper.getTestType());
-        examen.setDescription(examenHelper.getDescription());
-        examen.setConsultation(consultation);
+        //examen.setDateOfTesting(dateFormat.format(date));
+       // examen.setDeliverDate(dateFormat.format(date));
+       // examen.setName(examenHelper.getName());
+       // examen.setResults(examenHelper.getResults());
+       // examen.setTestType(examenHelper.getTestType());
+       // examen.setDescription(examenHelper.getDescription());
+       // examen.setConsultation(consultation);
         examenRepository.save(examen);
 
         return ""; /**** ici on va voir la vue qu'il faut mettre *****/

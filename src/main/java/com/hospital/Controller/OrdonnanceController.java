@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/hospital-care/ordonnace")
-public class OrdonnaceController {
+public class OrdonnanceController {
 
     @Autowired
     private OrdonnanceRepository ordonnanceRepository;
