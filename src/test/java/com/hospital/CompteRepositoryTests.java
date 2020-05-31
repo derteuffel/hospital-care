@@ -21,7 +21,7 @@ import static org.junit.Assert.assertNotNull;
 public class CompteRepositoryTests {
 
 
-    @Autowired
+   /* @Autowired
     private CompteRepository compteRepository;
 
     @Test
@@ -70,5 +70,5 @@ public class CompteRepositoryTests {
         compte2.setUsername("django");
         compte2.setPassword("enzo123");
         compteRepository.save(compte2);
-    }
+    }*/
 }
