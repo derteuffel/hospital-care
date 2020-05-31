@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Data
-public class Ordonnace implements Serializable {
+public class Ordonnance implements Serializable {
 
 
     @Id
