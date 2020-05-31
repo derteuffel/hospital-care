@@ -72,7 +72,7 @@ public class CompteServiceImpl implements CompteService {
             roleRepository.save(role);
             compte.setRoles(Arrays.asList(role));
         }
-        compte.setPersonnel(personnel);
+        //compte.setPersonnel(personnel);
         compteRepository.save(compte);
         return compte;
     }
