@@ -11,5 +11,5 @@ public interface CompteRepository  extends JpaRepository<Compte, Long> {
 
     Compte findByUsername(String username);
 
-    Optional<Compte>findByPersonnel_Id(Long id);
+    Optional<Compte>findByPersonnels_Id(Long id);
 }
