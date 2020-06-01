@@ -19,7 +19,6 @@ import java.util.Date;
 @Data
 public class Consultation implements Serializable {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
