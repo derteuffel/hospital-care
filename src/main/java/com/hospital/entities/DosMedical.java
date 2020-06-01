@@ -1,6 +1,5 @@
 package com.hospital.entities;
 
-import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.Cache;
@@ -34,15 +33,14 @@ public class DosMedical implements Serializable {
     @OneToOne
     private Compte compte;
 
-    @OneToMany(mappedBy = "dosMedical")
-    @OnDelete(action= OnDeleteAction.NO_ACTION)
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @OneToMany
     private Collection<Consultation>consultations;
+
 
     @OneToMany(mappedBy = "dosMedical")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Collection<Ordonnace>ordonnaces;
+    private Collection<Ordonnance>ordonnances;
 
 
     public DosMedical() {
@@ -50,7 +48,7 @@ public class DosMedical implements Serializable {
 
     public DosMedical(String rhesus, Integer weight, Integer age, String hereditaryDiseases,
                       String description, String code, Compte compte, Collection<Consultation> consultations,
-                      Collection<Ordonnace> ordonnaces) {
+                      Collection<Ordonnance> ordonnances) {
         this.rhesus = rhesus;
         this.weight = weight;
         this.age = age;
@@ -59,7 +57,7 @@ public class DosMedical implements Serializable {
         this.code = code;
         this.compte = compte;
         this.consultations = consultations;
-        this.ordonnaces = ordonnaces;
+        this.ordonnances = ordonnances;
     }
 
 
@@ -135,11 +133,16 @@ public class DosMedical implements Serializable {
         this.consultations = consultations;
     }
 
-    public Collection<Ordonnace> getOrdonnaces() {
-        return ordonnaces;
+    public Collection<Ordonnance> getOrdonnances() {
+        return ordonnances;
     }
 
-    public void setOrdonnaces(Collection<Ordonnace> ordonnaces) {
-        this.ordonnaces = ordonnaces;
+    public void setOrdonnances(Collection<Ordonnance> ordonnances) {
+        this.ordonnances = ordonnances;
     }
+
+
+
+
+
 }
