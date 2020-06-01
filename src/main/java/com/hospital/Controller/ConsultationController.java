@@ -17,17 +17,19 @@ import java.util.Optional;
 @RequestMapping("/hospital-care/consultation")
 public class ConsultationController {
 
-
     @Autowired
     private ConsultationRepository consultationRepository;
-
     @Autowired
     private DosMedicalRepository dosMedicalRepository;
+    @Autowired
+    private DosMedicalRepository hospitalRepository;
+
 
     /** Get all consultations in a medical record */
-    @GetMapping(value = "/medical-record/{id}")
-    public List<Consultation> getAllConsultationsInMedicalRecord(){
-        List<Consultation> consultations = consultationRepository.findAll();
+    @GetMapping(value = "/medical-record/{code}")
+    public List<Consultation> getAllConsultationsInMedicalRecord(@PathVariable String code){
+        DosMedical dosMedical = dosMedicalRepository.findByCode(code);
+        List<Consultation> consultations = consultationRepository.findByDosMedical(dosMedical);
         return consultations;
     }
 

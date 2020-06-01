@@ -21,11 +21,13 @@ public class DashboardController {
     public String doctors(){
         return "dashboard/pages/admin/doctors";
     }
-    /*@GetMapping("/dashboard")
-    public String index(){
-        return "dashboard/pages/admin/dashboard";
+
+    @GetMapping("/addDosMedical")
+    public String addDosMedical(){
+        return "dashboard/pages/admin/addDosMedical";
     }
-    @GetMapping("/dashboard")
+
+    /*@GetMapping("/dashboard")
     public String index(){
         return "dashboard/pages/admin/dashboard";
     }*/
