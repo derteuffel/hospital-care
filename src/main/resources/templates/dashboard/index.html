@@ -21,7 +21,7 @@
 <body>
     <div class="main-wrapper">
         <div class="header" th:replace="~{../templates/dashboard/fragments/navbar :: topbar}"></div>
-		<div class="sidebard" id="sidebar" th:replace="~{../templates/dashboard/fragments/navbar :: #sidebar}"></div>
+		<div class="sidebar" id="sidebar" th:replace="~{../templates/dashboard/fragments/navbar :: #sidebar}"></div>
         <div class="page-wrapper">
 			<div class="content" layout:fragment="content"></div>
 			<div class="notification-box" th:replace="~{../templates/dashboard/fragments/notifications :: notifications}"></div>

@@ -10,6 +10,7 @@ public class HospitalCareApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HospitalCareApplication.class, args);
+		System.out.println("google");
 	}
 
 }
