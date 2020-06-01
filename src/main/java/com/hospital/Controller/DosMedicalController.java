@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,8 +32,13 @@ public class DosMedicalController {
 
     /** Add a medical record */
     @PostMapping(value = "/")
-    public DosMedical addMedicalRecord(@RequestBody DosMedical dosMedical){
-         dos.save(dosMedical);
+    public DosMedical addMedicalRecord(@Valid @RequestBody DosMedical dosMedical){
+         //dos.save(dosMedical);
+        System.out.println(dosMedical.getAge());
+        System.out.println(dosMedical.getRhesus());
+        System.out.println(dosMedical.getWeight());
+        System.out.println(dosMedical.getHereditaryDiseases());
+        System.out.println(dosMedical.getDescription());
         return dosMedical;
     }
 

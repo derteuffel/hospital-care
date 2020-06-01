@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DosMedicalRepository extends JpaRepository<DosMedical, Long> {
+    DosMedical findByCode(String code);
 }

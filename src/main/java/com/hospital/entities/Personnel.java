@@ -23,5 +23,4 @@ public class Personnel implements Serializable {
     private String gender;
     private Integer age;
     private String address;
-    private String avatar;
 }

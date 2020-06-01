@@ -6,8 +6,8 @@
 
 <div class="header" th:fragment="topbar">
     <div class="header-left">
-        <a href="index-2.html" class="logo">
-            <img src="assets/img/logo.png" width="35" height="35" alt=""> <span>Preclinic</span>
+        <a th:href="@{/admin/dashboard}" class="logo">
+            <img th:src="@{/assets/img/logo.png}" width="35" height="35" alt=""> <span>Preclinic</span>
         </a>
     </div>
     <a id="toggle_btn" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
@@ -25,7 +25,7 @@
                             <a href="activities.html">
                                 <div class="media">
 											<span class="avatar">
-												<img alt="John Doe" src="assets/img/user.jpg" class="img-fluid">
+												<img alt="John Doe" th:src="@{/assets/img/user.jpg}" class="img-fluid">
 											</span>
                                     <div class="media-body">
                                         <p class="noti-details"><span class="noti-title">John Doe</span> added new task <span class="noti-title">Patient appointment booking</span></p>
@@ -118,10 +118,10 @@
             <ul>
                 <li class="menu-title">Main</li>
                 <li class="active">
-                    <a href="index-2.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+                    <a th:href="@{/admin/dashboard}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
                 </li>
                 <li>
-                    <a href="doctors.html"><i class="fa fa-user-md"></i> <span>Doctors</span></a>
+                    <a th:href="@{/admin/doctors}"><i class="fa fa-user-md"></i> <span>Doctors</span></a>
                 </li>
                 <li>
                     <a href="patients.html"><i class="fa fa-wheelchair"></i> <span>Patients</span></a>
@@ -132,8 +132,12 @@
                 <li>
                     <a href="schedule.html"><i class="fa fa-calendar-check-o"></i> <span>Doctor Schedule</span></a>
                 </li>
-                <li>
-                    <a href="departments.html"><i class="fa fa-hospital-o"></i> <span>Departments</span></a>
+                <li class="submenu">
+                    <a href="#"><i class="fa fa-hospital-o"></i> <span>Hospitals</span></a>
+                    <ul style="display: none;">
+                        <li><a th:href="@{/admin/hospital/all}">Hospitals List</a></li>
+                        <li><a href="leaves.html">Add Hospital</a></li>
+                    </ul>
                 </li>
                 <li class="submenu">
                     <a href="#"><i class="fa fa-user"></i> <span> Employees </span> <span class="menu-arrow"></span></a>
