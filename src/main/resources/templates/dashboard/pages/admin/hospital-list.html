@@ -9,11 +9,24 @@
 <div class="content" layout:fragment="content">
     <div class="row">
         <div class="col-sm-5 col-5">
-            <h4 class="page-title">Departments</h4>
+            <h4 class="page-title">Hospitals</h4>
         </div>
         <div class="col-sm-7 col-7 text-right m-b-30">
-            <a href="add-department.html" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Add Department</a>
+            <a th:href="@{/admin/hospital/add}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Add Hospital</a>
         </div>
+    </div>
+    <div class="row filter-row">
+        <form th:action="@{/admin/hospital/search}" method="post" th:object="${hospital}" id="search">
+        <div class="col-sm-6 col-md-3">
+            <div class="form-group form-focus">
+                <label class="focus-label">Search Key</label>
+                <input type="text" class="form-control floating" th:field="*{name}" autofocus>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <a href="#" class="btn btn-success btn-block" onclick="event.preventDefault();document.getElementById('search').submit();"> Search </a>
+        </div>
+        </form>
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -51,7 +64,7 @@
     </div>
     <div class="row">
         <div class="col-sm-12 col-md-5">
-            <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing 1 to 6 of 6 entries</div>
+            <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite" th:text="'Showing 1 to '+ ${currentEntries} +' of '+ ${entries} +' entries'"></div>
         </div><div class="col-sm-12 col-md-7">
         <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
             <ul class="pagination">
