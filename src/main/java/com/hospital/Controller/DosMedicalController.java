@@ -67,6 +67,4 @@ public class DosMedicalController {
         return dos.findById(id);
     }
 
-
-
 }
