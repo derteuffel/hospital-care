@@ -4,6 +4,7 @@ package com.hospital.services;
 import com.hospital.entities.Compte;
 import com.hospital.entities.Personnel;
 import com.hospital.entities.Role;
+import com.hospital.enums.ERole;
 import com.hospital.helpers.CompteRegistrationDto;
 import com.hospital.repository.CompteRepository;
 import com.hospital.repository.PersonnelRepository;
@@ -58,9 +59,9 @@ public class CompteServiceImpl implements CompteService {
         personnelRepository.save(personnel);
         Role role = new Role();
         if (compteRepository.findAll().size()<=2){
-            role.setName("ROLE_ROOT");
+            role.setName(ERole.ROLE_ROOT.toString());
         }else {
-            role.setName("ROLE_USER");
+            role.setName(ERole.ROLE_ADMIN.toString());
         }
         Optional<Role> existRole =  roleRepository.findByName(role.getName());
         if (existRole.isPresent()){

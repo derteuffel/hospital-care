@@ -1,5 +1,6 @@
 package com.hospital.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.Cache;
@@ -7,6 +8,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -18,14 +22,19 @@ public class DosMedical implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Size(min = 1, max = 1)
     private String rhesus;
 
+    @NotNull
     private Integer weight;
 
+    @NotNull
     private Integer age;
 
     private String hereditaryDiseases;
 
+    @NotNull
     private String description;
 
     private String code;
@@ -33,7 +42,15 @@ public class DosMedical implements Serializable {
     @OneToOne
     private Compte compte;
 
-    @OneToMany
+
+
+
+
+
+    @JsonIgnoreProperties("dosMedical")
+    @OneToMany(mappedBy = "dosMedical")
+    @OnDelete(action= OnDeleteAction.NO_ACTION)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Consultation>consultations;
 
 

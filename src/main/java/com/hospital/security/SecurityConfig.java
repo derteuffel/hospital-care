@@ -3,6 +3,7 @@ package com.hospital.security;
 
 import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -22,48 +23,50 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .antMatcher("/hospital-care/**").authorizeRequests()
-                .antMatchers("/hospital-care/**").access("hasAnyRole('ROLE_ROOT','ROLE_COORDINATOR')")
-                .and()
-                .formLogin()
-                .loginPage("/hospital-care/login")
-                .loginProcessingUrl("/hospital-care/login/process")
-                .defaultSuccessUrl("/")
-                .permitAll()
-                .and()
-                .logout()
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout")
-                .and()
-                .exceptionHandling().accessDeniedPage("/access-denied");
-    }
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+        http.
+                authorizeRequests()
+                .antMatchers("/login","/registration", "/").permitAll()
+                .antMatchers("/admin/**","/hospital-care/**").access("hasAnyRole('ROLE_ADMIN','ROLE_ROOT')")
+                .anyRequest()
+                .authenticated().and().csrf().disable().formLogin()
+                .loginPage("/login").failureUrl("/login?error=true")
+                .defaultSuccessUrl("/admin/dashboard")
+                .and().logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
-    @Autowired
-    private DaoAuthenticationProvider authenticationProvider;
-
-    @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider);
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/js/**",
+                .antMatchers("/","/registration**",
+                        "/fonts/**",
+                        "/assets/**",
                         "/css/**",
-                        "/images/**",
-                        "/vendor/**",
+                        "/img/**",
+                        "/js/**",
                         "/downloadFile/**",
-                        "/fonts**",
-                        "/coordinator/kidole/registration",
-                        "/static/**"
+                        "/scss/**"
                 );
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+        auth.setUserDetailsService(compteService);
+        auth.setPasswordEncoder(passwordEncoder());
+        return auth;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
     }
 }

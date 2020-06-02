@@ -1,8 +1,3 @@
-/*
-Author       : Dreamguys
-Template Name: PreClinic - Medical and Hospital Admin Template
-Version      : 1.0
-*/
 $(document).ready(function($) {
 	
 	// Variables declarations
@@ -149,6 +144,7 @@ $(document).ready(function($) {
 	}
 	
 	// Datatable
+	//$('.datatable').DataTable();
 	if($('.datatable').length > 0) {
 		$('.datatable').DataTable({
 			"bFilter": false,

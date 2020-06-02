@@ -19,7 +19,7 @@ public class Incubator implements Serializable {
 
     private Integer quantity;
 
-    private String incubatorNo;
+    private String incubartorNo;
 
     private String dateObtained;
 
@@ -47,11 +47,11 @@ public class Incubator implements Serializable {
     }
 
     public String getIncubatorNo() {
-        return incubatorNo;
+        return incubartorNo;
     }
 
     public void setIncubatorNo(String incubatorNo) {
-        this.incubatorNo = incubatorNo;
+        this.incubartorNo = incubatorNo;
     }
 
     public Integer getQuantity() {

@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/hospital-care")
+//@RequestMapping("/hospital-care")
 public class LoginController {
 
     @Autowired
@@ -52,7 +52,8 @@ public class LoginController {
 
     @PostMapping("/registration")
     public String registerUserAccount(@ModelAttribute("compte") @Valid CompteRegistrationDto compteDto,
-                                      BindingResult result, RedirectAttributes redirectAttributes, Model model, @RequestParam("file") MultipartFile file) {
+                                      BindingResult result, RedirectAttributes redirectAttributes, Model model,
+                                      @RequestParam("file") MultipartFile file) {
 
         System.out.println(compteDto.getUsername());
         Compte existing = compteService.findByUsername(compteDto.getUsername());

@@ -24,6 +24,10 @@
         <div class="account-center">
             <div class="account-box">
                 <form th:action="@{/login}" method="post" class="form-signin">
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger">Invalid username or
+                            password.</div>
+                    </div>
                     <div class="account-logo">
                         <a href="index-2.html"><img src="assets/img/logo-dark.png" alt=""></a>
                     </div>
@@ -42,7 +46,7 @@
                         <button type="submit" class="btn btn-primary account-btn">Login</button>
                     </div>
                     <div class="text-center register-link">
-                        Don’t have an account? <a href="register.html">Register Now</a>
+                        Don’t have an account? <a  th:href="@{/registration}">Register Now</a>
                     </div>
                 </form>
             </div>
