@@ -7,7 +7,7 @@
 <div class="header" th:fragment="topbar">
     <div class="header-left">
         <a th:href="@{/admin/dashboard}" class="logo">
-            <img th:src="@{/assets/img/logo.png}" width="35" height="35" alt=""> <span>Preclinic</span>
+            <img th:src="@{/assets/img/logo.png}" width="35" height="35" alt=""> <span>Hospital Care</span>
         </a>
     </div>
     <a id="toggle_btn" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
@@ -124,10 +124,10 @@
                     <a th:href="@{/admin/doctors}"><i class="fa fa-user-md"></i> <span>Doctors</span></a>
                 </li>
                 <li>
-                    <a href="patients.html"><i class="fa fa-wheelchair"></i> <span>Patients</span></a>
+                    <a th:href="@{/admin/medical-record/all}"><i class="fa fa-wheelchair"></i> <span>Patients</span></a>
                 </li>
                 <li>
-                    <a href="appointments.html"><i class="fa fa-calendar"></i> <span>Appointments</span></a>
+                    <a href="a.html"><i class="fa fa-calendar"></i> <span>Appointments</span></a>
                 </li>
                 <li>
                     <a href="schedule.html"><i class="fa fa-calendar-check-o"></i> <span>Doctor Schedule</span></a>

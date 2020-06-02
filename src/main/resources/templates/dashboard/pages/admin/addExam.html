@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Add an Exam</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h4 class="page-title">Add Exam</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <form method="post" action="/admin/exam/create">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input class="form-control" type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Test Type</label>
+                    <input class="form-control" type="type" name="testType" required>
+                </div>
+                <div class="form-group">
+                    <label>Date Of Testing</label>
+                    <input class="form-control" type="date" name="dateOfTesting" required>
+                </div>
+                <div class="form-group">
+                    <label>Deliver Date</label>
+                    <input class="form-control" type="date" name="deliverDate">
+                </div>
+                <div class="form-group">
+                    <label>Results</label>
+                    <input class="form-control" type="text" name="results">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea cols="30" rows="4" class="form-control" name="description"></textarea>
+                </div>
+                <div class="m-t-20 text-center">
+                    <button class="btn btn-primary submit-btn">Create Exam</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

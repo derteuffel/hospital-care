@@ -8,8 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface CompteRepository  extends JpaRepository<Compte, Long> {
-/*
-    Compte findByUsername(String username);
+
+   /* Compte findByUsername(String username);
 
     Optional<Compte>findByPersonnel_Id(Long id);*/
 }
