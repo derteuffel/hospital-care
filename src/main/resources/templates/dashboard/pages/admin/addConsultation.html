@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Consultation</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h4 class="page-title">Add Consultation</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <form method="post" action="/admin/consultation/create">
+                <div class="form-group">
+                    <label>date</label>
+                    <input class="form-control" type="date" name="date" required>
+                </div>
+                <div class="m-t-20 text-center">
+                    <button class="btn btn-primary submit-btn">Create Consultation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

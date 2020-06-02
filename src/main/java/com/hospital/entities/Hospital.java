@@ -7,6 +7,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -20,10 +22,13 @@ public class Hospital implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String name;
 
+    @NotBlank
     private String city;
 
+    @NotBlank
     private String type;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -41,4 +46,23 @@ public class Hospital implements Serializable {
 
     @OneToMany(mappedBy = "hospital")
     private Collection<Incubator>incubators;
+
+    public String getName() {
+        return name;
+    }
+    public Long getId(){
+        return id;
+    }
+
+    @OneToMany(mappedBy = "hospital")
+    @OnDelete(action= OnDeleteAction.NO_ACTION)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<Consultation>consultations;
+
+    @OneToMany(mappedBy = "hospital")
+    @OnDelete(action= OnDeleteAction.NO_ACTION)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<Examen> examens;
+
+
 }

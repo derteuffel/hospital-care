@@ -35,4 +35,7 @@ public class Consultation implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("consultations")
     private DosMedical dosMedical;
+
+    @ManyToOne
+    private Hospital hospital;
 }

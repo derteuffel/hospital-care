@@ -23,7 +23,7 @@ public class DosMedical implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 4)
+    @Size(min = 1, max = 1)
     private String rhesus;
 
     @NotNull
@@ -34,7 +34,7 @@ public class DosMedical implements Serializable {
 
     private String hereditaryDiseases;
 
-    @NotBlank
+    @NotNull
     private String description;
 
     private String code;

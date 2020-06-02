@@ -6,6 +6,8 @@ import com.hospital.repository.CompteRepository;
 import com.hospital.repository.DosMedicalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -13,8 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@ResponseBody
-@RequestMapping("/hospital-care/dossier-medical")
+@RequestMapping("/admin/medical-record")
 public class DosMedicalController {
 
     @Autowired
@@ -24,27 +25,33 @@ public class DosMedicalController {
     private CompteRepository compteRepository;
 
     /** Retrieve all medical records */
-    @GetMapping(value = "/")
-    public List<DosMedical> getAllMedicalRecords(){
-        List<DosMedical> DosMedical = dos.findAll();
-        return DosMedical;
+    @GetMapping(value = "/all")
+    public String getAllMedicalRecords(Model model){
+        model.addAttribute("dosMedicalList",dos.findAll());
+        return "dashboard/pages/admin/dosMedical";
+    }
+
+    /** form for adding a medical-record */
+    @GetMapping(value = "/create")
+    public String addMedicalRecords(){
+        return "dashboard/pages/admin/addDosMedical";
     }
 
     /** Add a medical record */
-    @PostMapping(value = "/")
-    public DosMedical addMedicalRecord(@Valid @RequestBody DosMedical dosMedical){
-         //dos.save(dosMedical);
-        System.out.println(dosMedical.getAge());
-        System.out.println(dosMedical.getRhesus());
-        System.out.println(dosMedical.getWeight());
-        System.out.println(dosMedical.getHereditaryDiseases());
-        System.out.println(dosMedical.getDescription());
-        return dosMedical;
+    @PostMapping(value = "/create")
+    public String addMedicalRecord(@Valid @RequestBody DosMedical dosMedical, Errors errors, Model model){
+        if(errors.hasErrors()) {
+            System.out.println(errors.hasErrors());
+            return "error";
+        }
+        //dos.save(dosMedical);
+        model.addAttribute("dosMedicalList", dos.findAll());
+        return "dashboard/pages/admin/dosMedical";
     }
 
     /** Delete a medical record */
     @DeleteMapping(value = "/{id}")
-    public int deleteMedicalRecord(@PathVariable Long id){
+    @ResponseBody public int deleteMedicalRecord(@PathVariable Long id){
         try {
             dos.deleteById(id);
             return 1;
@@ -55,10 +62,9 @@ public class DosMedicalController {
 
     /** get a medical record */
     @GetMapping(value = "/{id}")
+    @ResponseBody
     public Optional<DosMedical> getMedicalRecord(@PathVariable Long id){
         return dos.findById(id);
     }
-
-
 
 }
