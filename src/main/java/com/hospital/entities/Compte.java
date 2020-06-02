@@ -24,7 +24,7 @@ public class Compte implements Serializable {
     private Boolean status;
 
 
-   /* @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    /*@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "comptes_roles",
             joinColumns = @JoinColumn(
@@ -43,7 +43,7 @@ public class Compte implements Serializable {
     private Collection<Personnel> personnels;*/
 
 
-    public Compte(String username, String email, Boolean status) {
+    public Compte(String username, String email, Boolean status, String password) {
         this.username = username;
         this.password = password;
         this.email = email;

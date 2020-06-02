@@ -14,10 +14,11 @@ import java.util.List;
 @Repository
 public interface HospitalRepository extends JpaRepository<Hospital, Long> {
 
-    Page<Hospital> findAll(Pageable pageable);
-    Hospital findByName(String name);
+    /*@Query("SELECT t FROM hospital t WHERE t.name LIKE CONCAT('%',:searchTerm,'%') OR t.city LIKE CONCAT('%',:searchTerm,'%') OR t.type LIKE CONCAT('%',:searchTerm,'%')")
+    List<Hospital> findBySearch(@Param("searchTerm") String searchTerm);*/
 
-    @Query("SELECT t FROM hospital t WHERE t.name LIKE CONCAT('%',:searchTerm,'%') OR t.city LIKE CONCAT('%',:searchTerm,'%') OR t.type LIKE CONCAT('%',:searchTerm,'%')")
-    List<Hospital> findBySearch(@Param("searchTerm") String searchTerm);
+    Page<Hospital> findAll(Pageable pageable);
+
+    List<Hospital> findByNameLike(String name);
 
 }

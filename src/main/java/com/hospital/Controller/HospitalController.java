@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -66,8 +67,8 @@ public class HospitalController {
 
         Hospital hospital = new Hospital();
         modelAndView.addObject("hospital",hospital);
-        modelAndView.addObject("activeArticleList", true);
-        modelAndView.addObject("articleList", hospitals.getContent());
+        //modelAndView.addObject("activeArticleList", true);
+        modelAndView.addObject("hospitals", hospitals.getContent());
         modelAndView.addObject("currentPage",currentPage);
 
         return modelAndView;
@@ -83,26 +84,37 @@ public class HospitalController {
     }
 
     @PostMapping("/add")
-    public String addHospital(@Valid Hospital hospital, BindingResult bindingResult,Model model){
+    public String addHospital(@Valid Hospital hospital, BindingResult bindingResult, Model model, RedirectAttributes redirAttrs){
+
         ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors()) {
-            //modelAndView.setViewName("dashboard/pages/admin/add-hospital");
-            //model.addAttribute("hospital",hospital);
-            System.out.println("erreur");
             model.addAttribute("hospital",hospital);
             System.out.println(hospital.toString()) ;
             return "dashboard/pages/admin/add-hospital";
         }
+        hospitalRepository.save(hospital);
         modelAndView.setViewName("/dashboard/pages/admin/hospital-list");
+        redirAttrs.addFlashAttribute("message", "Successfully added hospital " + hospital.getName());
         return "redirect:/admin/hospital/all";
     }
 
     @PostMapping("/search")
     public String searchHospital(Hospital hospital,Model model){
 
-        List<Hospital> results = hospitalRepository.findBySearch(hospital.getName());
+        List<Hospital> results =  hospitalRepository.findByNameLike(hospital.getName());
         model.addAttribute("results",results);
         return "dashboard/pages/admin/search-hospital";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteHospital(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
+        try {
+            hospitalRepository.deleteById(id);
+            redirAttrs.addFlashAttribute("message", "Successfully deleted");
+            return "redirect:/admin/hospital/all";
+        }catch (Exception e){
+           return "";
+        }
     }
     
 }
