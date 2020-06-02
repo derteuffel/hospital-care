@@ -3,7 +3,7 @@
       layout:decorate="~{../templates/dashboard/index}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Medical Records</title>
 </head>
 <body>
 <div class="content" layout:fragment="content">
@@ -63,5 +63,6 @@
         </div>
     </div>
 </div>
+<div th:replace="~{../templates/dashboard/fragments/modals :: #delete_patient}"></div>
 </body>
 </html>
