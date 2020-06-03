@@ -1,10 +1,8 @@
 package com.hospital.Controller;
 
-import com.hospital.entities.Consultation;
-import com.hospital.entities.DosMedical;
-import com.hospital.entities.Examen;
-import com.hospital.entities.Hospital;
+import com.hospital.entities.*;
 import com.hospital.helpers.ExamenHelper;
+import com.hospital.repository.CompteRepository;
 import com.hospital.repository.ConsultationRepository;
 import com.hospital.repository.ExamenRepository;
 import com.hospital.repository.HospitalRepository;
@@ -15,6 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,6 +35,10 @@ public class ExamenController {
     @Autowired
     private ConsultationRepository consultationRepository;
 
+    @Autowired
+    private CompteRepository compteRepository;
+
+
 
     /** Get all exams made in an hospital */
     @GetMapping(value = "/hospital/{id}")
@@ -52,40 +55,50 @@ public class ExamenController {
         Consultation consultation =  consultationRepository.getOne(id);
         List<Examen> exams = examenRepository.findByConsultation(consultation);
         model.addAttribute("examList",exams);
+        model.addAttribute("idConsultation",id);
         return "dashboard/pages/admin/exam";
     }
 
     /** form for adding an exam */
     @GetMapping(value = "/create")
-    public String addExam(){
+    public String addExam(@RequestParam("idConsultation") int  idConsultation, Model model){
+        List<Hospital> hospitals = hospitalRepository.findAll();
+        model.addAttribute("idConsultation",idConsultation);
+        model.addAttribute("hospitalList",hospitals);
+        model.addAttribute(new ExamenHelper());
         return "dashboard/pages/admin/addExam";
     }
 
     /** Add an exam */
     @PostMapping("/create")
-    public String saveExam(@Valid Examen exam, Model model){
-
-       // Consultation consultation = consultationRepository.getOne(id);
-        Examen examen = new Examen();
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/mm/dd hh:mm");
-        //examen.setDateOfTesting(dateFormat.format(date));
-        // examen.setDeliverDate(dateFormat.format(date));
-        // examen.setName(examenHelper.getName());
-        // examen.setResults(examenHelper.getResults());
-        // examen.setTestType(examenHelper.getTestType());
-        // examen.setDescription(examenHelper.getDescription());
-        // examen.setConsultation(consultation);
-        examenRepository.save(examen);
-
-        return ""; /**** ici on va voir la vue qu'il faut mettre *****/
+    public String saveExam(@ModelAttribute @Valid ExamenHelper examenHelper,Errors errors, Model model){
+        if(errors.hasErrors()){
+            System.out.println(examenHelper.getTestType());
+            model.addAttribute("hospitalList",hospitalRepository.findAll());
+            model.addAttribute("idConsultation",examenHelper.getIdConsultation());
+            return "dashboard/pages/admin/addExam";
+        }else{
+            Consultation consultation = consultationRepository.getOne(examenHelper.getIdConsultation());
+            Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());
+            examenRepository.save(examenHelper.getExamInstance(hospital,consultation));
+        }
+        return  "redirect:/admin/exam/consultation/"+examenHelper.getIdConsultation();
     }
 
     /** cancel an exam */
-    @DeleteMapping(value = "/{id}")
-    public String cancelExam(@PathVariable Long id, Model model){
-         examenRepository.deleteById(id);
-         return "exam";
+    @PostMapping(value = "/cancel")
+    public String cancelExam(HttpServletRequest request, Model model){
+
+        Long id = Long.parseLong(request.getParameter("id"));
+        String password = request.getParameter("password");
+        Compte compte = compteRepository.findByPassword(password);
+
+        if(compte != null){
+            if(compte.getStatus()){
+                examenRepository.deleteById(id);
+            }
+        }
+         return "redirect:/admin/medical-record/all";
     }
 
 

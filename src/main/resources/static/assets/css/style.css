@@ -4908,3 +4908,8 @@ blockquote p {
 		margin-bottom: 10px;
 	}
 }
+
+.error {
+  color: red;
+  font-style: italic;
+}

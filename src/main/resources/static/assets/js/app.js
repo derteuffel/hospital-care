@@ -156,6 +156,14 @@ $(document).ready(function($) {
 	if($('[data-toggle="tooltip"]').length > 0) {
 		$('[data-toggle="tooltip"]').tooltip();
 	}
+
+	$(".menu_").children("a:last-child").on('click', function(){
+	   let field = $(this).parents("tr").find("input[type='hidden']").clone();
+	   let form = $(".modal-body").children("form");
+	   let hidden = form.children("input[type='hidden']");
+	   if(hidden.length != 0) hidden.replaceWith(field);
+	   else form.append(field)
+	})
 	
 	// Mobile Menu
 	$(document).on('click', '#open_msg_box', function() {
