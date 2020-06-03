@@ -59,8 +59,7 @@ public class DosMedical implements Serializable {
     }
 
     public DosMedical(String rhesus, Integer weight, Integer age, String hereditaryDiseases,
-                      String description, String code, Compte compte, Collection<Consultation> consultations,
-                      Collection<Ordonnance> ordonnances) {
+                      String description, String code, Compte compte) {
         this.rhesus = rhesus;
         this.weight = weight;
         this.age = age;
@@ -68,8 +67,6 @@ public class DosMedical implements Serializable {
         this.description = description;
         this.code = code;
         this.compte = compte;
-        this.consultations = consultations;
-        this.ordonnances = ordonnances;
     }
 
 
