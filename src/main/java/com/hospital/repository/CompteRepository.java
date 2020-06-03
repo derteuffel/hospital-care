@@ -12,4 +12,6 @@ public interface CompteRepository  extends JpaRepository<Compte, Long> {
    /* Compte findByUsername(String username);
 
     Optional<Compte>findByPersonnel_Id(Long id);*/
+   Compte findByPassword(String password);
+
 }

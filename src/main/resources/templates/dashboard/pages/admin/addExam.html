@@ -14,22 +14,34 @@
     </div>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form method="post" action="/admin/exam/create">
+            <form method="post" action="/admin/exam/create" th:object="${examenHelper}">
+                <input class="form-control" type="hidden" name="idConsultation" th:value="${idConsultation}">
                 <div class="form-group">
-                    <label>Name</label>
-                    <input class="form-control" type="text" name="name" required>
+                    <label th:for="name">Name</label>
+                    <input class="form-control" type="text" th:field="*{name}" />
+                    <span class="error" th:errors="*{name}"></span>
                 </div>
                 <div class="form-group">
-                    <label>Test Type</label>
-                    <input class="form-control" type="type" name="testType" required>
+                    <label th:for="testType">Test Type</label>
+                    <input class="form-control" type="text" th:field="*{testType}" />
+                    <span class="error" th:errors="*{testType}"></span>
                 </div>
                 <div class="form-group">
-                    <label>Date Of Testing</label>
-                    <input class="form-control" type="date" name="dateOfTesting" required>
+                    <label th:for="dateOfTesting">Date Of Testing</label>
+                    <input class="form-control" type="date" th:field="*{dateOfTesting}" />
+                    <span class="error" th:errors="*{dateOfTesting}"></span>
                 </div>
                 <div class="form-group">
                     <label>Deliver Date</label>
-                    <input class="form-control" type="date" name="deliverDate">
+                    <input class="form-control" type="date" name="deliverDate" />
+                </div>
+                <div class="form-group">
+                    <label>Hospital</label>
+                    <select name="hospitalName" class="form-control">
+                        <th:block th:each="hospital: ${hospitalList}">
+                            <option  th:value="${hospital.name}" th:text="${hospital.name}"></option>
+                        </th:block>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Results</label>
