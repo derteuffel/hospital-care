@@ -35,9 +35,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="dosMedical: ${dosMedicalList}">
-                        <td th:text="${dosMedical.id}"></td>
-                        <td th:text="${dosMedical.compte.avatar}"></td>
+                    <tr th:each="dosMedical,i: ${dosMedicalList}" >
+                        <td th:text="${i.count}"></td>
+                  <!--th:text="${dosMedical.compte.avatar}"--> <td><img width="28" height="28" src="/assets/img/user.jpg" class="rounded-circle m-r-5" alt=""></td>
                         <td th:text="${dosMedical.compte.username}"></td>
                         <td th:text="${dosMedical.compte.email}"></td>
                         <td th:text="${dosMedical.age}"></td>

@@ -28,8 +28,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="consultation: ${consultationList}">
-                        <td th:text="${consultation.id}"></td>
+                    <tr th:each="consultation,i: ${consultationList}">
+                        <td th:text="${i.count}"></td>
                         <td th:text="${consultation.date}"></td>
                         <td th:text="${consultation.hospital.name}"></td>
                         <td class="text-right">

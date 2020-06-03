@@ -24,24 +24,14 @@
 </head>
 
 <body>
+
 <div class="main-wrapper">
     <div class="header" th:replace="~{../templates/dashboard/fragments/navbar :: topbar}"></div>
     <div class="sidebar" id="sidebar" th:replace="~{../templates/dashboard/fragments/navbar :: #sidebar}"></div>
     <div class="page-wrapper">
         <div class="content" layout:fragment="content"></div>
         <div class="notification-box" th:replace="~{../templates/dashboard/fragments/notifications :: notifications}"></div>
-    </div>
-<<<<<<< HEAD
 </div>
-<div class="sidebar-overlay" data-reff=""></div>
-<script th:src="@{/assets/js/jquery-3.2.1.min.js}"></script>
-<script th:src="@{/assets/js/popper.min.js}"></script>
-<script th:src="@{/assets/js/bootstrap.min.js}"></script>
-<script th:src="@{/assets/js/jquery.slimscroll.js}"></script>
-<script th:src="@{/assets/js/Chart.bundle.js}"></script>
-<script th:src="@{/assets/js/chart.js}"></script>
-<script th:src="@{/assets/js/app.js}"></script>
-=======
     <div class="sidebar-overlay" data-reff=""></div>
     <script th:src="@{/assets/js/jquery-3.2.1.min.js}"></script>
 	<script th:src="@{/assets/js/popper.min.js}"></script>
@@ -59,7 +49,6 @@
     <script th:src="@{/assets/js/jquery.slimscroll.js}"></script>
     <script th:src="@{/assets/js/tagsinput.js}"></script>
 
->>>>>>> owner-developer
 
 </body>
 
