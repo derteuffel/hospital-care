@@ -37,6 +37,7 @@ public class Consultation implements Serializable {
     private DosMedical dosMedical;
 
     @ManyToOne
+    @JsonIgnoreProperties("hospitals")
     private Hospital hospital;
 
 
