@@ -23,5 +23,5 @@ public class Ordonnance implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("ordonnances")
-    private DosMedical dosMedical;
+    private Consultation consultation;
 }

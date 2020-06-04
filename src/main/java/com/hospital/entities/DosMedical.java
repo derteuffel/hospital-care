@@ -54,10 +54,7 @@ public class DosMedical implements Serializable {
     private Collection<Consultation>consultations;
 
 
-    @OneToMany(mappedBy = "dosMedical")
-    @OnDelete(action= OnDeleteAction.NO_ACTION)
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Collection<Ordonnance>ordonnances;
+
 
 
     public DosMedical() {
@@ -147,13 +144,6 @@ public class DosMedical implements Serializable {
         this.consultations = consultations;
     }
 
-    public Collection<Ordonnance> getOrdonnances() {
-        return ordonnances;
-    }
-
-    public void setOrdonnances(Collection<Ordonnance> ordonnances) {
-        this.ordonnances = ordonnances;
-    }
 
 
 

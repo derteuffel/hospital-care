@@ -41,6 +41,12 @@ public class Consultation implements Serializable {
     private Hospital hospital;
 
 
+    @OneToMany(mappedBy = "consultation")
+    @OnDelete(action= OnDeleteAction.NO_ACTION)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<Ordonnance>ordonnances;
+
+
     public Hospital getHospital() {
         return hospital;
     }
@@ -75,5 +81,13 @@ public class Consultation implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    public Collection<Ordonnance> getOrdonnances() {
+        return ordonnances;
+    }
+
+    public void setOrdonnances(Collection<Ordonnance> ordonnances) {
+        this.ordonnances = ordonnances;
     }
 }
