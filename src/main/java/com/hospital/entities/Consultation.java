@@ -38,4 +38,41 @@ public class Consultation implements Serializable {
 
     @ManyToOne
     private Hospital hospital;
+
+
+    public Hospital getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
+
+    public DosMedical getDosMedical() {
+        return dosMedical;
+    }
+
+    public void setDosMedical(DosMedical dosMedical) {
+        this.dosMedical = dosMedical;
+    }
+
+    public Collection<Examen> getExamens() {
+        return examens;
+    }
+
+    public void setExamens(Collection<Examen> examens) {
+        this.examens = examens;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Long getId() {
+        return id;
+    }
 }

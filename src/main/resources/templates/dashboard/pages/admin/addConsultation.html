@@ -14,10 +14,20 @@
     </div>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form method="post" action="/admin/consultation/create">
+            <form method="post" action="/admin/consultation/create" th:object="${consultationHelper}">
+                <input class="form-control" type="hidden" name="code" th:value="${code}">
                 <div class="form-group">
-                    <label>date</label>
-                    <input class="form-control" type="date" name="date" required>
+                    <label th:for="date">date</label>
+                    <input class="form-control" type="date" th:field="*{date}" required/>
+                    <span th:errors="*{date}" class="error"></span>
+                </div>
+                <div class="form-group">
+                    <label>Hospital</label>
+                    <select name="hospitalName" class="form-control">
+                        <th:block th:each="hospital: ${hospitalList}">
+                            <option  th:value="${hospital.name}" th:text="${hospital.name}"></option>
+                        </th:block>
+                    </select>
                 </div>
                 <div class="m-t-20 text-center">
                     <button class="btn btn-primary submit-btn">Create Consultation</button>

@@ -1,7 +1,9 @@
 package com.hospital.Controller;
 
 
+import com.hospital.entities.Compte;
 import com.hospital.entities.DosMedical;
+import com.hospital.helpers.DosMedicalHelper;
 import com.hospital.repository.CompteRepository;
 import com.hospital.repository.DosMedicalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/medical-record")
@@ -33,38 +34,47 @@ public class DosMedicalController {
 
     /** form for adding a medical-record */
     @GetMapping(value = "/create")
-    public String addMedicalRecords(){
+    public String addMedicalRecords(Model model){
+        model.addAttribute(new DosMedicalHelper());
         return "dashboard/pages/admin/addDosMedical";
     }
 
     /** Add a medical record */
     @PostMapping(value = "/create")
-    public String addMedicalRecord(@Valid @RequestBody DosMedical dosMedical, Errors errors, Model model){
+    public String addMedicalRecord(@ModelAttribute @Valid DosMedicalHelper dosMedicalHelper, Errors errors, Model model){
         if(errors.hasErrors()) {
-            System.out.println(errors.hasErrors());
-            return "error";
+            return "dashboard/pages/admin/addDosMedical";
         }
-        //dos.save(dosMedical);
-        model.addAttribute("dosMedicalList", dos.findAll());
-        return "dashboard/pages/admin/dosMedical";
+        Compte compte = compteRepository.findByEmail(dosMedicalHelper.getEmail());
+
+        if(compte != null){
+            DosMedical dosMedical = dosMedicalHelper.getDosMedicalInstance(compte);
+            dos.save(dosMedical);
+        }
+        return "redirect:/admin/medical-record/all";
     }
 
-    /** Delete a medical record */
-    @DeleteMapping(value = "/{id}")
-    @ResponseBody public int deleteMedicalRecord(@PathVariable Long id){
-        try {
-            dos.deleteById(id);
-            return 1;
-        }catch (Exception e){
-            return 0;
+    /** cancel a medical record */
+    @PostMapping(value = "/cancel")
+    public String cancelDosMedical(HttpServletRequest request, Model model){
+
+        Long id = Long.parseLong(request.getParameter("id"));
+        String password = request.getParameter("password");
+        Compte compte = compteRepository.findByPassword(password);
+
+        if(compte != null){
+            if(compte.getStatus()){
+                dos.deleteById(id);
+            }
         }
+        return "redirect:/admin/medical-record/all";
     }
 
     /** get a medical record */
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public Optional<DosMedical> getMedicalRecord(@PathVariable Long id){
-        return dos.findById(id);
+    public DosMedical getMedicalRecord(@PathVariable Long id){
+        return dos.getOne(id);
     }
 
 }
