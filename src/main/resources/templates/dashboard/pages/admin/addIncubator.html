@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Add an Incubator</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h4 class="page-title">Add Incubator</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <form method="post" action="/admin/incubator/create" th:object="${incubatorHelper}">
+                <input class="form-control" type="hidden" name="idHospital" th:value="${idHospital}">
+                <div class="form-group">
+                    <label th:for="number">Numéro</label>
+                    <input class="form-control" type="text" th:field="*{number}" />
+                    <span class="error" th:errors="*{number}"></span>
+                </div>
+<!--                <div class="form-group">
+                    <label th:for="testType">Test Type</label>
+                    <input class="form-control" type="text" th:field="*{testType}" />
+                    <span class="error" th:errors="*{testType}"></span>
+                </div>-->
+                <div class="form-group">
+                    <label th:for="dateObtained">Date Of Obtained</label>
+                    <input class="form-control" type="date" th:field="*{dateObtained}" />
+                    <span class="error" th:errors="*{dateObtained}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input class="form-control" type="integer" name="quantity" />
+                </div>
+                <div class="m-t-20 text-center">
+                    <button class="btn btn-primary submit-btn">Create Incubator</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

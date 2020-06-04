@@ -1,38 +1,36 @@
 package com.hospital.Controller;
 
 
-import com.hospital.entities.*;
-import com.hospital.helpers.IncubatorHelper;
-import com.hospital.repository.*;
+import com.hospital.entities.BloodBank;
+import com.hospital.entities.Hospital;
+import com.hospital.helpers.BloodBankHelper;
+import com.hospital.repository.BloodBankRepository;
+import com.hospital.repository.HospitalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
-
-
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Controller
-@RequestMapping("/admin/incubator")
-public class IncubatorController {
+@RequestMapping("/admin/bloodbank")
+public class BloodBankController {
 
 
     @Autowired
-    private IncubatorRepository incubatorRepository;
+    private BloodBankRepository bloodBankRepository;
 
     @Autowired
     private HospitalRepository hospitalRepository;
-
 
 
     @GetMapping(value = "/all")
@@ -41,15 +39,15 @@ public class IncubatorController {
 
         int currentPage = page.orElse(1);
 
-        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/incubator-list");
+        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/bloodbank-list");
 
         PageRequest pageable = PageRequest.of(currentPage - 1, 10);
 
-        Page<Incubator> incubators = incubatorRepository.findAll(pageable);
+        Page<BloodBank> bloodbanks = bloodBankRepository.findAll(pageable);
 
-        modelAndView.addObject("currentEntries",incubators.getContent().size());
+        modelAndView.addObject("currentEntries",bloodbanks.getContent().size());
 
-        int totalPages = incubators.getTotalPages();
+        int totalPages = bloodbanks.getTotalPages();
 
         if(totalPages > 0) {
             List<Integer> pageNumbers = IntStream.rangeClosed(1,totalPages).boxed().collect(Collectors.toList());
@@ -57,10 +55,10 @@ public class IncubatorController {
             modelAndView.addObject("entries",pageNumbers.size());
         }
 
-        Incubator incubator = new Incubator();
-        modelAndView.addObject("incubator",incubator);
+        BloodBank bloodbank = new BloodBank();
+        modelAndView.addObject("bloodbank",bloodbank);
         //modelAndView.addObject("activeArticleList", true);
-        modelAndView.addObject("incubators", incubators.getContent());
+        modelAndView.addObject("bloodbanks", bloodbanks.getContent());
         modelAndView.addObject("currentPage",currentPage);
 
         return modelAndView;
@@ -70,54 +68,51 @@ public class IncubatorController {
     @GetMapping("/add")
     public String form(Model model, Long shopId){
         List<Hospital> hospitals=hospitalRepository.findAll();
-        model.addAttribute("incubator", new Incubator());
+        model.addAttribute("bloodbank", new BloodBank());
         model.addAttribute("hospitals", hospitals);
-        return "dashboard/pages/admin/addIncubator";
+        return "dashboard/pages/admin/addBloodbank";
     }
 
     @PostMapping("/create")
-    public String saveIncubator(@ModelAttribute @Valid IncubatorHelper incubatorHelper, Long idHospital,
+    public String saveIncubator(@ModelAttribute @Valid BloodBankHelper bloodBankHelper, Long idHospital,
                                 HttpSession session){
 
         Hospital hospital = hospitalRepository.findById(idHospital).get();
-        Incubator incubator = new Incubator();
-        incubator.setStatus(incubatorHelper.getStatus());
-        incubator.setQuantity(incubatorHelper.getQuantity());
-        incubator.setNumber(incubatorHelper.getNumber());
-        incubator.setDateObtained(incubatorHelper.getDateObtained());
-        incubator.setHospital(hospital);
+        BloodBank bloodBank = new BloodBank();
+        bloodBank.setStatus(bloodBankHelper.getStatus());
+        bloodBank.setQuantity(bloodBankHelper.getQuantity());
+        bloodBank.setHospital(hospital);
         session.setAttribute("idHospital",idHospital);
-        incubatorRepository.save(incubator);
+        bloodBankRepository.save(bloodBank);
         return "redirect:/admin/hospital/" +session.getAttribute("idHospital") ;
     }
 
     @PostMapping("/search")
-    public String searchIncubator(Incubator incubator,Model model){
+    public String searchBloodBank(BloodBank bloodBank,Model model){
 
-        List<Incubator> results =  incubatorRepository.findByNumberLike(incubator.getNumber());
+        List<BloodBank> results =  bloodBankRepository.findByReferenceLike(bloodBank.getReference());
         model.addAttribute("results",results);
-        return "dashboard/pages/admin/search-incubator";
+        return "dashboard/pages/admin/search-bloodbank";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable Long id, Model model, HttpSession session) {
-        Incubator incubator = incubatorRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid incubator id:" +id));
-        System.out.println("incubator id: " + incubator.getId());
+        BloodBank bloodBank = bloodBankRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid bloodBankRepository id:" +id));
+        System.out.println("bloodBankRepository id: " + bloodBank.getId());
         Hospital hospital = hospitalRepository.getOne((Long)session.getAttribute("id"));
-        incubatorRepository.delete(incubator);
-        model.addAttribute("incubators", incubatorRepository.findAll());
+        bloodBankRepository.delete(bloodBank);
+        model.addAttribute("bloodBankRepositorys", bloodBankRepository.findAll());
         return "redirect:/admin/hospital/"+hospital.getId() ;
     }
 
     @GetMapping("/{id}")
     public String getIncubator(Model model, @PathVariable Long id){
-        Incubator incubator = incubatorRepository.findById(id).get();
-        model.addAttribute("incubator", incubator);
-        return "dashboard/pages/admin/showIncubator";
+        BloodBank bloodBank = bloodBankRepository.findById(id).get();
+        model.addAttribute("bloodBank", bloodBank);
+        return "dashboard/pages/admin/showBloodbank";
 
     }
-
 
 
 }

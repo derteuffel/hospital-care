@@ -1,7 +1,11 @@
 package com.hospital.helpers;
 
-
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class IncubatorHelper {
@@ -9,18 +13,24 @@ public class IncubatorHelper {
 
     private Integer quantity;
 
-    private String incubatorNo;
+    private String number;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private String dateObtained;
+
+    @NotNull(message = "idHospital field must not be null")
+    private Long idHospital;
 
     private Boolean status;
 
-    public String getIncubatorNo() {
-        return incubatorNo;
+
+    public String getNumber() {
+        return number;
     }
 
-    public void setIncubatorNo(String incubatorNo) {
-        this.incubatorNo = incubatorNo;
+    public void setNumber(String incubatorNo) {
+        this.number = number;
     }
 
     public Integer getQuantity() {
