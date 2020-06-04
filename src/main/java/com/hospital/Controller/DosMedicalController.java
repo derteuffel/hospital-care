@@ -54,9 +54,11 @@ public class DosMedicalController {
 
         if(compte != null){
            model.addAttribute("error","There are existing account with provided email");
+           model.addAttribute(new DosMedicalHelper());
            return "dashboard/pages/admin/addDosMedical";
         }else if (dosMedical != null){
             model.addAttribute("error","There are existing medical records with provided code, try to connect to their account please");
+            model.addAttribute(new DosMedicalHelper());
             return "dashboard/pages/admin/addDosMedical";
         }else {
             DosMedical dosMedical1 = new DosMedical();
