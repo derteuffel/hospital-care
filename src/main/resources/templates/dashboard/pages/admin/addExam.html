@@ -18,17 +18,17 @@
                 <input class="form-control" type="hidden" name="idConsultation" th:value="${idConsultation}">
                 <div class="form-group">
                     <label th:for="name">Name</label>
-                    <input class="form-control" type="text" th:field="*{name}" />
+                    <input class="form-control" type="text" th:field="*{name}" required/>
                     <span class="error" th:errors="*{name}"></span>
                 </div>
                 <div class="form-group">
                     <label th:for="testType">Test Type</label>
-                    <input class="form-control" type="text" th:field="*{testType}" />
+                    <input class="form-control" type="text" th:field="*{testType}" required/>
                     <span class="error" th:errors="*{testType}"></span>
                 </div>
                 <div class="form-group">
                     <label th:for="dateOfTesting">Date Of Testing</label>
-                    <input class="form-control" type="date" th:field="*{dateOfTesting}" />
+                    <input class="form-control" type="date" th:field="*{dateOfTesting}" required/>
                     <span class="error" th:errors="*{dateOfTesting}"></span>
                 </div>
                 <div class="form-group">

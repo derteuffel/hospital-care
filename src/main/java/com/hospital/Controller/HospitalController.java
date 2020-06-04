@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -27,7 +28,7 @@ public class HospitalController {
     private HospitalRepository hospitalRepository;
 
     @PostMapping("/create")
-    public String addHostpital(Hospital hospital, Model model){
+    public String addHostpital(Hospital hospital){
 
         Hospital hospitalAdded = hospitalRepository.save(hospital);
 
@@ -47,29 +48,12 @@ public class HospitalController {
 
     public ModelAndView getHospitals(Model model, @RequestParam(name = "page") Optional<Integer> page) {
 
-        int currentPage = page.orElse(1);
-
         ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/hospital-list");
 
-        PageRequest pageable = PageRequest.of(currentPage - 1, 10);
-
-        Page<Hospital> hospitals = hospitalRepository.findAll(pageable);
-
-        modelAndView.addObject("currentEntries",hospitals.getContent().size());
-
-        int totalPages = hospitals.getTotalPages();
-
-        if(totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1,totalPages).boxed().collect(Collectors.toList());
-            modelAndView.addObject("pageNumbers", pageNumbers);
-            modelAndView.addObject("entries",pageNumbers.size());
-        }
-
+        List<Hospital> hospitals = hospitalRepository.findAll();
         Hospital hospital = new Hospital();
         modelAndView.addObject("hospital",hospital);
-        //modelAndView.addObject("activeArticleList", true);
-        modelAndView.addObject("hospitals", hospitals.getContent());
-        modelAndView.addObject("currentPage",currentPage);
+        modelAndView.addObject("hospitals",hospitals);
 
         return modelAndView;
     }
@@ -98,14 +82,6 @@ public class HospitalController {
         return "redirect:/admin/hospital/all";
     }
 
-    @PostMapping("/search")
-    public String searchHospital(Hospital hospital,Model model){
-
-        List<Hospital> results =  hospitalRepository.findByNameLike(hospital.getName());
-        model.addAttribute("results",results);
-        return "dashboard/pages/admin/search-hospital";
-    }
-
     @PostMapping("/delete/{id}")
     public String deleteHospital(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
         try {
@@ -113,8 +89,32 @@ public class HospitalController {
             redirAttrs.addFlashAttribute("message", "Successfully deleted");
             return "redirect:/admin/hospital/all";
         }catch (Exception e){
-           return "";
+            redirAttrs.addFlashAttribute("error", "Error deleting this hospital");
+           return "redirect:/admin/hospital/all";
         }
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs){
+
+        try{
+            Hospital hospital = hospitalRepository.getOne(id);
+            model.addAttribute("hospital",hospital);
+            return "dashboard/pages/admin/edit-hospital";
+        }catch (Exception e){
+            redirAttrs.addFlashAttribute("error", "This hospital seems to not exist");
+            return "redirect:/admin/hospital/all";
+        }
+    }
+
+    @PostMapping("/edit/{id}")
+    public String updateHospital(@PathVariable("id") Long id, @Valid Hospital hospital, BindingResult bindingResult, Errors errors, Model model, RedirectAttributes redirAttrs){
+        if (bindingResult.hasErrors()) {
+            return "dashboard/pages/admin/edit-hospital";
+        }
+        hospitalRepository.save(hospital);
+        redirAttrs.addFlashAttribute("message", "Successfully edited");
+        return "redirect:/admin/hospital/all";
     }
     
 }

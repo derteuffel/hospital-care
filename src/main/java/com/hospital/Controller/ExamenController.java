@@ -73,7 +73,6 @@ public class ExamenController {
     @PostMapping("/create")
     public String saveExam(@ModelAttribute @Valid ExamenHelper examenHelper,Errors errors, Model model){
         if(errors.hasErrors()){
-            System.out.println(examenHelper.getTestType());
             model.addAttribute("hospitalList",hospitalRepository.findAll());
             model.addAttribute("idConsultation",examenHelper.getIdConsultation());
             return "dashboard/pages/admin/addExam";
@@ -91,6 +90,7 @@ public class ExamenController {
 
         Long id = Long.parseLong(request.getParameter("id"));
         String password = request.getParameter("password");
+        String idConsultation = request.getParameter("idConsultation");
         Compte compte = compteRepository.findByPassword(password);
 
         if(compte != null){
@@ -98,7 +98,7 @@ public class ExamenController {
                 examenRepository.deleteById(id);
             }
         }
-         return "redirect:/admin/medical-record/all";
+         return "redirect:/admin/exam/consultation/"+idConsultation;
     }
 
 

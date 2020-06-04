@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{../templates/dashboard/index}">
 <head>
     <meta charset="UTF-8">
@@ -14,14 +14,26 @@
     </div>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form method="post" action="/admin/medical-record/create">
+            <form method="post" action="/admin/medical-record/create" th:object="${dosMedicalHelper}">
                 <div class="form-group">
-                    <label>Age</label>
-                    <input class="form-control" type="number" name="age" required>
+                    <label th:for="code">Code</label>
+                    <input class="form-control" type="text" th:field="*{code}" required/>
+                    <span class="error" th:errors="*{code}"></span>
                 </div>
                 <div class="form-group">
-                    <label>Weight</label>
-                    <input class="form-control" type="number" name="weight" required>
+                    <label th:for="email">Email</label>
+                    <input class="form-control" type="email" th:field="*{email}" required/>
+                    <span class="error" th:errors="*{email}"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="age">Age</label>
+                    <input class="form-control" type="number" th:field="*{age}" required/>
+                    <span class="error" th:errors="*{age}"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="weight">Weight</label>
+                    <input class="form-control" type="number" th:field="*{weight}" required/>
+                    <span class="error" th:errors="*{weight}"></span>
                 </div>
                 <div class="form-group">
                     <label>Hereditary Disease</label>
@@ -41,10 +53,11 @@
                             -
                         </label>
                     </div>
+                    <span class="error" th:errors="*{rhesus}"></span>
                 </div>
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea cols="30" rows="4" class="form-control" name="description" required></textarea>
+                    <textarea cols="30" rows="4" class="form-control" name="description" ></textarea>
                 </div>
                 <div class="m-t-20 text-center">
                     <button class="btn btn-primary submit-btn">Create Medical Record</button>

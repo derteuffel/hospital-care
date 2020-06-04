@@ -10,8 +10,8 @@ public interface CompteRepository  extends JpaRepository<Compte, Long> {
 
 
     Compte findByUsername(String username);
-
-    Compte findByPassword(String password);
+   Compte findByPassword(String password);
+   Compte findByEmail(String email);
 
 
 }
