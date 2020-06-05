@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>DashBoard</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h4 class="page-title">Add Incubator</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <form th:action="@{/admin/incubator/create}" method="post" th:object="${incubator}">
+                <div class="form-group">
+                    <input class="form-control" type="hidden" name="idHospital" th:value="${idHospital}">
+                </div>
+
+                <div class="form-group">
+                    <label>Incubator number</label>
+                    <input class="form-control" type="text" th:field="*{number}" required autofocus>
+                    <p th:if="${#fields.hasErrors('number')}" th:errors="*{number}">number Error</p>
+                </div>
+                <div class="form-group">
+                    <label>Date of Obtained</label>
+                    <input class="form-control" type="date" th:field="*{dateObtained}" required autofocus>
+                    <td th:if="${#fields.hasErrors('dateObtained')}" th:errors="*{dateObtained}">Date Error</td>
+                </div>
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input class="form-control" type="number" th:field="*{quantity}" required autofocus>
+                    <td th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}">Quantity Error</td>
+                </div>
+
+                <div class="form-group">
+                    <label class="display-block">Etat:</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" th:field="*{status}"  value="option1">
+                        <label class="form-check-label">Neuf</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" th:field="*{status}"  value="option2">
+                        <label class="form-check-label">Occasion</label>
+                    </div>
+                </div>
+                <div class="m-t-20 text-center">
+                    <button class="btn btn-primary submit-btn" type="submit">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

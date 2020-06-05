@@ -68,18 +68,19 @@ public class IncubatorController {
 
 
     @GetMapping("/add")
-    public String form(Model model, Long shopId){
+    public String form(Model model, Long idHospital){
         List<Hospital> hospitals=hospitalRepository.findAll();
         model.addAttribute("incubator", new Incubator());
+        model.addAttribute("idHospital",idHospital);
         model.addAttribute("hospitals", hospitals);
-        return "dashboard/pages/admin/addIncubator";
+        return "dashboard/pages/admin/add-incubator";
     }
 
     @PostMapping("/create")
-    public String saveIncubator(@ModelAttribute @Valid IncubatorHelper incubatorHelper, Long idHospital,
+    public String saveIncubator(@Valid IncubatorHelper incubatorHelper, Long idHospital,
                                 HttpSession session){
 
-        Hospital hospital = hospitalRepository.findById(idHospital).get();
+        Hospital hospital = hospitalRepository.getOne(idHospital);
         Incubator incubator = new Incubator();
         incubator.setStatus(incubatorHelper.getStatus());
         incubator.setQuantity(incubatorHelper.getQuantity());
@@ -111,10 +112,11 @@ public class IncubatorController {
     }
 
     @GetMapping("/{id}")
+    @ResponseBody
     public String getIncubator(Model model, @PathVariable Long id){
         Incubator incubator = incubatorRepository.findById(id).get();
-        model.addAttribute("incubator", incubator);
-        return "dashboard/pages/admin/showIncubator";
+        //model.addAttribute("incubator", incubator);
+        return incubator.toString();
 
     }
 

@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Controller
-@RequestMapping("/admin/bloodbank")
+@RequestMapping("/admin/blood")
 public class BloodBankController {
 
 
@@ -39,7 +39,7 @@ public class BloodBankController {
 
         int currentPage = page.orElse(1);
 
-        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/bloodbank-list");
+        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/blood-list");
 
         PageRequest pageable = PageRequest.of(currentPage - 1, 10);
 
@@ -58,7 +58,7 @@ public class BloodBankController {
         BloodBank bloodbank = new BloodBank();
         modelAndView.addObject("bloodbank",bloodbank);
         //modelAndView.addObject("activeArticleList", true);
-        modelAndView.addObject("bloodbanks", bloodbanks.getContent());
+        modelAndView.addObject("bloods", bloodbanks.getContent());
         modelAndView.addObject("currentPage",currentPage);
 
         return modelAndView;
@@ -66,11 +66,11 @@ public class BloodBankController {
 
 
     @GetMapping("/add")
-    public String form(Model model, Long shopId){
+    public String form(Model model, Long id){
         List<Hospital> hospitals=hospitalRepository.findAll();
-        model.addAttribute("bloodbank", new BloodBank());
+        model.addAttribute("blood", new BloodBank());
         model.addAttribute("hospitals", hospitals);
-        return "dashboard/pages/admin/addBloodbank";
+        return "dashboard/pages/admin/add-blood";
     }
 
     @PostMapping("/create")
@@ -92,7 +92,7 @@ public class BloodBankController {
 
         List<BloodBank> results =  bloodBankRepository.findByReferenceLike(bloodBank.getReference());
         model.addAttribute("results",results);
-        return "dashboard/pages/admin/search-bloodbank";
+        return "dashboard/pages/admin/search-blood";
     }
 
     @GetMapping("/delete/{id}")
@@ -107,10 +107,11 @@ public class BloodBankController {
     }
 
     @GetMapping("/{id}")
+    @ResponseBody
     public String getIncubator(Model model, @PathVariable Long id){
         BloodBank bloodBank = bloodBankRepository.findById(id).get();
-        model.addAttribute("bloodBank", bloodBank);
-        return "dashboard/pages/admin/showBloodbank";
+        //model.addAttribute("bloodBank", bloodBank);
+        return bloodBank.toString();
 
     }
 

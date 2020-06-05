@@ -13,8 +13,6 @@ public class BloodBankHelper {
 
     private Boolean status;
 
-    @NotNull(message = "idHospital field must not be null")
-    private Long idHospital;
 
 
 }
