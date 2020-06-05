@@ -67,7 +67,7 @@ public class IncubatorController {
     }
 
 
-    @GetMapping("/add")
+   @GetMapping("/add")
     public String form(Model model, Long idHospital){
         List<Hospital> hospitals=hospitalRepository.findAll();
         model.addAttribute("incubator", new Incubator());
@@ -76,6 +76,7 @@ public class IncubatorController {
         return "dashboard/pages/admin/add-incubator";
     }
 
+
     @PostMapping("/create")
     public String saveIncubator(@Valid IncubatorHelper incubatorHelper, Long idHospital,
                                 HttpSession session){
@@ -83,7 +84,6 @@ public class IncubatorController {
         Hospital hospital = hospitalRepository.getOne(idHospital);
         Incubator incubator = new Incubator();
         incubator.setStatus(incubatorHelper.getStatus());
-        incubator.setQuantity(incubatorHelper.getQuantity());
         incubator.setNumber(incubatorHelper.getNumber());
         incubator.setDateObtained(incubatorHelper.getDateObtained());
         incubator.setHospital(hospital);

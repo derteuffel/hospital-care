@@ -20,25 +20,31 @@
                     <input class="form-control" type="hidden" name="idHospital" th:value="${idHospital}">
                 </div>
                 <div class="form-group">
-                    <label>Reference</label>
-                    <input class="form-control" type="text" th:field="*{reference}" required autofocus>
-                    <td th:if="${#fields.hasErrors('reference')}" th:errors="*{reference}">Reference Error</td>
+                    <label>Groupe Sanguin</label>
+                    <input class="form-control" type="text" th:field="*{groupeSanguin}" required autofocus>
+                    <td th:if="${#fields.hasErrors('groupeSanguin')}" th:errors="*{groupeSanguin}">Groupe Sanguin Error</td>
                 </div>
                 <div class="form-group">
-                    <label>Quantity</label>
-                    <input class="form-control" type="number" th:field="*{quantity}" required autofocus>
-                    <td th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}">Quantity Error</td>
+                    <label class="display-block">Rhesus</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rhesus" id="rh+" value="+" checked>
+                        <label class="form-check-label" for="rh+">
+                            +
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rhesus" id="rh-" value="-">
+                        <label class="form-check-label" for="rh-">
+                            -
+                        </label>
+                    </div>
+                    <span class="error" th:errors="*{rhesus}"></span>
                 </div>
+                <span class="error" th:errors="*{rhesus}"></span>
                 <div class="form-group">
-                    <label class="display-block">Etat:</label>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" th:field="*{status}"  value="option1">
-                        <label class="form-check-label">Neuf</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" th:field="*{status}"  value="option2">
-                        <label class="form-check-label">Occasion</label>
-                    </div>
+                    <label>Date</label>
+                    <input class="form-control" type="date" th:field="*{date}" required autofocus>
+                    <td th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date Error</td>
                 </div>
 
                 <div class="m-t-20 text-center">

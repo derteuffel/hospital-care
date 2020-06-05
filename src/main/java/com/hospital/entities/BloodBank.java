@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "bloodbank")
@@ -15,9 +18,13 @@ public class BloodBank implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String reference;
+    private String groupeSanguin;
 
-    private Integer quantity;
+    @NotNull
+    @Size(min = 1, max = 1)
+    private String rhesus;
+
+    private Date date;
 
     private Boolean status;
 

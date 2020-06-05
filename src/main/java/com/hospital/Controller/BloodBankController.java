@@ -79,8 +79,10 @@ public class BloodBankController {
 
         Hospital hospital = hospitalRepository.findById(idHospital).get();
         BloodBank bloodBank = new BloodBank();
+        bloodBank.setDate(bloodBankHelper.getDate());
+        bloodBank.setGroupeSanguin(bloodBankHelper.getGroupeSanguin());
+        bloodBank.setRhesus(bloodBankHelper.getRhesus());
         bloodBank.setStatus(bloodBankHelper.getStatus());
-        bloodBank.setQuantity(bloodBankHelper.getQuantity());
         bloodBank.setHospital(hospital);
         session.setAttribute("idHospital",idHospital);
         bloodBankRepository.save(bloodBank);
@@ -90,7 +92,7 @@ public class BloodBankController {
     @PostMapping("/search")
     public String searchBloodBank(BloodBank bloodBank,Model model){
 
-        List<BloodBank> results =  bloodBankRepository.findByReferenceLike(bloodBank.getReference());
+        List<BloodBank> results =  bloodBankRepository.findByGroupeSanguinLike(bloodBank.getGroupeSanguin());
         model.addAttribute("results",results);
         return "dashboard/pages/admin/search-blood";
     }
