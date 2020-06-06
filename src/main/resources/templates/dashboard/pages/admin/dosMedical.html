@@ -15,6 +15,12 @@
             <a href="/admin/medical-record/create" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Medical Record</a>
         </div>
     </div>
+    <div th:if='${success}'>
+        <div class="alert alert-success" th:text="${success}"></div>
+    </div>
+    <div th:if='${error}'>
+        <div class="alert alert-danger" th:text="${error}"></div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
@@ -74,8 +80,8 @@
     <form method="post" action="/admin/medical-record/cancel">
         <img src="/assets/img/password.png" alt="" width="50" height="46">
         <div class="form-group">
-            <label><b>Enter your username</b></label>
-            <input class="form-control" type="password" name="password" required/>
+            <label><b>Enter a doctor Username</b></label>
+            <input class="form-control" type="password" name="username" required/>
         </div>
         <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
         <button type="submit" class="btn btn-danger">Delete</button>

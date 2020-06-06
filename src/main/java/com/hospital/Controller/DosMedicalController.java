@@ -90,16 +90,20 @@ public class DosMedicalController {
         Compte compte = compteRepository.findByUsername(username);
         boolean authorized = false;
 
-        if(compte != null){
+        if(compte == null){
             model.addAttribute("error","There is no account with this username");
             return "redirect:/admin/medical-record/all";
-        }
+        }else{
+            for (Role role : compte.getRoles()){
+                if(role.getName().equals(ERole.ROLE_ROOT.toString())){
+                    authorized = true;
+                }
+            }
 
-        for (Role role : compte.getRoles()){ if(role.getName() == ERole.ROLE_ROOT.toString()) authorized = true; }
-
-        if(!authorized){
-            model.addAttribute("error","you don't have rights to perform this operation");
-            return "redirect:/admin/medical-record/all";
+            if(!authorized){
+                model.addAttribute("error","you don't have rights to perform this operation");
+                return "redirect:/admin/medical-record/all";
+            }
         }
 
         dos.deleteById(id);

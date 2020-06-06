@@ -16,5 +16,7 @@ public interface PersonnelRepository extends JpaRepository<Personnel, Long> {
 
     Personnel findByLastNameOrEmailOrPhone(String lastname, String Email, String phone);
 
+    Personnel findByLastName(String lastName);
+
     List<Personnel>findAllByFunction(String function);
 }

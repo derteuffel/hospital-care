@@ -151,6 +151,13 @@ $(document).ready(function($) {
 			"searching": true,
 		});
 	}
+
+	$('input[type="date"]').attr("value",new Date().toISOString().substr(0,10))
+    $('#doctorPhone').val($('select[name="doctorName"]').children("option:selected").attr('number'));
+    $('select[name="doctorName"]').on('change',function(){
+      console.log("google");
+      $('#doctorPhone').val($(this).children("option:selected").attr('number'))
+    })
 	
 	// Bootstrap Tooltip
 	if($('[data-toggle="tooltip"]').length > 0) {
