@@ -51,6 +51,8 @@ public class DosMedical implements Serializable {
 
     private String name;
 
+    private Integer age;
+
     @OneToOne
     private Compte compte;
 
@@ -69,7 +71,7 @@ public class DosMedical implements Serializable {
     }
 
     public DosMedical(String rhesus, double weight, Integer height, Date birthDate, String hereditaryDiseases,
-                      String description, String code, String bloodType, String name, String sex) {
+                      String description, String code, String bloodType, String name, String sex, Integer age) {
         this.rhesus = rhesus;
         this.weight = weight;
         this.height = height;
@@ -80,6 +82,7 @@ public class DosMedical implements Serializable {
         this.bloodType = bloodType;
         this.name = name;
         this.sex = sex;
+        this.age = age;
     }
 
     public Long getId() {
@@ -168,6 +171,14 @@ public class DosMedical implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     public Compte getCompte() {

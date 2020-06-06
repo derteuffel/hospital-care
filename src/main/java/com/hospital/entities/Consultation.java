@@ -49,30 +49,17 @@ public class Consultation implements Serializable {
     private Hospital hospital;
 
 
+
     @ManyToOne
     @JsonIgnoreProperties("consultations")
     private Personnel personnel;
+
 
     @OneToMany(mappedBy = "consultation")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Ordonnance>ordonnances;
 
-    public Consultation(Date date, int height, double weight, double temperature, String sex, int age, double pressure, Hospital hospital, DosMedical dosMedical, Personnel personnel, String observations){
-        this.date = date;
-        this.height = height;
-        this.weight = weight;
-        this.pressure = pressure;
-        this.age = age;
-        this.sex = sex;
-        this.hospital = hospital;
-        this.dosMedical = dosMedical;
-        this.temperature = temperature;
-        this.observations = observations;
-        this.personnel = personnel;
-    }
-
-    public Consultation(){}
 
     public Long getId() {
         return id;

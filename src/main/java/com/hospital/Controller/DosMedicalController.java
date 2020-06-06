@@ -13,6 +13,13 @@ import com.hospital.services.CompteService;
 import com.hospital.repository.RoleRepository;
 import com.hospital.services.CompteService;
 import org.apache.tomcat.util.log.SystemLogHandler;
+
+import com.hospital.services.CompteService;
+
+import com.hospital.repository.RoleRepository;
+import com.hospital.services.CompteService;
+import org.apache.tomcat.util.log.SystemLogHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -36,10 +43,11 @@ public class DosMedicalController {
     private CompteRepository compteRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private CompteService compteService;
 
     @Autowired
-    private CompteService compteService;
+    private RoleRepository roleRepository;
+
 
     /** Retrieve all medical records */
     @GetMapping(value = "/all")
@@ -74,17 +82,23 @@ public class DosMedicalController {
             return "dashboard/pages/admin/addDosMedical";
         }else {
             DosMedical dosMedical1 = new DosMedical();
+
             dosMedical1.setCode(dosMedicalHelper.getCode());
             dosMedical1.setDescription(dosMedicalHelper.getDescription());
             dosMedical1.setHereditaryDiseases(dosMedicalHelper.getHereditaryDiseases());
             dosMedical1.setRhesus(dosMedicalHelper.getRhesus());
             dosMedical1.setWeight(Integer.parseInt(dosMedicalHelper.getWeight()));
             dos.save(dosMedical1);
+
             CompteRegistrationDto compteDto = new CompteRegistrationDto();
             compteDto.setEmail(dosMedicalHelper.getEmail());
             compteDto.setPassword("1234567890");
             compteDto.setUsername(dosMedicalHelper.getCode());
             compteService.savePatient(compteDto,"/img/default.jpeg",dosMedical1);
+
+
+            compteService.savePatient(compteDto,"/img/default.jpeg", dosMedicalHelper.getDosMedicalInstance());
+
         }
 
         model.addAttribute("success","Operation successfully completed");

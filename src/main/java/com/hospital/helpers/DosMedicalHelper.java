@@ -34,6 +34,8 @@ public class DosMedicalHelper {
 
     @NotBlank(message = "name must not be null")
     private String name;
+    @NotBlank(message = "age must not be null")
+    private Integer age;
 
     @NotNull(message = "you must specify a date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -57,7 +59,7 @@ public class DosMedicalHelper {
 
     public DosMedical getDosMedicalInstance(){
         return new DosMedical(rhesus, Double.parseDouble(weight), Integer.parseInt(height), birthDate, hereditaryDiseases,
-                description, code, bloodType, name, sex);
+                description, code, bloodType, name, sex, age);
     }
 
     public String getEmail() {
@@ -146,5 +148,13 @@ public class DosMedicalHelper {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 }
