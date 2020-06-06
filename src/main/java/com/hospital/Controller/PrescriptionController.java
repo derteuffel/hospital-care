@@ -2,10 +2,10 @@ package com.hospital.Controller;
 
 import com.hospital.entities.*;
 import com.hospital.enums.ERole;
-import com.hospital.helpers.ExamenHelper;
+import com.hospital.helpers.PrescriptionHelper;
 import com.hospital.repository.CompteRepository;
 import com.hospital.repository.ConsultationRepository;
-import com.hospital.repository.ExamenRepository;
+import com.hospital.repository.PrescriptionRepository;
 import com.hospital.repository.HospitalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,71 +23,52 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/admin/exam")
-public class ExamenController {
-
-
-    @Autowired
-    private ExamenRepository examenRepository;
-
-    @Autowired
-    private HospitalRepository hospitalRepository;
+@RequestMapping("/admin/prescription")
+public class PrescriptionController {
 
     @Autowired
     private ConsultationRepository consultationRepository;
-
+    @Autowired
+    private PrescriptionRepository prescriptionRepository;
     @Autowired
     private CompteRepository compteRepository;
 
+    
 
-
-    /** Get all exams made in an hospital */
-    @GetMapping(value = "/hospital/{id}")
-    @ResponseBody
-    public List<Examen> getAllExamsInHospital(@PathVariable Long id){
-        Hospital hospital =  hospitalRepository.getOne(id);
-        List<Examen> exams = examenRepository.findByHospital(hospital);
-        return exams;
-    }
-
-    /** Get all exams of a consultation */
+    /** Get all prescriptions of a consultation */
     @GetMapping(value = "/consultation/{id}")
-    public String getAllExamsOfAConsultation(@PathVariable Long id, Model model){
+    public String getAllPrescriptionsOfAConsultation(@PathVariable Long id, Model model){
         Consultation consultation =  consultationRepository.getOne(id);
-        List<Examen> exams = examenRepository.findByConsultation(consultation);
-        model.addAttribute("examList",exams);
+        List<Prescription> prescriptions = prescriptionRepository.findByConsultation(consultation);
+        model.addAttribute("prescriptionList",prescriptions);
         model.addAttribute("idConsultation",id);
-        return "dashboard/pages/admin/exam";
+        return "dashboard/pages/admin/prescription";
     }
 
-    /** form for adding an exam */
+    /** form for adding an prescription */
     @GetMapping(value = "/create")
-    public String addExam(@RequestParam("idConsultation") int  idConsultation, Model model){
-        List<Hospital> hospitals = hospitalRepository.findAll();
+    public String addPrescription(@RequestParam("idConsultation") int  idConsultation, Model model){
         model.addAttribute("idConsultation",idConsultation);
-        model.addAttribute("hospitalList",hospitals);
-        model.addAttribute(new ExamenHelper());
-        return "dashboard/pages/admin/addExam";
+        model.addAttribute(new PrescriptionHelper());
+        return "dashboard/pages/admin/addPrescription";
     }
 
-    /** Add an exam */
+    /** Add an prescription */
     @PostMapping("/create")
-    public String saveExam(@ModelAttribute @Valid ExamenHelper examenHelper,Errors errors, Model model){
+    public String savePrescription(@ModelAttribute @Valid PrescriptionHelper prescriptionHelper,Errors errors, Model model){
         if(errors.hasErrors()){
-            model.addAttribute("hospitalList",hospitalRepository.findAll());
-            model.addAttribute("idConsultation",examenHelper.getIdConsultation());
-            return "dashboard/pages/admin/addExam";
+            model.addAttribute("idConsultation",prescriptionHelper.getIdConsultation());
+            return "dashboard/pages/admin/addPrescription";
         }else{
-            Consultation consultation = consultationRepository.getOne(examenHelper.getIdConsultation());
-            Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());
-            examenRepository.save(examenHelper.getExamInstance(hospital,consultation));
+            Consultation consultation = consultationRepository.getOne(prescriptionHelper.getIdConsultation());
+            prescriptionRepository.save(prescriptionHelper.getPrescriptionInstance(consultation));
         }
-        return  "redirect:/admin/exam/consultation/"+examenHelper.getIdConsultation();
+        return  "redirect:/admin/prescription/consultation/"+prescriptionHelper.getIdConsultation();
     }
 
-    /** cancel an exam */
+    /** cancel a exam */
     @PostMapping(value = "/cancel")
-    public String cancelExam(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
+    public String cancelPrescription(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
 
         Long id = Long.parseLong(request.getParameter("id"));
         String username = request.getParameter("username");
@@ -98,7 +79,7 @@ public class ExamenController {
         if(compte == null){
             model.addAttribute("error","There is no account with this username");
             System.out.println(model.getAttribute("error"));
-            return "redirect:/admin/exam/consultation/"+idConsultation;
+            return "redirect:/admin/prescription/consultation/"+idConsultation;
         }else{
             for (Role role : compte.getRoles()){
                 if(role.getName().equals(ERole.ROLE_ROOT.toString())){
@@ -109,15 +90,14 @@ public class ExamenController {
             if(!authorized){
                 model.addAttribute("error","you don't have rights to perform this operation");
                 System.out.println(model.getAttribute("error"));
-                return "redirect:/admin/exam/consultation/"+idConsultation;
+                return "redirect:/admin/prescription/consultation/"+idConsultation;
             }
         }
 
-        examenRepository.deleteById(id);
+        prescriptionRepository.deleteById(id);
         model.addAttribute("success","Operation successfully completed");
         System.out.println(model.getAttribute("success"));
-        return "redirect:/admin/exam/consultation/"+idConsultation;
+        return "redirect:/admin/prescription/consultation/"+idConsultation;
     }
-
 
 }

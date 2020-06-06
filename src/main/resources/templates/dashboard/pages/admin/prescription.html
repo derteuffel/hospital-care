@@ -2,16 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{../templates/dashboard/index}"><head>
     <meta charset="UTF-8">
-    <title>Exam</title>
+    <title>Prescription</title>
 </head>
 <body>
 <div class="content" layout:fragment="content">
     <div class="row">
         <div class="col-sm-4 col-3">
-            <h4 class="page-title">Exams</h4>
+            <h4 class="page-title">Prescriptions</h4>
         </div>
         <div class="col-sm-8 col-9 text-right m-b-20">
-            <a th:href="@{'/admin/exam/create?idConsultation='+${idConsultation}}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add an Exam</a>
+            <a th:href="@{'/admin/prescription/create?idConsultation='+${idConsultation}}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add a Prescription</a>
         </div>
     </div>
     <div class="row">
@@ -21,27 +21,17 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Test Type</th>
-                        <th>Date Of Testing</th>
-                        <th>Deliver Date</th>
-                        <th>Results</th>
-                        <th>Description</th>
-                        <th>Hospital</th>
+                        <th>Date</th>
+                        <th>Dosage</th>
                         <th class="text-right">Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="exam,i: ${examList}">
-                        <input type="hidden" name="id" th:value="${exam.id}"/>
+                    <tr th:each="prescription,i: ${prescriptionList}">
+                        <input type="hidden" name="id" th:value="${prescription.id}"/>
                         <td th:text="${i.count}"></td>
-                        <td th:text="${exam.name}"></td>
-                        <td th:text="${exam.testType}"></td>
-                        <td th:text="${exam.dateOfTesting}"></td>
-                        <td th:text="${exam.deliverDate}"></td>
-                        <td th:text="${exam.results}"></td>
-                        <td th:text="${exam.description}"></td>
-                        <td th:text="${exam.hospital.name}"></td>
+                        <td th:text="${prescription.date}"></td>
+                        <td th:text="${prescription.dosage}"></td>
                         <td class="text-right">
                             <div class="dropdown dropdown-action">
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
@@ -59,7 +49,7 @@
     </div>
 </div>
 <div class="modal-body text-center" layout:fragment="deleteModalBody">
-    <form method="post" action="/admin/exam/cancel">
+    <form method="post" action="/admin/prescription/cancel">
         <img src="/assets/img/password.png" alt="" width="50" height="46">
         <div class="form-group">
             <label><b>Enter a doctor Username</b></label>

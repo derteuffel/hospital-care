@@ -186,7 +186,7 @@ public class ConsultationController {
     }*/
 
 
-    /** cancel an exam */
+    /** cancel a consultation */
     @PostMapping(value = "/cancel")
     public String cancelConsultation(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
 

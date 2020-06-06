@@ -56,7 +56,7 @@ public class Consultation implements Serializable {
     @OneToMany(mappedBy = "consultation")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Collection<Ordonnance>ordonnances;
+    private Collection<Prescription>prescriptions;
 
     public Consultation(Date date, int height, double weight, double temperature, String sex, int age, double pressure, Hospital hospital, DosMedical dosMedical, Personnel personnel, String observations){
         this.date = date;
@@ -108,14 +108,6 @@ public class Consultation implements Serializable {
 
     public Long getId() {
         return id;
-    }
-
-    public Collection<Ordonnance> getOrdonnances() {
-        return ordonnances;
-    }
-
-    public void setOrdonnances(Collection<Ordonnance> ordonnances) {
-        this.ordonnances = ordonnances;
     }
 
     public Personnel getPersonnel() {
@@ -180,5 +172,13 @@ public class Consultation implements Serializable {
 
     public void setObservations(String observations) {
         this.observations = observations;
+    }
+
+    public Collection<Prescription> getPrescriptions() {
+        return prescriptions;
+    }
+
+    public void setPrescriptions(Collection<Prescription> prescriptions) {
+        this.prescriptions = prescriptions;
     }
 }
