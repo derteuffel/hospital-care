@@ -5,12 +5,12 @@ import com.hospital.entities.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-<<<<<<< HEAD
+
 import java.util.Optional;
-=======
+
 import java.util.Collection;
 import java.util.List;
->>>>>>> owner-developer
+
 
 @Repository
 public interface CompteRepository  extends JpaRepository<Compte, Long> {

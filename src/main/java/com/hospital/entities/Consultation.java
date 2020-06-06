@@ -49,20 +49,17 @@ public class Consultation implements Serializable {
     private Hospital hospital;
 
 
-<<<<<<< HEAD
-=======
+
     @ManyToOne
     @JsonIgnoreProperties("consultations")
     private Personnel personnel;
 
->>>>>>> owner-developer
+
     @OneToMany(mappedBy = "consultation")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Ordonnance>ordonnances;
 
-<<<<<<< HEAD
-=======
     public Consultation(Date date, int height, double weight, double temperature, String sex, int age, double pressure, Hospital hospital, DosMedical dosMedical, Personnel personnel, String observations){
         this.date = date;
         this.height = height;
@@ -78,7 +75,7 @@ public class Consultation implements Serializable {
     }
 
     public Consultation(){}
->>>>>>> owner-developer
+
 
     public Hospital getHospital() {
         return hospital;
@@ -123,8 +120,7 @@ public class Consultation implements Serializable {
     public void setOrdonnances(Collection<Ordonnance> ordonnances) {
         this.ordonnances = ordonnances;
     }
-<<<<<<< HEAD
-=======
+
 
     public Personnel getPersonnel() {
         return personnel;
@@ -189,5 +185,5 @@ public class Consultation implements Serializable {
     public void setObservations(String observations) {
         this.observations = observations;
     }
->>>>>>> owner-developer
+
 }
