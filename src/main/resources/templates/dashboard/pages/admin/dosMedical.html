@@ -23,12 +23,15 @@
                     <tr>
                         <th>#</th>
                         <th>Avatar</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Age</th>
-                        <th>Weight</th>
-                        <th>Rhesus</th>
+                        <th>Nom</th>
                         <th>Code</th>
+                        <th>Email</th>
+                        <th>Birth Date</th>
+                        <th>Sex</th>
+                        <th>Weight</th>
+                        <th>Height</th>
+                        <th>Blood Type</th>
+                        <th>Rhesus</th>
                        <!-- <th>HereditaryDiseases</th> -->
                         <th>Description</th>
                         <th class="text-right">Action</th>
@@ -39,12 +42,15 @@
                         <input type="hidden" name="id" th:value="${dosMedical.id}"/>
                         <td th:text="${i.count}"></td>
                   <!--th:text="${dosMedical.compte.avatar}"--> <td><img width="28" height="28" src="/assets/img/user.jpg" class="rounded-circle m-r-5" alt=""></td>
-                        <td th:text="${dosMedical.compte.username}"></td>
-                        <td th:text="${dosMedical.compte.email}"></td>
-                        <td th:text="${dosMedical.age}"></td>
-                        <td th:text="${dosMedical.weight}"></td>
-                        <td th:text="${dosMedical.rhesus}"></td>
+                        <td th:text="${dosMedical.name}"></td>
                         <td th:text="${dosMedical.code}"></td>
+                        <td th:text="${dosMedical.compte.email}"></td>
+                        <td th:text="${dosMedical.birthDate}"></td>
+                        <td th:text="${dosMedical.sex}"></td>
+                        <td th:text="${dosMedical.weight}"></td>
+                        <td th:text="${dosMedical.height}"></td>
+                        <td th:text="${dosMedical.bloodType}"></td>
+                        <td th:text="${dosMedical.rhesus}"></td>
                        <!-- <td th:text="${dosMedical.hereditaryDiseases}"></td> -->
                         <td th:text="${dosMedical.description}"></td>
                         <td class="text-right">
@@ -68,8 +74,8 @@
     <form method="post" action="/admin/medical-record/cancel">
         <img src="/assets/img/password.png" alt="" width="50" height="46">
         <div class="form-group">
-            <label><b>Enter your User Password</b></label>
-            <input class="form-control" type="text" name="password" required/>
+            <label><b>Enter your username</b></label>
+            <input class="form-control" type="password" name="password" required/>
         </div>
         <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
         <button type="submit" class="btn btn-danger">Delete</button>

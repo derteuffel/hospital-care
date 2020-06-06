@@ -27,6 +27,14 @@ public class Consultation implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
+    private int height;
+    private double pressure;
+    private double weight;
+    private double temperature;
+    private String sex;
+    private int age;
+    private String observations;
+
     @OneToMany(mappedBy = "consultation")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -37,15 +45,34 @@ public class Consultation implements Serializable {
     private DosMedical dosMedical;
 
     @ManyToOne
-    @JsonIgnoreProperties("hospitals")
+    @JsonIgnoreProperties("consultations")
     private Hospital hospital;
 
+
+    @ManyToOne
+    @JsonIgnoreProperties("consultations")
+    private Personnel personnel;
 
     @OneToMany(mappedBy = "consultation")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Ordonnance>ordonnances;
 
+    public Consultation(Date date, int height, double weight, double temperature, String sex, int age, double pressure, Hospital hospital, DosMedical dosMedical, Personnel personnel, String observations){
+        this.date = date;
+        this.height = height;
+        this.weight = weight;
+        this.pressure = pressure;
+        this.age = age;
+        this.sex = sex;
+        this.hospital = hospital;
+        this.dosMedical = dosMedical;
+        this.temperature = temperature;
+        this.observations = observations;
+        this.personnel = personnel;
+    }
+
+    public Consultation(){}
 
     public Hospital getHospital() {
         return hospital;
@@ -89,5 +116,69 @@ public class Consultation implements Serializable {
 
     public void setOrdonnances(Collection<Ordonnance> ordonnances) {
         this.ordonnances = ordonnances;
+    }
+
+    public Personnel getPersonnel() {
+        return personnel;
+    }
+
+    public void setPersonnel(Personnel personnel) {
+        this.personnel = personnel;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public double getPressure() {
+        return pressure;
+    }
+
+    public void setPressure(double pressure) {
+        this.pressure = pressure;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getObservations() {
+        return observations;
+    }
+
+    public void setObservations(String observations) {
+        this.observations = observations;
     }
 }

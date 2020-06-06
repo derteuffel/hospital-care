@@ -56,7 +56,7 @@ public class LoginController {
                                       @RequestParam("file") MultipartFile file) {
 
         System.out.println(compteDto.getUsername());
-        Compte existing = compteService.findByUsername(compteDto.getUsername());
+       Compte existing = compteService.findByUsername(compteDto.getUsername());
         if (existing != null) {
             System.out.println("i'm there");
             result.rejectValue("username", null, "There is already an account registered with that login");
@@ -80,6 +80,7 @@ public class LoginController {
             }
             compteService.save(compteDto, "/downloadFile/"+file.getOriginalFilename());
         }else {
+            System.out.println("Done");
             compteService.save(compteDto,"/img/default.jpeg");
         }
 
@@ -110,16 +111,16 @@ public class LoginController {
     @GetMapping("/accounts/change/{id}")
     public String changeRole(String role, @PathVariable Long id){
         Compte compte = compteRepository.getOne(id);
-        compte.getRoles().clear();
+      //  compte.getRoles().clear();
         Optional<Role> role1 = roleRepository.findByName(role);
         if (role1.isPresent()){
-            compte.getRoles().add(role1.get());
+       //     compte.getRoles().add(role1.get());
 
         }else {
             Role role2 = new Role();
-            role2.setName(role);
+         //   role2.setName(role);
             roleRepository.save(role2);
-            compte.getRoles().add(role2);
+           // compte.getRoles().add(role2);
         }
         compteRepository.save(compte);
         return "redirect:/accounts";

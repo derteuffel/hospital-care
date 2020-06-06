@@ -2,19 +2,43 @@ package com.hospital.helpers;
 
 import com.hospital.entities.Compte;
 import com.hospital.entities.DosMedical;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.*;
+import java.util.Date;
 
 public class DosMedicalHelper {
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @NotNull(message = "blood Type must not be null")
+    private String bloodType;
 
     @Size(min = 1, max = 1, message = "rhesus must only be one character")
     private String rhesus;
 
-    @NotBlank(message = "weight must not be null")
+    @NotBlank(message = "sex must not be null")
+    @Size(min = 1, max = 1, message = "sex one character")
+    private String sex;
+
+   // @NotBlank(message = "weight must not be null")
     private String weight;
 
-    @NotBlank(message = "age must not be null")
-    private String age;
+    @NotBlank(message = "height must not be null")
+    private String height;
+
+    @NotBlank(message = "name must not be null")
+    private String name;
+
+    @NotNull(message = "you must specify a date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date birthDate;
 
     private String hereditaryDiseases;
 
@@ -28,8 +52,12 @@ public class DosMedicalHelper {
     @Email(message = "this is not a valid email address")
     private String email;
 
-    public DosMedical getDosMedicalInstance(Compte compte){
-        return new DosMedical(rhesus,Integer.parseInt(weight),Integer.parseInt(age),hereditaryDiseases,description,code,compte);
+    public DosMedicalHelper() {
+    }
+
+    public DosMedical getDosMedicalInstance(){
+        return new DosMedical(rhesus, Double.parseDouble(weight), Integer.parseInt(height), birthDate, hereditaryDiseases,
+                description, code, bloodType, name, sex);
     }
 
     public String getEmail() {
@@ -64,14 +92,6 @@ public class DosMedicalHelper {
         this.weight = weight;
     }
 
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
     public String getHereditaryDiseases() {
         return hereditaryDiseases;
     }
@@ -86,5 +106,45 @@ public class DosMedicalHelper {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getBloodType() {
+        return bloodType;
+    }
+
+    public void setBloodType(String bloodType) {
+        this.bloodType = bloodType;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }

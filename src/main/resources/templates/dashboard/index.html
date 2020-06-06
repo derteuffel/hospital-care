@@ -31,6 +31,8 @@
     <div class="page-wrapper">
         <div class="content" layout:fragment="content"></div>
         <div class="notification-box" th:replace="~{../templates/dashboard/fragments/notifications :: notifications}"></div>
+    </div>
+    <div id="delete_patient" class="modal fade delete-modal" role="dialog" th:replace = "~{../templates/dashboard/fragments/modals :: deleteModal}"></div>
 </div>
     <div class="sidebar-overlay" data-reff=""></div>
     <script th:src="@{/assets/js/jquery-3.2.1.min.js}"></script>

@@ -85,7 +85,7 @@ public class IncubatorController {
         incubator.setQuantity(incubatorHelper.getQuantity());
         incubator.setNumber(incubatorHelper.getNumber());
         incubator.setDateObtained(incubatorHelper.getDateObtained());
-        incubator.setHospital(hospital);
+       // incubator.setHospital(hospital);
         session.setAttribute("idHospital",idHospital);
         incubatorRepository.save(incubator);
         return "redirect:/admin/hospital/" +session.getAttribute("idHospital") ;
