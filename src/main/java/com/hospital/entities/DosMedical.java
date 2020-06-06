@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 
 
 @Entity
@@ -27,25 +29,30 @@ public class DosMedical implements Serializable {
     private String rhesus;
 
     @NotNull
-    private Integer weight;
+    private double weight;
 
-    @NotNull
-    private Integer age;
+    @NotNull(message = "you must specify a date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date birthDate;
 
     private String hereditaryDiseases;
+
+    private Integer height;
 
     @NotNull
     private String description;
 
     private String code;
 
+    private String sex;
+
+    private String bloodType;
+
+    private String name;
+
     @OneToOne
     private Compte compte;
-
-
-
-
-
 
     @JsonIgnoreProperties("dosMedical")
     @OneToMany(mappedBy = "dosMedical")
@@ -58,19 +65,22 @@ public class DosMedical implements Serializable {
 
 
     public DosMedical() {
+
     }
 
-    public DosMedical(String rhesus, Integer weight, Integer age, String hereditaryDiseases,
-                      String description, String code, Compte compte) {
+    public DosMedical(String rhesus, double weight, Integer height, Date birthDate, String hereditaryDiseases,
+                      String description, String code, String bloodType, String name, String sex) {
         this.rhesus = rhesus;
         this.weight = weight;
-        this.age = age;
+        this.height = height;
+        this.birthDate = birthDate;
         this.hereditaryDiseases = hereditaryDiseases;
         this.description = description;
         this.code = code;
-        this.compte = compte;
+        this.bloodType = bloodType;
+        this.name = name;
+        this.sex = sex;
     }
-
 
     public Long getId() {
         return id;
@@ -88,20 +98,12 @@ public class DosMedical implements Serializable {
         this.rhesus = rhesus;
     }
 
-    public Integer getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
     }
 
     public String getHereditaryDiseases() {
@@ -145,8 +147,43 @@ public class DosMedical implements Serializable {
     }
 
 
+    public String getBloodType() {
+        return bloodType;
+    }
 
+    public void setBloodType(String bloodType) {
+        this.bloodType = bloodType;
+    }
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
 }
