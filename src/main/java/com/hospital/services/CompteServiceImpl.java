@@ -77,8 +77,34 @@ public class CompteServiceImpl implements CompteService {
             compte.setRoles(Arrays.asList(role));
         }
 
+        compte.setPersonnel(personnel);
         compteRepository.save(compte);
         return compte;
+    }
+
+    @Override
+    public Compte savePatient(CompteRegistrationDto compteRegistrationDto, String s, DosMedical dosMedical) {
+        Compte compte = new Compte();
+        Optional<Role> role = roleRepository.findByName(ERole.ROLE_USER.toString());
+        if (!(role.isPresent())){
+            Role role1 = new Role();
+            role1.setName(ERole.ROLE_USER.toString());
+            roleRepository.save(role1);
+            compte.setRoles(Arrays.asList(role1));
+        }else {
+            compte.setRoles(Arrays.asList(role.get()));
+        }
+
+        compte.setAvatar(s);
+        compte.setEmail(compteRegistrationDto.getEmail());
+        compte.setPassword(passwordEncoder.encode(compteRegistrationDto.getPassword()));
+        compte.setUsername(compteRegistrationDto.getUsername());
+        compte.setStatus(true);
+        compteRepository.save(compte);
+        dosMedical.setCompte(compte);
+        dosMedicalRepository.save(dosMedical);
+        return compte;
+
     }
 
     @Override

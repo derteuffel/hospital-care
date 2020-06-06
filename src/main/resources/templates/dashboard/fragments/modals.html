@@ -1,5 +1,6 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <head>
     <meta charset="UTF-8">
     <title>Modals</title>
@@ -8,14 +9,7 @@
 <div id="delete_patient" class="modal fade delete-modal" role="dialog" th:fragment="deleteModal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-body text-center">
-                <img src="assets/img/sent.png" alt="" width="50" height="46">
-                <h3>Are you sure want to delete this Patient?</h3>
-                <div class="m-t-20">
-                    <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </div>
-            </div>
+            <div layout:fragment="deleteModalBody"></div>
         </div>
     </div>
 </div>

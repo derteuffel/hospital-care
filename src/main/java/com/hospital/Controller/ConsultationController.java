@@ -1,10 +1,8 @@
 package com.hospital.Controller;
 
 
-import com.hospital.entities.Compte;
-import com.hospital.entities.Consultation;
-import com.hospital.entities.DosMedical;
-import com.hospital.entities.Hospital;
+import com.hospital.entities.*;
+import com.hospital.enums.ERole;
 import com.hospital.helpers.ConsultationHelper;
 import com.hospital.repository.CompteRepository;
 import com.hospital.repository.ConsultationRepository;
@@ -28,12 +26,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/admin/consultation")
@@ -50,7 +48,7 @@ public class ConsultationController {
 
 
 
-    @GetMapping("/lists")
+  /*  @GetMapping("/lists")
     public String findAll(Model model){
         model.addAttribute("consultations", consultationRepository.findAll());
         return "consultation/consultations";
@@ -111,7 +109,7 @@ public class ConsultationController {
         consultationRepository.delete(consultation);
         model.addAttribute("consultations", consultationRepository.findAll());
         return "redirect: /hospital-care/dossier-medical/"+dos.getId();
-    }
+    }*/
 
 
     /** owner-developer branch code **/
@@ -140,25 +138,33 @@ public class ConsultationController {
     @GetMapping(value = "/create")
     public String addConsultation(@RequestParam("code") String code, Model model){
         List<Hospital> hospitals = hospitalRepository.findAll();
+        DosMedical dosMedical = dosMedicalRepository.findByCode(code);
+        List<Compte> doctors = compteRepository.findByRolesName(ERole.ROLE_ROOT.toString());
+        Long days = TimeUnit.DAYS.convert(new Date().getTime() - dosMedical.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
+
+        model.addAttribute("age",Math.round(days/365));
+        model.addAttribute("doctors",doctors);
         model.addAttribute("hospitalList",hospitals);
+        model.addAttribute("patient",dosMedical);
         model.addAttribute("code",code);
-        model.addAttribute(new ConsultationHelper());
+
+        model.addAttribute("consultationHelper", new ConsultationHelper());
         return "dashboard/pages/admin/addConsultation";
     }
 
     /** Add a consultation */
     @PostMapping(value = "/create")
     public String saveConsultation(@ModelAttribute @Valid ConsultationHelper consultationHelper, Errors errors, Model model){
-        if(errors.hasErrors()){
+      /*  if(errors.hasErrors()){
             model.addAttribute("hospitalList",hospitalRepository.findAll());
             model.addAttribute("code",consultationHelper.getCode());
             return "dashboard/pages/admin/addConsultation";
         }else{
             DosMedical dosMedical = dosMedicalRepository.findByCode(consultationHelper.getCode());
             Hospital hospital = hospitalRepository.findByName(consultationHelper.getHospitalName());
-            consultationRepository.save(consultationHelper.getConsultationInstance(hospital,dosMedical));
-        }
-        return  "redirect:/admin/consultation/medical-record/"+consultationHelper.getCode();
+          //  consultationRepository.save(consultationHelper.getConsultationInstance(hospital,dosMedical));
+        }*/
+        return  "redirect:/admin/consultation/medical-record/";//+consultationHelper.getCode();
     }
 
 
