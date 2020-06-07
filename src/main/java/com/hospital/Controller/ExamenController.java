@@ -2,6 +2,7 @@ package com.hospital.Controller;
 
 import com.hospital.entities.*;
 import com.hospital.enums.ERole;
+import com.hospital.helpers.ConsultationHelper;
 import com.hospital.helpers.ExamenHelper;
 import com.hospital.repository.CompteRepository;
 import com.hospital.repository.ConsultationRepository;
@@ -21,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/admin/exam")
@@ -117,6 +119,57 @@ public class ExamenController {
         model.addAttribute("success","Operation successfully completed");
         System.out.println(model.getAttribute("success"));
         return "redirect:/admin/exam/consultation/"+idConsultation;
+    }
+
+    /** form for updating an exam */
+    @GetMapping(value = "/update/{idExam}")
+    public String updateExam(@PathVariable Long idExam, @RequestParam("idConsultation") Long idConsultation, Model model){
+        List<Hospital> hospitals = hospitalRepository.findAll();
+        model.addAttribute("idConsultation",idConsultation);
+        model.addAttribute("hospitalList",hospitals);
+        model.addAttribute("examenHelper", ExamenHelper.getExamenHelperInstance(examenRepository.getOne(idExam)));
+
+        return "dashboard/pages/admin/updateExam";
+    }
+
+    /** Update an exam */
+    @PostMapping(value = "/update/{idExam}")
+    public String updateExam(@PathVariable Long idExam, @ModelAttribute @Valid ExamenHelper examenHelper, Errors errors, Model model){
+        if(errors.hasErrors()){
+            model.addAttribute("hospitalList",hospitalRepository.findAll());
+            model.addAttribute("idConsultation",examenHelper.getIdConsultation());
+            return "dashboard/pages/admin/updateExam";
+        }else{
+            Consultation consultation = consultationRepository.getOne(examenHelper.getIdConsultation());
+            Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());
+            Examen exExam = examenRepository.getOne(idExam);
+            Examen newExam = examenHelper.getExamInstance(hospital,consultation);
+            newExam.setId(exExam.getId());
+            newExam.setHospital(hospital);
+            examenRepository.save(newExam);
+        }
+       /* Compte compte = compteRepository.findByUsername(username);
+        boolean authorized = false;
+
+        if(compte == null){
+            model.addAttribute("error","There is no account with this username");
+            return "redirect:/admin/medical-record/all";
+        }else{
+            for (Role role : compte.getRoles()){
+                if(role.getName().equals(ERole.ROLE_ROOT.toString())){
+                    authorized = true;
+                }
+            }
+
+            if(!authorized){
+                model.addAttribute("error","you don't have rights to perform this operation");
+                return "redirect:/admin/medical-record/all";
+            }
+        }*/
+
+        model.addAttribute("success","Operation successfully completed");
+        System.out.println(model.getAttribute("success"));
+        return  "redirect:/admin/exam/consultation/"+examenHelper.getIdConsultation();
     }
 
 

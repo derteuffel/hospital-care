@@ -29,9 +29,24 @@ public class PrescriptionHelper {
     @NotNull(message = "idConsultation field must not be null")
     private Long idConsultation;
 
+    public PrescriptionHelper(){
+
+    }
+
+    public PrescriptionHelper(Date date, String dosage, Long idConsultation) {
+        this.date = date;
+        this.dosage = dosage;
+        this.idConsultation = idConsultation;
+    }
+
     public Prescription getPrescriptionInstance(Consultation consultation){
        return new Prescription(date,dosage,consultation);
     }
+
+    public static PrescriptionHelper getPrescriptionHelperInstance(Prescription prescription){
+       return new PrescriptionHelper(prescription.getDate(),prescription.getDosage(),prescription.getConsultation().getId());
+    }
+
 
     public Date getDate() {
         return date;

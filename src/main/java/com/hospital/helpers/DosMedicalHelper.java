@@ -13,9 +13,6 @@ import java.util.Date;
 
 public class DosMedicalHelper {
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
     @NotNull(message = "blood Type must not be null")
     private String bloodType;
 
@@ -52,12 +49,30 @@ public class DosMedicalHelper {
     @Email(message = "this is not a valid email address")
     private String email;
 
-    public DosMedicalHelper() {
+    public DosMedicalHelper() { }
+
+
+    public DosMedicalHelper(String bloodType, String rhesus, String sex, String weight, String height, String name, Date birthDate, String hereditaryDiseases, String description,  String code, String email) {
+        this.bloodType = bloodType;
+        this.rhesus = rhesus;
+        this.sex = sex;
+        this.weight = weight;
+        this.height = height;
+        this.name = name;
+        this.birthDate = birthDate;
+        this.hereditaryDiseases = hereditaryDiseases;
+        this.description = description;
+        this.code = code;
+        this.email = email;
     }
 
     public DosMedical getDosMedicalInstance(){
         return new DosMedical(rhesus, Double.parseDouble(weight), Integer.parseInt(height), birthDate, hereditaryDiseases,
                 description, code, bloodType, name, sex);
+    }
+    public static DosMedicalHelper getDosMedicalHelperInstance(DosMedical dosMedical){
+        return new DosMedicalHelper(dosMedical.getBloodType(), dosMedical.getRhesus(), dosMedical.getSex(),String.valueOf(dosMedical.getWeight()), String.valueOf(dosMedical.getHeight()), dosMedical.getName(),
+                dosMedical.getBirthDate(), dosMedical.getHereditaryDiseases(), dosMedical.getDescription(),dosMedical.getCode(),dosMedical.getCompte().getEmail());
     }
 
     public String getEmail() {

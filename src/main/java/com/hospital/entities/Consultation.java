@@ -181,4 +181,8 @@ public class Consultation implements Serializable {
     public void setPrescriptions(Collection<Prescription> prescriptions) {
         this.prescriptions = prescriptions;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

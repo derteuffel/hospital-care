@@ -65,4 +65,8 @@ public class Prescription implements Serializable {
     public void setConsultation(Consultation consultation) {
         this.consultation = consultation;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

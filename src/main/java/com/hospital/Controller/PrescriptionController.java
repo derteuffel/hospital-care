@@ -2,6 +2,7 @@ package com.hospital.Controller;
 
 import com.hospital.entities.*;
 import com.hospital.enums.ERole;
+import com.hospital.helpers.ExamenHelper;
 import com.hospital.helpers.PrescriptionHelper;
 import com.hospital.repository.CompteRepository;
 import com.hospital.repository.ConsultationRepository;
@@ -98,6 +99,51 @@ public class PrescriptionController {
         model.addAttribute("success","Operation successfully completed");
         System.out.println(model.getAttribute("success"));
         return "redirect:/admin/prescription/consultation/"+idConsultation;
+    }
+
+    /** form for updating a prescription */
+    @GetMapping(value = "/update/{idPrescription}")
+    public String updatePrescription(@PathVariable Long idPrescription, @RequestParam("idConsultation") Long idConsultation, Model model){
+        model.addAttribute("idConsultation",idConsultation);
+        model.addAttribute("prescriptionHelper",PrescriptionHelper.getPrescriptionHelperInstance(prescriptionRepository.getOne(idPrescription)));
+        return "dashboard/pages/admin/updatePrescription";
+    }
+
+    /** Update a prescription */
+    @PostMapping(value = "/update/{idPrescription}")
+    public String updatePrescription(@PathVariable Long idPrescription, @ModelAttribute @Valid PrescriptionHelper prescriptionHelper, Errors errors, Model model){
+        if(errors.hasErrors()){
+            model.addAttribute("idConsultation",prescriptionHelper.getIdConsultation());
+            return "dashboard/pages/admin/updatePrescription";
+        }else{
+            Consultation consultation = consultationRepository.getOne(prescriptionHelper.getIdConsultation());
+            Prescription exPrescription = prescriptionRepository.getOne(idPrescription);
+            Prescription newPrescription = prescriptionHelper.getPrescriptionInstance(consultation);
+            newPrescription.setId(exPrescription.getId());
+            prescriptionRepository.save(newPrescription);
+        }
+       /* Compte compte = compteRepository.findByUsername(username);
+        boolean authorized = false;
+
+        if(compte == null){
+            model.addAttribute("error","There is no account with this username");
+            return "redirect:/admin/medical-record/all";
+        }else{
+            for (Role role : compte.getRoles()){
+                if(role.getName().equals(ERole.ROLE_ROOT.toString())){
+                    authorized = true;
+                }
+            }
+
+            if(!authorized){
+                model.addAttribute("error","you don't have rights to perform this operation");
+                return "redirect:/admin/medical-record/all";
+            }
+        }*/
+
+        model.addAttribute("success","Operation successfully completed");
+        System.out.println(model.getAttribute("success"));
+        return  "redirect:/admin/prescription/consultation/"+prescriptionHelper.getIdConsultation();
     }
 
 }
