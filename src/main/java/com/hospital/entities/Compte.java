@@ -13,7 +13,6 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor //@NoArgsConstructor
 public class Compte implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,7 +28,6 @@ public class Compte implements Serializable {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 
-
     @JoinTable(
             name = "comptes_roles",
             joinColumns = @JoinColumn(
@@ -38,14 +36,15 @@ public class Compte implements Serializable {
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
-   /* @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "comptes_personnels",
-            joinColumns = @JoinColumn(
-                    name = "compte_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "personnel_id", referencedColumnName = "id"))*/
-
+    /* @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+     @JoinTable(
+             name = "comptes_personnels",
+             joinColumns = @JoinColumn(
+                     name = "compte_id", referencedColumnName = "id"),
+             inverseJoinColumns = @JoinColumn(
+                     name = "personnel_id", referencedColumnName = "id"))*/
+    @OneToOne
+    private Personnel personnel;
 
 
     public Compte(String username, String email, Boolean status, String password) {
@@ -110,11 +109,18 @@ public class Compte implements Serializable {
     }
 
     public Collection<Role> getRoles() {
-        return this.roles;
+        return roles;
     }
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
 
+    public Personnel getPersonnel() {
+        return personnel;
+    }
+
+    public void setPersonnel(Personnel personnel) {
+        this.personnel = personnel;
+    }
 }
