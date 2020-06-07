@@ -1,5 +1,6 @@
 package com.hospital.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
@@ -33,6 +34,10 @@ public class Personnel implements Serializable {
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Consultation> consultations;
+
+    @ManyToOne
+    @JsonIgnoreProperties("personnels")
+    private Hospital hospital;
 
     public String getLastName() {
         return lastName;
