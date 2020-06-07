@@ -56,12 +56,11 @@
                         <td class="text-right">
                             <div class="dropdown dropdown-action">
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" th:href="@{/admin/hospital/}+${hospital.id}"><i class="fa fa-eye m-r-5"></i> Show</a>
-
-                                    <a class="dropdown-item" th:href="@{|/admin/hospital/edit/${hospital.id}|}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-
-                                    <a class="dropdown-item" href="#" data-toggle="modal" th:data-target="${'#delete_department-'+ {hospital.id}}"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                <div class="dropdown-menu dropdown-menu-right menu_">
+                                    <a class="dropdown-item" th:href="@{'/admin/incubator/hospital/'+${hospital.id}}" th:text="@{'View Incubators ('+${hospital.incubators.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
+                                    <a class="dropdown-item" th:href="@{'/admin/incubator/hospital/'+${hospital.id}}" th:text="@{'View Blood Bank ('+${hospital.incubators.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
+                                    <a class="dropdown-item" th:href="@{'/admin/incubator/update/'+${hospital.id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_department"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                 </div>
                             </div>
                         </td>

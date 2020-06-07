@@ -110,13 +110,14 @@ public class IncubatorController {
         return "redirect:/admin/hospital/"+hospital.getId() ;
     }
 
-    @GetMapping("/{id}")
-    @ResponseBody
-    public String getIncubator(Model model, @PathVariable Long id){
-        Incubator incubator = incubatorRepository.findById(id).get();
-        //model.addAttribute("incubator", incubator);
-        return incubator.toString();
-
+    /** Get all incubators of a hospital */
+    @GetMapping(value = "/hospital/{id}")
+    public String getAllExamsOfAConsultation(@PathVariable Long id, Model model){
+        Hospital hospital =  hospitalRepository.getOne(id);
+        List<Incubator> incubators = incubatorRepository.findByHospital(hospital);
+        model.addAttribute("incubators",incubators);
+        model.addAttribute("idHospital",id);
+        return "dashboard/pages/admin/incubator";
     }
 
 }

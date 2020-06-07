@@ -36,12 +36,12 @@ public class HospitalController {
     }
 
     @GetMapping(value = "/{id}")
-    @ResponseBody
-    public String getHospital(@PathVariable Long id) {
+    public String getHospital(@PathVariable Long id, Model model) {
 
         Optional<Hospital> hospital = hospitalRepository.findById(id);
+        model.addAttribute("hospital", hospital);
 
-        return hospital.toString();
+        return "dashboard/pages/admin/show-hospital";
     }
 
     @GetMapping(value = "/all")

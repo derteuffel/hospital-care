@@ -9,7 +9,6 @@
 <div class="content" layout:fragment="content">
     <div class="row">
         <div class="col-sm-5">
-            <h4 class="page-title">Hospitals</h4>
         </div>
         <div class="col-sm-7 col-7 text-right m-b-30">
             <a th:href="@{/admin/blood/add}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Add Blood</a>
@@ -32,7 +31,7 @@
         </div>
     </div>
 
-    <div class="row">
+   <!-- <div class="row">
         <h3>Incubator list</h3>
         <div class="col-md-12">
             <div class="table-responsive">
@@ -41,7 +40,6 @@
                     <tr>
                         <th>#</th>
                         <th>Incubator number</th>
-                        <th>Quantity</th>
                         <th>Date of Obtained</th>
                         <th>Status</th>
                         <th class="text-right">Action</th>
@@ -51,7 +49,6 @@
                     <tr th:each="incubator : ${incubators}">
                         <td th:text="${incubator.id}"></td>
                         <td th:text="${incubator.number}"></td>
-                        <td th:text="${incubator.quantity}"></td>
                         <td th:text="${incubator.dateOfObtained}"></td>
                         <td th:text="$incubator.status"></td>
                         <td class="text-right">
@@ -69,9 +66,9 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div>-->
     <br>
-    <div class="row">
+   <!-- <div class="row">
         <h3>Blood Bank list</h3>
         <div class="col-md-12">
             <div class="table-responsive">
@@ -79,8 +76,9 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Reference</th>
-                        <th>Quantity</th>
+                        <th>Rhésus</th>
+                        <th>Groupe sanguin</th>
+                        <th>date</th>
                         <th>Status</th>
                         <th class="text-right">Action</th>
                     </tr>
@@ -88,8 +86,9 @@
                     <tbody>
                     <tr  th:each="blood : ${bloods}">
                         <td th:text="${blood.id}"></td>
-                        <td th:text="${blood.reference}"></td>
-                        <td th:text="${blood.quantity}"></td>
+                        <td th:text="${blood.rhesus}"></td>
+                        <td th:text="${blood.groupeSanguin}"></td>
+                        <td th:text="${blood.date}"></td>
                         <td th:text="${blood.status}"></td>
 
                         <td class="text-right">
@@ -107,7 +106,7 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div>-->
 </div>
 </body>
 </html>
