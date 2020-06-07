@@ -1,4 +1,4 @@
-package com.hospital.Controller;
+package com.hospital.controller;
 
 import com.hospital.repository.DosMedicalRepository;
 import org.springframework.beans.factory.annotation.Autowired;

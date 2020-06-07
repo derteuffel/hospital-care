@@ -1,4 +1,4 @@
-package com.hospital.Controller;
+package com.hospital.controller;
 
 
 import com.hospital.entities.BloodBank;
@@ -22,9 +22,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Controller
-@RequestMapping("/admin/blood")
+@RequestMapping("/admin/bloodbank")
 public class BloodBankController {
-
 
     @Autowired
     private BloodBankRepository bloodBankRepository;

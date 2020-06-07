@@ -1,4 +1,4 @@
-package com.hospital.Controller;
+package com.hospital.controller;
 
 
 import com.hospital.entities.*;
@@ -25,7 +25,6 @@ import java.util.stream.IntStream;
 @Controller
 @RequestMapping("/admin/incubator")
 public class IncubatorController {
-
 
     @Autowired
     private IncubatorRepository incubatorRepository;
@@ -67,7 +66,7 @@ public class IncubatorController {
     }
 
 
-   @GetMapping("/add")
+    @GetMapping("/add")
     public String form(Model model, Long idHospital){
         List<Hospital> hospitals=hospitalRepository.findAll();
         model.addAttribute("incubator", new Incubator());
@@ -86,7 +85,7 @@ public class IncubatorController {
         incubator.setStatus(incubatorHelper.getStatus());
         incubator.setNumber(incubatorHelper.getNumber());
         incubator.setDateObtained(incubatorHelper.getDateObtained());
-       // incubator.setHospital(hospital);
+        // incubator.setHospital(hospital);
         session.setAttribute("idHospital",idHospital);
         incubatorRepository.save(incubator);
         return "redirect:/admin/hospital/" +session.getAttribute("idHospital") ;
@@ -119,7 +118,5 @@ public class IncubatorController {
         return incubator.toString();
 
     }
-
-
 
 }

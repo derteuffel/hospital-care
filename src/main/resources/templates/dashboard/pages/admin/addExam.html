@@ -17,9 +17,13 @@
             <form method="post" action="/admin/exam/create" th:object="${examenHelper}">
                 <input class="form-control" type="hidden" name="idConsultation" th:value="${idConsultation}">
                 <div class="form-group">
-                    <label th:for="name">Name</label>
-                    <input class="form-control" type="text" th:field="*{name}" required/>
-                    <span class="error" th:errors="*{name}"></span>
+                    <label>Name</label>
+                    <select name="name" class="form-control">
+                        <option value="A" test-type="A-Test">A</option>
+                        <option value="B" test-type="B-Test">B</option>
+                        <option value="C" test-type="C-Test">C</option>
+                        <option value="D" test-type="D-Test">D</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label th:for="testType">Test Type</label>
@@ -28,7 +32,7 @@
                 </div>
                 <div class="form-group">
                     <label th:for="dateOfTesting">Date Of Testing</label>
-                    <input class="form-control" type="date" th:field="*{dateOfTesting}" required/>
+                    <input class="form-control date" type="date" th:field="*{dateOfTesting}" required/>
                     <span class="error" th:errors="*{dateOfTesting}"></span>
                 </div>
                 <div class="form-group">

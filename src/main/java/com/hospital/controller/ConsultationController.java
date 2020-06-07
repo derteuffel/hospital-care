@@ -1,9 +1,10 @@
-package com.hospital.Controller;
+package com.hospital.controller;
 
 
 import com.hospital.entities.*;
 import com.hospital.enums.ERole;
 import com.hospital.helpers.ConsultationHelper;
+import com.hospital.helpers.DosMedicalHelper;
 import com.hospital.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -1,23 +1,16 @@
-package com.hospital.Controller;
+package com.hospital.controller;
 
 
 import com.hospital.entities.Compte;
 import com.hospital.entities.DosMedical;
+import com.hospital.entities.Examen;
 import com.hospital.entities.Role;
 import com.hospital.enums.ERole;
 import com.hospital.helpers.CompteRegistrationDto;
 import com.hospital.helpers.DosMedicalHelper;
 import com.hospital.repository.*;
 import com.hospital.services.CompteService;
-import com.hospital.services.CompteService;
 import org.apache.tomcat.util.log.SystemLogHandler;
-
-import com.hospital.services.CompteService;
-
-import com.hospital.repository.RoleRepository;
-import com.hospital.services.CompteService;
-import org.apache.tomcat.util.log.SystemLogHandler;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -185,4 +178,5 @@ public class DosMedicalController {
     public DosMedical getMedicalRecord(@PathVariable Long id){
         return dos.getOne(id);
     }
+
 }

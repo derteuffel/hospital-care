@@ -40,6 +40,21 @@ public class ExamenHelper {
     @NotBlank(message = "hospital name must not be blank")
     private String hospitalName;
 
+    public ExamenHelper(){
+
+    }
+
+    public ExamenHelper(String name, String testType, Date deliverDate, Date dateOfTesting, String results, String description, Long idConsultation,String hospitalName) {
+        this.name = name;
+        this.testType = testType;
+        this.deliverDate = deliverDate;
+        this.dateOfTesting = dateOfTesting;
+        this.results = results;
+        this.description = description;
+        this.idConsultation = idConsultation;
+        this.hospitalName = hospitalName;
+    }
+
     public Examen getExamInstance(Hospital hospital, Consultation consultation){
         Examen examen = new Examen();
         examen.setDateOfTesting(getDateOfTesting());
@@ -51,6 +66,11 @@ public class ExamenHelper {
         examen.setConsultation(consultation);
         examen.setHospital(hospital);
         return examen;
+    }
+
+    public static ExamenHelper getExamenHelperInstance(Examen exam){
+        return new ExamenHelper(exam.getName(),exam.getTestType(),exam.getDeliverDate(),exam.getDateOfTesting(),exam.getResults(),
+                exam.getDescription(),exam.getConsultation().getId(),exam.getHospital().getName());
     }
 
     public String getResults() {

@@ -1,9 +1,7 @@
-package com.hospital.Controller;
+package com.hospital.controller;
 
-import com.hospital.entities.BloodBank;
 import com.hospital.entities.Hospital;
 import com.hospital.entities.HospitalSearch;
-import com.hospital.entities.Incubator;
 import com.hospital.repository.HospitalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,18 +36,17 @@ public class HospitalController {
     }
 
     @GetMapping(value = "/{id}")
-    public String getHospital(@PathVariable Long id, Model model) {
+    @ResponseBody
+    public String getHospital(@PathVariable Long id) {
 
-        model.addAttribute("hospital", hospitalRepository.getOne(id));
-        model.addAttribute("incubator", new Incubator());
-        model.addAttribute("bloodblank", new BloodBank());
+        Optional<Hospital> hospital = hospitalRepository.findById(id);
 
-        return "dashboard/pages/admin/show-hospital";
+        return hospital.toString();
     }
 
     @GetMapping(value = "/all")
 
-    public ModelAndView getHospitals(Model model, @RequestParam(name = "page") Optional<Integer> page) {
+    public ModelAndView getHospitals(Model model) {
 
         ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/hospital-list");
 
