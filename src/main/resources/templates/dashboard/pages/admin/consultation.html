@@ -15,6 +15,12 @@
             <a th:href="@{'/admin/consultation/create?code='+${code}}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add a consultation</a>
         </div>
     </div>
+    <div th:if="${success}">
+        <div class="alert alert-success" th:text="${success}"></div>
+    </div>
+    <div th:if="${error}">
+        <div class="alert alert-danger" th:text="${error}"></div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
@@ -23,7 +29,15 @@
                     <tr>
                         <th>#</th>
                         <th>date</th>
-                        <th>Lieu</th>
+                        <th>height</th>
+                        <th>weight</th>
+                        <th>pressure</th>
+                        <th>temperature</th>
+                        <th>age</th>
+                        <th>sex</th>
+                        <th>Doctor's Name</th>
+                        <th>Doctor's Phone</th>
+                        <th>Hospital</th>
                         <th class="text-right">Action</th>
                     </tr>
                     </thead>
@@ -32,14 +46,22 @@
                         <input type="hidden" name="id" th:value="${consultation.id}"/>
                         <td th:text="${i.count}"></td>
                         <td th:text="${consultation.date}"></td>
+                        <td th:text="${consultation.height}"></td>
+                        <td th:text="${consultation.weight}"></td>
+                        <td th:text="${consultation.pressure}"></td>
+                        <td th:text="${consultation.temperature}"></td>
+                        <td th:text="${consultation.age}"></td>
+                        <td th:text="${consultation.sex}"></td>
+                        <td th:text="${consultation.personnel.lastName}"></td>
+                        <td th:text="${consultation.personnel.phone}"></td>
                         <td th:text="${consultation.hospital.name}"></td>
                         <td class="text-right">
                             <div class="dropdown dropdown-action">
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right menu_">
-                                    <a class="dropdown-item" th:href="@{'/admin/exam/consultation/'+${consultation.id}}"><i class="fa fa-pencil m-r-5"></i> View Exams</a>
-                                    <a class="dropdown-item" th:href=""><i class="fa fa-pencil m-r-5"></i> View Exams</a>
-                                  <!--  <a class="dropdown-item" href="edit-patient.html"><i class="fa fa-pencil m-r-5"></i> Edit</a> -->
+                                    <a class="dropdown-item" th:href="@{'/admin/exam/consultation/'+${consultation.id}}" th:text="@{'View Exams ('+${consultation.examens.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
+                                    <a class="dropdown-item" th:href="@{'/admin/prescription/consultation/'+${consultation.id}}" th:text="@{'View Prescriptions ('+${consultation.prescriptions.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
+                                    <a class="dropdown-item" th:href="@{'/admin/consultation/update/'+${consultation.id}+'?code='+${code}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_patient"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                 </div>
                             </div>
@@ -55,8 +77,8 @@
     <form method="post" action="/admin/consultation/cancel">
         <img src="/assets/img/password.png" alt="" width="50" height="46">
         <div class="form-group">
-            <label><b>Enter your User Password</b></label>
-            <input class="form-control" type="text" name="password" required/>
+            <label><b>Enter a doctor Username</b></label>
+            <input class="form-control" type="password" name="username" required/>
             <input type="hidden" name="code" th:value="${code}" />
         </div>
         <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>

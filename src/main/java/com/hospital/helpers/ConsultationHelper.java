@@ -52,8 +52,28 @@ public class ConsultationHelper {
     public ConsultationHelper() {
     }
 
+    public ConsultationHelper(Date date, int height, double pressure, double weight, double temperature, String sex, int age, String doctorName, String doctorPhone, String observations,String hospitalName) {
+        this.date = date;
+        this.height = height;
+        this.pressure = pressure;
+        this.weight = weight;
+        this.temperature = temperature;
+        this.sex = sex;
+        this.age = age;
+        DoctorName = doctorName;
+        DoctorPhone = doctorPhone;
+        this.observations = observations;
+        this.hospitalName = hospitalName;
+    }
+
     public Consultation getConsultationInstance(Hospital hospital, DosMedical dosMedical, Personnel personnel){
         return new Consultation(date,height,weight,temperature,sex,age,pressure,hospital,dosMedical,personnel,observations);
+    }
+
+    public static ConsultationHelper getConsultationHelperInstance(Consultation consultation){
+        return new ConsultationHelper(consultation.getDate(),consultation.getHeight(),consultation.getPressure(),consultation.getWeight(),
+                consultation.getTemperature(),consultation.getSex(),consultation.getAge(),consultation.getPersonnel().getLastName(),consultation.getPersonnel().getPhone(),
+                consultation.getObservations(),consultation.getHospital().getName());
     }
 
     public String getCode() {

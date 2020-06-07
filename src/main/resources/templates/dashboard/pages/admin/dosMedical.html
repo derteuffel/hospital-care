@@ -15,6 +15,12 @@
             <a href="/admin/medical-record/create" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Medical Record</a>
         </div>
     </div>
+    <div th:if='${success}'>
+        <div class="alert alert-success" th:text="${success}"></div>
+    </div>
+    <div th:if='${error}'>
+        <div class="alert alert-danger" th:text="${error}"></div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
@@ -32,7 +38,7 @@
                         <th>Height</th>
                         <th>Blood Type</th>
                         <th>Rhesus</th>
-                       <!-- <th>HereditaryDiseases</th> -->
+                        <!-- <th>HereditaryDiseases</th> -->
                         <th>Description</th>
                         <th class="text-right">Action</th>
                     </tr>
@@ -41,7 +47,7 @@
                     <tr th:each="dosMedical,i: ${dosMedicalList}" >
                         <input type="hidden" name="id" th:value="${dosMedical.id}"/>
                         <td th:text="${i.count}"></td>
-                  <!--th:text="${dosMedical.compte.avatar}"--> <td><img width="28" height="28" src="/assets/img/user.jpg" class="rounded-circle m-r-5" alt=""></td>
+                        <!--th:text="${dosMedical.compte.avatar}"--> <td><img width="28" height="28" src="/assets/img/user.jpg" class="rounded-circle m-r-5" alt=""></td>
                         <td th:text="${dosMedical.name}"></td>
                         <td th:text="${dosMedical.code}"></td>
                         <td th:text="${dosMedical.compte.email}"></td>
@@ -51,14 +57,15 @@
                         <td th:text="${dosMedical.height}"></td>
                         <td th:text="${dosMedical.bloodType}"></td>
                         <td th:text="${dosMedical.rhesus}"></td>
-                       <!-- <td th:text="${dosMedical.hereditaryDiseases}"></td> -->
+                        <!-- <td th:text="${dosMedical.hereditaryDiseases}"></td> -->
                         <td th:text="${dosMedical.description}"></td>
                         <td class="text-right">
                             <div class="dropdown dropdown-action">
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right menu_">
-                                   <!-- <a class="dropdown-item" href="#"><i class="fa fa-pencil m-r-5"></i> Edit</a> -->
-                                    <a class="dropdown-item" th:href="@{'/admin/consultation/medical-record/'+${dosMedical.code}}"><i class="fa fa-pencil m-r-5"></i> View Consultations</a>
+                                    <!-- <a class="dropdown-item" href="#"><i class="fa fa-pencil m-r-5"></i> Edit</a> -->
+                                    <a class="dropdown-item" th:href="@{'/admin/consultation/medical-record/'+${dosMedical.code}}" th:text="@{'View Consultations ('+${dosMedical.consultations.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
+                                    <a class="dropdown-item"  th:href="@{'/admin/medical-record/update/'+${dosMedical.code}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_patient"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                 </div>
                             </div>
@@ -74,8 +81,8 @@
     <form method="post" action="/admin/medical-record/cancel">
         <img src="/assets/img/password.png" alt="" width="50" height="46">
         <div class="form-group">
-            <label><b>Enter your username</b></label>
-            <input class="form-control" type="password" name="password" required/>
+            <label><b>Enter a doctor Username</b></label>
+            <input class="form-control" type="password" name="username" required/>
         </div>
         <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
         <button type="submit" class="btn btn-danger">Delete</button>

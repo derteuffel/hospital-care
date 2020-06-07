@@ -49,24 +49,53 @@ public class Consultation implements Serializable {
     private Hospital hospital;
 
 
-
     @ManyToOne
     @JsonIgnoreProperties("consultations")
     private Personnel personnel;
 
-
     @OneToMany(mappedBy = "consultation")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Collection<Ordonnance>ordonnances;
+    private Collection<Prescription>prescriptions;
 
-
-    public Long getId() {
-        return id;
+    public Consultation(Date date, int height, double weight, double temperature, String sex, int age, double pressure, Hospital hospital, DosMedical dosMedical, Personnel personnel, String observations){
+        this.date = date;
+        this.height = height;
+        this.weight = weight;
+        this.pressure = pressure;
+        this.age = age;
+        this.sex = sex;
+        this.hospital = hospital;
+        this.dosMedical = dosMedical;
+        this.temperature = temperature;
+        this.observations = observations;
+        this.personnel = personnel;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Consultation(){}
+
+    public Hospital getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
+
+    public DosMedical getDosMedical() {
+        return dosMedical;
+    }
+
+    public void setDosMedical(DosMedical dosMedical) {
+        this.dosMedical = dosMedical;
+    }
+
+    public Collection<Examen> getExamens() {
+        return examens;
+    }
+
+    public void setExamens(Collection<Examen> examens) {
+        this.examens = examens;
     }
 
     public Date getDate() {
@@ -75,6 +104,18 @@ public class Consultation implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Personnel getPersonnel() {
+        return personnel;
+    }
+
+    public void setPersonnel(Personnel personnel) {
+        this.personnel = personnel;
     }
 
     public int getHeight() {
@@ -133,43 +174,15 @@ public class Consultation implements Serializable {
         this.observations = observations;
     }
 
-    public Collection<Examen> getExamens() {
-        return examens;
+    public Collection<Prescription> getPrescriptions() {
+        return prescriptions;
     }
 
-    public void setExamens(Collection<Examen> examens) {
-        this.examens = examens;
+    public void setPrescriptions(Collection<Prescription> prescriptions) {
+        this.prescriptions = prescriptions;
     }
 
-    public DosMedical getDosMedical() {
-        return dosMedical;
-    }
-
-    public void setDosMedical(DosMedical dosMedical) {
-        this.dosMedical = dosMedical;
-    }
-
-    public Hospital getHospital() {
-        return hospital;
-    }
-
-    public void setHospital(Hospital hospital) {
-        this.hospital = hospital;
-    }
-
-    public Personnel getPersonnel() {
-        return personnel;
-    }
-
-    public void setPersonnel(Personnel personnel) {
-        this.personnel = personnel;
-    }
-
-    public Collection<Ordonnance> getOrdonnances() {
-        return ordonnances;
-    }
-
-    public void setOrdonnances(Collection<Ordonnance> ordonnances) {
-        this.ordonnances = ordonnances;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

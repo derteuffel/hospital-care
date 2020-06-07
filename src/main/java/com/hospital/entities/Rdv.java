@@ -1,79 +1,59 @@
 package com.hospital.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@Table(name = "rdv")
+@Data
 public class Rdv implements Serializable {
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+    @NotNull
     private String motif;
-    private String heure;
+    @NotNull
     private Long compteId;
+    @NotNull
     private Long personnelId;
 
     public Rdv() {
     }
 
-    public Rdv(Date date, String motif, String heure, Long compteId, Long personnelId) {
+    public Rdv(Date date, String motif, Long compteId, Long personnelId) {
         this.date = date;
         this.motif = motif;
-        this.heure = heure;
         this.compteId = compteId;
         this.personnelId = personnelId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getMotif() {
-        return motif;
-    }
-
-    public void setMotif(String motif) {
-        this.motif = motif;
-    }
-
-    public String getHeure() {
-        return heure;
-    }
-
-    public void setHeure(String heure) {
-        this.heure = heure;
     }
 
     public Long getCompteId() {
         return compteId;
     }
 
-    public void setCompteId(Long compteId) {
-        this.compteId = compteId;
+    public Date getDate() {
+        return date;
     }
 
     public Long getPersonnelId() {
         return personnelId;
     }
 
-    public void setPersonnelId(Long personnelId) {
-        this.personnelId = personnelId;
+    public Long getId() {
+        return id;
+    }
+
+    public String getMotif() {
+        return motif;
     }
 }

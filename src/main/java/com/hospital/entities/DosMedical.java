@@ -19,7 +19,6 @@ import java.util.Date;
 
 @Entity
 public class DosMedical implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +31,7 @@ public class DosMedical implements Serializable {
     private double weight;
 
     @NotNull(message = "you must specify a date")
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 
@@ -50,8 +49,6 @@ public class DosMedical implements Serializable {
     private String bloodType;
 
     private String name;
-
-    private Integer age;
 
     @OneToOne
     private Compte compte;
@@ -71,7 +68,7 @@ public class DosMedical implements Serializable {
     }
 
     public DosMedical(String rhesus, double weight, Integer height, Date birthDate, String hereditaryDiseases,
-                      String description, String code, String bloodType, String name, String sex, Integer age) {
+                      String description, String code, String bloodType, String name, String sex) {
         this.rhesus = rhesus;
         this.weight = weight;
         this.height = height;
@@ -82,7 +79,6 @@ public class DosMedical implements Serializable {
         this.bloodType = bloodType;
         this.name = name;
         this.sex = sex;
-        this.age = age;
     }
 
     public Long getId() {
@@ -109,28 +105,12 @@ public class DosMedical implements Serializable {
         this.weight = weight;
     }
 
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
     public String getHereditaryDiseases() {
         return hereditaryDiseases;
     }
 
     public void setHereditaryDiseases(String hereditaryDiseases) {
         this.hereditaryDiseases = hereditaryDiseases;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
     }
 
     public String getDescription() {
@@ -149,13 +129,22 @@ public class DosMedical implements Serializable {
         this.code = code;
     }
 
-    public String getSex() {
-        return sex;
+    public Compte getCompte() {
+        return compte;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setCompte(Compte compte) {
+        this.compte = compte;
     }
+
+    public Collection<Consultation> getConsultations() {
+        return consultations;
+    }
+
+    public void setConsultations(Collection<Consultation> consultations) {
+        this.consultations = consultations;
+    }
+
 
     public String getBloodType() {
         return bloodType;
@@ -173,27 +162,27 @@ public class DosMedical implements Serializable {
         this.name = name;
     }
 
-    public Integer getAge() {
-        return age;
+    public Integer getHeight() {
+        return height;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setHeight(Integer height) {
+        this.height = height;
     }
 
-    public Compte getCompte() {
-        return compte;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setCompte(Compte compte) {
-        this.compte = compte;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public Collection<Consultation> getConsultations() {
-        return consultations;
+    public String getSex() {
+        return sex;
     }
 
-    public void setConsultations(Collection<Consultation> consultations) {
-        this.consultations = consultations;
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }
