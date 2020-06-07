@@ -3,13 +3,12 @@ package com.hospital.Controller;
 
 import com.hospital.entities.Compte;
 import com.hospital.entities.DosMedical;
+import com.hospital.entities.Examen;
 import com.hospital.entities.Role;
 import com.hospital.enums.ERole;
 import com.hospital.helpers.CompteRegistrationDto;
 import com.hospital.helpers.DosMedicalHelper;
-import com.hospital.repository.CompteRepository;
-import com.hospital.repository.DosMedicalRepository;
-import com.hospital.repository.RoleRepository;
+import com.hospital.repository.*;
 import com.hospital.services.CompteService;
 import org.apache.tomcat.util.log.SystemLogHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +38,15 @@ public class DosMedicalController {
 
     @Autowired
     private CompteService compteService;
+
+    @Autowired
+    private ConsultationRepository consultationRepository;
+
+    @Autowired
+    private PrescriptionRepository prescriptionRepository;
+
+    @Autowired
+    private ExamenRepository examenRepository;
 
     /** Retrieve all medical records */
     @GetMapping(value = "/all")
@@ -106,8 +114,61 @@ public class DosMedicalController {
             }
         }
 
+        DosMedical dosMedical = dos.getOne(id);
+        dosMedical.getConsultations().forEach(consultation -> {
+            prescriptionRepository.deleteAll(consultation.getPrescriptions());
+            examenRepository.deleteAll(consultation.getExamens());
+        });
+        consultationRepository.deleteAll(dosMedical.getConsultations());
         dos.deleteById(id);
         model.addAttribute("success","Operation successfully completed");
+        return "redirect:/admin/medical-record/all";
+    }
+
+    /** form for updating a medical-record */
+    @GetMapping(value = "/update/{code}")
+    public String updateMedicalRecords(@PathVariable String code, Model model){
+        DosMedical dosMedical = dos.findByCode(code);
+
+        if(dosMedical != null){
+            model.addAttribute("dosMedicalHelper",DosMedicalHelper.getDosMedicalHelperInstance(dosMedical));
+        }
+        return "dashboard/pages/admin/updateDosMedical";
+    }
+
+    /** Update a medical record */
+    @PostMapping(value = "/update/{code}")
+    public String updateMedicalRecord(@PathVariable String code, @ModelAttribute @Valid DosMedicalHelper dosMedicalHelper, Errors errors, Model model){
+        if(errors.hasErrors()) {
+            return "dashboard/pages/admin/updateDosMedical";
+        }
+        DosMedical exDosMedical = dos.findByCode(code);
+        DosMedical newDosMedical = dosMedicalHelper.getDosMedicalInstance();
+        exDosMedical.getCompte().setEmail(dosMedicalHelper.getEmail());
+        newDosMedical.setId(exDosMedical.getId());
+        newDosMedical.setCompte(exDosMedical.getCompte());
+        dos.save(newDosMedical);
+       /* Compte compte = compteRepository.findByUsername(username);
+        boolean authorized = false;
+
+        if(compte == null){
+            model.addAttribute("error","There is no account with this username");
+            return "redirect:/admin/medical-record/all";
+        }else{
+            for (Role role : compte.getRoles()){
+                if(role.getName().equals(ERole.ROLE_ROOT.toString())){
+                    authorized = true;
+                }
+            }
+
+            if(!authorized){
+                model.addAttribute("error","you don't have rights to perform this operation");
+                return "redirect:/admin/medical-record/all";
+            }
+        }*/
+
+        model.addAttribute("success","Operation successfully completed");
+        System.out.println(model.getAttribute("success"));
         return "redirect:/admin/medical-record/all";
     }
 
