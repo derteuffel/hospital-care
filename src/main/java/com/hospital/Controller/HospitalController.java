@@ -46,7 +46,7 @@ public class HospitalController {
 
     @GetMapping(value = "/all")
 
-    public ModelAndView getHospitals(Model model, @RequestParam(name = "page") Optional<Integer> page) {
+    public ModelAndView getHospitals(Model model) {
 
         ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/hospital-list");
 

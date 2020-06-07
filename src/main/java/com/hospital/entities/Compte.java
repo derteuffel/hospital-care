@@ -29,6 +29,7 @@ public class Compte implements Serializable {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 
+
     @JoinTable(
             name = "comptes_roles",
             joinColumns = @JoinColumn(
@@ -44,8 +45,7 @@ public class Compte implements Serializable {
                     name = "compte_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
                     name = "personnel_id", referencedColumnName = "id"))*/
-   @OneToOne
-   private Personnel personnel;
+
 
 
     public Compte(String username, String email, Boolean status, String password) {
@@ -110,18 +110,11 @@ public class Compte implements Serializable {
     }
 
     public Collection<Role> getRoles() {
-        return roles;
+        return this.roles;
     }
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
 
-    public Personnel getPersonnel() {
-        return personnel;
-    }
-
-    public void setPersonnel(Personnel personnel) {
-        this.personnel = personnel;
-    }
 }
