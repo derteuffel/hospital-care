@@ -1,9 +1,14 @@
 package com.hospital.helpers;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hospital.entities.Consultation;
+import com.hospital.entities.Examen;
+import com.hospital.entities.Hospital;
 import com.hospital.entities.Prescription;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
@@ -35,11 +40,11 @@ public class PrescriptionHelper {
     }
 
     public Prescription getPrescriptionInstance(Consultation consultation){
-        return new Prescription(date,dosage,consultation);
+       return new Prescription(date,dosage,consultation);
     }
 
     public static PrescriptionHelper getPrescriptionHelperInstance(Prescription prescription){
-        return new PrescriptionHelper(prescription.getDate(),prescription.getDosage(),prescription.getConsultation().getId());
+       return new PrescriptionHelper(prescription.getDate(),prescription.getDosage(),prescription.getConsultation().getId());
     }
 
 

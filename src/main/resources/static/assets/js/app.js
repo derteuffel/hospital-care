@@ -151,6 +151,18 @@ $(document).ready(function($) {
 			"searching": true,
 		});
 	}
+
+	$('.date').attr("value",new Date().toISOString().substr(0,10))
+
+    $('#doctorPhone').val($('select[name="doctorName"]').children("option:selected").attr('number'));
+    $('select[name="doctorName"]').on('change',function(){
+      $('#doctorPhone').val($(this).children("option:selected").attr('number'))
+    })
+
+    $('#testType').val($('select[name="name"]').children("option:selected").attr('test-type'));
+    $('select[name="name"]').on('change',function(){
+      $('#testType').val($(this).children("option:selected").attr('test-type'))
+    })
 	
 	// Bootstrap Tooltip
 	if($('[data-toggle="tooltip"]').length > 0) {

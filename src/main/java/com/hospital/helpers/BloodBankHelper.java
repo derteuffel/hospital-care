@@ -1,5 +1,7 @@
 package com.hospital.helpers;
 
+import com.hospital.entities.BloodBank;
+import com.hospital.entities.Hospital;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,7 +21,21 @@ public class BloodBankHelper {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    private Boolean status;
+    @NotNull(message = "idHospital field must not be null")
+    private Long idHospital;
+
+    public BloodBank getBloodBankInstance(Hospital hospital){
+        BloodBank incubator = new BloodBank();
+        incubator.setGroupeSanguin(getGroupeSanguin());
+        incubator.setRhesus(getRhesus());
+        incubator.setHospital(hospital);
+        return incubator;
+    }
+
+
+
+
+
 
 
 

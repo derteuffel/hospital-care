@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Controller
-@RequestMapping("/admin/bloodbank")
+@RequestMapping("/admin/blood")
 public class BloodBankController {
 
     @Autowired
@@ -34,7 +35,7 @@ public class BloodBankController {
 
     @GetMapping(value = "/all")
 
-    public ModelAndView getIncubators(Model model, @RequestParam(name = "page") Optional<Integer> page) {
+    public ModelAndView getBloods(Model model, @RequestParam(name = "page") Optional<Integer> page) {
 
         int currentPage = page.orElse(1);
 
@@ -55,7 +56,7 @@ public class BloodBankController {
         }
 
         BloodBank bloodbank = new BloodBank();
-        modelAndView.addObject("bloodbank",bloodbank);
+        modelAndView.addObject("blood",bloodbank);
         //modelAndView.addObject("activeArticleList", true);
         modelAndView.addObject("bloods", bloodbanks.getContent());
         modelAndView.addObject("currentPage",currentPage);
@@ -64,29 +65,32 @@ public class BloodBankController {
     }
 
 
-    @GetMapping("/add")
-    public String form(Model model, Long id){
-        List<Hospital> hospitals=hospitalRepository.findAll();
-        model.addAttribute("blood", new BloodBank());
-        model.addAttribute("hospitals", hospitals);
+
+    /** form for adding an blood */
+    @GetMapping(value = "/create")
+    public String add(@RequestParam("idHospital") int  idHospital, Model model){
+        List<Hospital> hospitals = hospitalRepository.findAll();
+        model.addAttribute("idHospital",idHospital);
+        model.addAttribute("hospitalList",hospitals);
+        model.addAttribute(new BloodBankHelper());
         return "dashboard/pages/admin/add-blood";
     }
 
+    /** Add an blood */
     @PostMapping("/create")
-    public String saveIncubator(@ModelAttribute @Valid BloodBankHelper bloodBankHelper, Long idHospital,
-                                HttpSession session){
-
-        Hospital hospital = hospitalRepository.findById(idHospital).get();
-        BloodBank bloodBank = new BloodBank();
-        bloodBank.setDate(bloodBankHelper.getDate());
-        bloodBank.setGroupeSanguin(bloodBankHelper.getGroupeSanguin());
-        bloodBank.setRhesus(bloodBankHelper.getRhesus());
-        bloodBank.setStatus(bloodBankHelper.getStatus());
-        bloodBank.setHospital(hospital);
-        session.setAttribute("idHospital",idHospital);
-        bloodBankRepository.save(bloodBank);
-        return "redirect:/admin/hospital/" +session.getAttribute("idHospital") ;
+    public String save(@ModelAttribute @Valid BloodBankHelper bloodBankHelper, Errors errors, Model model){
+        if(errors.hasErrors()){
+            model.addAttribute("hospitalList",hospitalRepository.findAll());
+            model.addAttribute("idHospital",bloodBankHelper.getIdHospital());
+            return "dashboard/pages/admin/add-blood";
+        }else{
+            Hospital hospital = hospitalRepository.getOne(bloodBankHelper.getIdHospital());
+            //Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());
+            bloodBankRepository.save(bloodBankHelper.getBloodBankInstance(hospital));
+        }
+        return  "redirect:/admin/blood/hospital/"+bloodBankHelper.getIdHospital();
     }
+
 
     @PostMapping("/search")
     public String searchBloodBank(BloodBank bloodBank,Model model){
@@ -107,14 +111,14 @@ public class BloodBankController {
         return "redirect:/admin/hospital/"+hospital.getId() ;
     }
 
-    @GetMapping("/{id}")
-    @ResponseBody
-    public String getIncubator(Model model, @PathVariable Long id){
-        BloodBank bloodBank = bloodBankRepository.findById(id).get();
-        //model.addAttribute("bloodBank", bloodBank);
-        return bloodBank.toString();
-
+    /** Get all bloods of a hospital */
+    @GetMapping(value = "/hospital/{id}")
+    public String getAllBloodOfHospital(@PathVariable Long id, Model model){
+        Hospital hospital =  hospitalRepository.getOne(id);
+        List<BloodBank> bloods = bloodBankRepository.findByHospital(hospital);
+        model.addAttribute("bloods",bloods);
+        model.addAttribute("idHospital",id);
+        return "dashboard/pages/admin/blood";
     }
-
 
 }

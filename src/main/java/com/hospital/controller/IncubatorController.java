@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -66,29 +67,29 @@ public class IncubatorController {
     }
 
 
-    @GetMapping("/add")
-    public String form(Model model, Long idHospital){
-        List<Hospital> hospitals=hospitalRepository.findAll();
-        model.addAttribute("incubator", new Incubator());
+    /** form for adding an exam */
+    @GetMapping(value = "/create")
+    public String addExam(@RequestParam("idHospital") int  idHospital, Model model){
+        List<Hospital> hospitals = hospitalRepository.findAll();
         model.addAttribute("idHospital",idHospital);
-        model.addAttribute("hospitals", hospitals);
+        model.addAttribute("hospitalList",hospitals);
+        model.addAttribute(new IncubatorHelper());
         return "dashboard/pages/admin/add-incubator";
     }
 
-
+    /** Add an incubator */
     @PostMapping("/create")
-    public String saveIncubator(@Valid IncubatorHelper incubatorHelper, Long idHospital,
-                                HttpSession session){
-
-        Hospital hospital = hospitalRepository.getOne(idHospital);
-        Incubator incubator = new Incubator();
-        incubator.setStatus(incubatorHelper.getStatus());
-        incubator.setNumber(incubatorHelper.getNumber());
-        incubator.setDateObtained(incubatorHelper.getDateObtained());
-        // incubator.setHospital(hospital);
-        session.setAttribute("idHospital",idHospital);
-        incubatorRepository.save(incubator);
-        return "redirect:/admin/hospital/" +session.getAttribute("idHospital") ;
+    public String save(@ModelAttribute @Valid IncubatorHelper incubatorHelper, Errors errors, Model model){
+        if(errors.hasErrors()){
+            model.addAttribute("hospitalList",hospitalRepository.findAll());
+            model.addAttribute("idHospital",incubatorHelper.getIdHospital());
+            return "dashboard/pages/admin/add-incubator";
+        }else{
+            Hospital hospital = hospitalRepository.getOne(incubatorHelper.getIdHospital());
+            //Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());
+            incubatorRepository.save(incubatorHelper.getIncubatorInstance(hospital));
+        }
+        return  "redirect:/admin/incubator/hospital/"+incubatorHelper.getIdHospital();
     }
 
     @PostMapping("/search")
@@ -112,7 +113,7 @@ public class IncubatorController {
 
     /** Get all incubators of a hospital */
     @GetMapping(value = "/hospital/{id}")
-    public String getAllExamsOfAConsultation(@PathVariable Long id, Model model){
+    public String getAllIncubatorOfHospital(@PathVariable Long id, Model model){
         Hospital hospital =  hospitalRepository.getOne(id);
         List<Incubator> incubators = incubatorRepository.findByHospital(hospital);
         model.addAttribute("incubators",incubators);

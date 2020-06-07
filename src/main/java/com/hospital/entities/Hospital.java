@@ -65,4 +65,7 @@ public class Hospital implements Serializable {
     private Collection<Examen> examens;
 
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }

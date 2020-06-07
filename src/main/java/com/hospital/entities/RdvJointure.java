@@ -1,8 +1,11 @@
 package com.hospital.entities;
 
+import javax.persistence.Entity;
 import java.util.Date;
 
+
 public class RdvJointure {
+
     private Long id;
 
     private String username;
@@ -25,4 +28,6 @@ public class RdvJointure {
         this.motif = motif;
         this.personnel = personnel;
     }
+
+
 }
