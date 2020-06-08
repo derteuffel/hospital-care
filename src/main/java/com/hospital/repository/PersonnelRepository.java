@@ -19,4 +19,7 @@ public interface PersonnelRepository extends JpaRepository<Personnel, Long> {
     Personnel findByLastName(String lastName);
 
     List<Personnel>findAllByFunction(String function);
+
+    List<Personnel> findAllByHospital_Id(Long id);
 }
+

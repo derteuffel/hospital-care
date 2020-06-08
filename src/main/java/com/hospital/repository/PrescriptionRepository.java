@@ -9,3 +9,4 @@ import java.util.List;
 public interface PrescriptionRepository extends JpaRepository<Prescription,Long> {
     List<Prescription> findByConsultation(Consultation consultation);
 }
+

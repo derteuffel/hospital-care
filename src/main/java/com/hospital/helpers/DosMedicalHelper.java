@@ -23,7 +23,7 @@ public class DosMedicalHelper {
     @Size(min = 1, max = 1, message = "sex one character")
     private String sex;
 
-   // @NotBlank(message = "weight must not be null")
+    // @NotBlank(message = "weight must not be null")
     private String weight;
 
     @NotBlank(message = "height must not be null")

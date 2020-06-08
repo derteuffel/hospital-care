@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -17,52 +19,20 @@ public class Incubator implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer quantity;
+    private String type;
 
     private String number;
 
     private String dateObtained;
 
-    private Boolean status;
+    @NotNull
+    @Size(min = 1, max = 1)
+    private String status;
 
     @ManyToOne
     @JsonIgnoreProperties("incubators")
     private Hospital hospital;
 
 
-    public String getDateObtained() {
-        return dateObtained;
-    }
 
-    public void setDateObtained(String dateObtained) {
-        this.dateObtained = dateObtained;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String incubatorNo) {
-        this.number = number;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }

@@ -14,7 +14,7 @@ public interface CompteService extends UserDetailsService {
     Compte findByUsername(String username);
     Compte save(CompteRegistrationDto compteRegistrationDto, String s);
     Compte savePatient(CompteRegistrationDto compteRegistrationDto, String s, DosMedical dosMedical);
-    List<Compte> findAllCompte();
 
+    public List<Compte> findAllCompte();
 
 }

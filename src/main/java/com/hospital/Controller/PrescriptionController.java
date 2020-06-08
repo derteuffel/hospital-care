@@ -1,8 +1,12 @@
 package com.hospital.Controller;
-
 import com.hospital.entities.*;
 import com.hospital.enums.ERole;
 import com.hospital.helpers.ExamenHelper;
+import com.hospital.entities.Compte;
+import com.hospital.entities.Consultation;
+import com.hospital.entities.Prescription;
+import com.hospital.entities.Role;
+import com.hospital.enums.ERole;
 import com.hospital.helpers.PrescriptionHelper;
 import com.hospital.repository.CompteRepository;
 import com.hospital.repository.ConsultationRepository;
@@ -22,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin/prescription")
@@ -34,7 +39,6 @@ public class PrescriptionController {
     @Autowired
     private CompteRepository compteRepository;
 
-    
 
     /** Get all prescriptions of a consultation */
     @GetMapping(value = "/consultation/{id}")
@@ -56,7 +60,7 @@ public class PrescriptionController {
 
     /** Add an prescription */
     @PostMapping("/create")
-    public String savePrescription(@ModelAttribute @Valid PrescriptionHelper prescriptionHelper,Errors errors, Model model){
+    public String savePrescription(@ModelAttribute @Valid PrescriptionHelper prescriptionHelper, Errors errors, Model model){
         if(errors.hasErrors()){
             model.addAttribute("idConsultation",prescriptionHelper.getIdConsultation());
             return "dashboard/pages/admin/addPrescription";
@@ -147,3 +151,4 @@ public class PrescriptionController {
     }
 
 }
+

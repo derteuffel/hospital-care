@@ -24,11 +24,6 @@ public class DashboardController {
         return "dashboard/pages/admin/activities";
     }
 
-    @GetMapping("/doctors")
-    public String doctors(){
-        return "dashboard/pages/admin/doctors";
-    }
-
     @GetMapping("/addDosMedical")
     public String addDosMedical(){
         return "dashboard/pages/admin/addDosMedical";

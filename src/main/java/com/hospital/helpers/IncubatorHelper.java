@@ -1,17 +1,20 @@
 package com.hospital.helpers;
 
+import com.hospital.entities.Hospital;
+import com.hospital.entities.Incubator;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 public class IncubatorHelper {
 
 
-    private Integer quantity;
+    private String type;
 
     private String number;
 
@@ -22,7 +25,19 @@ public class IncubatorHelper {
     @NotNull(message = "idHospital field must not be null")
     private Long idHospital;
 
-    private Boolean status;
+    @NotNull
+    @Size(min = 1, max = 1)
+    private String status;
+
+    public Incubator getIncubatorInstance(Hospital hospital){
+        Incubator incubator = new Incubator();
+        incubator.setDateObtained(getDateObtained());
+        incubator.setNumber(getNumber());
+        incubator.setType(getType());
+        incubator.setStatus(getStatus());
+        incubator.setHospital(hospital);
+        return incubator;
+    }
 
 
     public String getNumber() {
@@ -33,12 +48,12 @@ public class IncubatorHelper {
         this.number = number;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public String getType() {
+        return type;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getDateObtained() {
@@ -49,11 +64,11 @@ public class IncubatorHelper {
         this.dateObtained = dateObtained;
     }
 
-    public Boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

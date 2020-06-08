@@ -46,7 +46,7 @@ public class ConsultationHelper {
 
     private String code;
 
-    @NotBlank(message = "hospitalName must not be blank")
+//    @NotBlank(message = "hospitalName must not be blank")
     private String hospitalName;
 
     public ConsultationHelper() {
