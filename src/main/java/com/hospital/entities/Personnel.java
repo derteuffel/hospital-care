@@ -37,9 +37,12 @@ public class Personnel implements Serializable {
 
     private String address;
     private String avatar;
+    @OneToOne
+    private Compte compte;
 
 
     @OneToMany(mappedBy = "personnel")
+
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Consultation> consultations;
@@ -47,6 +50,9 @@ public class Personnel implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("personnels")
     private Hospital hospital;
+
+    public Personnel() {
+    }
 
     public String getLastName() {
         return lastName;
@@ -138,5 +144,9 @@ public class Personnel implements Serializable {
 
     public void setConsultations(Collection<Consultation> consultations) {
         this.consultations = consultations;
+    }
+
+    public Hospital getHospital() {
+        return hospital;
     }
 }

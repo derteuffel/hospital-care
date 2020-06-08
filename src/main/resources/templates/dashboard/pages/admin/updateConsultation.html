@@ -12,6 +12,10 @@
             <h4 class="page-title">Update Consultation</h4>
         </div>
     </div>
+<<<<<<< HEAD
+=======
+    <div th:if='${error}'><div class="alert alert-danger" th:text="${error}"></div></div>
+>>>>>>> remotes/origin/owner-developer
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
             <form method="post" th:action="@{'/admin/consultation/update/'+${idConsultation}}" th:object="${consultationHelper}">
@@ -24,7 +28,11 @@
                     </div>
                     <div class="form-group col-sm-6">
                         <label th:for="height">height</label>
+<<<<<<< HEAD
                         <input class="form-control" type="number" id="height" name="height" th:value="${patient.height}" required/>
+=======
+                        <input class="form-control" type="number" th:field="*{height}" required/>
+>>>>>>> remotes/origin/owner-developer
                         <span th:errors="*{height}" class="error"></span>
                     </div>
                     <div class="form-group col-sm-6">
@@ -34,7 +42,11 @@
                     </div>
                     <div class="form-group col-sm-6">
                         <label th:for="weight">weight</label>
+<<<<<<< HEAD
                         <input class="form-control" type="text" id="weight" name="weight" th:value="${patient.weight}" required/>
+=======
+                        <input class="form-control" type="text" th:field="*{weight}" required/>
+>>>>>>> remotes/origin/owner-developer
                         <span th:errors="*{weight}" class="error"></span>
                     </div>
                     <div class="form-group col-sm-6">
@@ -47,6 +59,7 @@
                         <input class="form-control" type="number" id="age" name="age" th:value="${age}" required/>
                         <span th:errors="*{age}" class="error"></span>
                     </div>
+<<<<<<< HEAD
                     <div class="form-group">
                         <label class="display-block">Sex</label>
                         <div class="form-check form-check-inline">
@@ -64,18 +77,29 @@
                         <span class="error" th:errors="*{sex}"></span>
                     </div>
                     <div class="form-group col-sm-6">
+=======
+                   <!-- <div class="form-group col-sm-6">
+>>>>>>> remotes/origin/owner-developer
                         <label>Hospital</label>
                         <select name="hospitalName" class="form-control">
                             <th:block th:each="hospital: ${hospitalList}">
                                 <option  th:value="${hospital.name}" th:text="${hospital.name}" th:selected="${consultationHelper.hospitalName} == ${hospital.name} ? true : false"></option>
                             </th:block>
                         </select>
+<<<<<<< HEAD
                     </div>
+=======
+                    </div> -->
+>>>>>>> remotes/origin/owner-developer
                     <div class="form-group col-sm-6">
                         <label th:for="doctorName">Doctor's Name</label>
                         <select name="doctorName" class="form-control">
                             <th:block th:each="doctor: ${doctors}">
+<<<<<<< HEAD
                                 <option  th:value="${doctor.username}" th:text="${doctor.username}" th:number="${doctor.personnel.phone}" th:selected="${consultationHelper.doctorName} == ${doctor.username} ? true : false"></option>
+=======
+                                <option  th:value="${doctor.lastName}" th:text="${doctor.lastName}" th:number="${doctor.phone}" th:selected="${consultationHelper.doctorName} == ${doctor.lastName} ? true : false"></option>
+>>>>>>> remotes/origin/owner-developer
                             </th:block>
                         </select>
                         <span th:errors="*{doctorName}" class="error"></span>
@@ -85,7 +109,27 @@
                         <input class="form-control" type="tel" th:field="*{doctorPhone}" required/>
                         <span th:errors="*{doctorPhone}" class="error"></span>
                     </div>
+<<<<<<< HEAD
                     <div class="form-group">
+=======
+                    <div class="form-group col-sm-6">
+                    <label class="display-block">Sex</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sex" id="M" value="M" th:checked="*{sex} == 'M' ? true : false">
+                        <label class="form-check-label" for="M">
+                            M
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sex" id="F" value="F" th:checked="*{sex} == 'F' ? true : false">
+                        <label class="form-check-label" for="F">
+                            F
+                        </label>
+                    </div>
+                    <span class="error" th:errors="*{sex}"></span>
+                </div>
+                    <div class="form-group col-sm-6">
+>>>>>>> remotes/origin/owner-developer
                         <label>Observations</label>
                         <textarea cols="30" rows="4" class="form-control" th:field="*{observations}"></textarea>
                     </div>

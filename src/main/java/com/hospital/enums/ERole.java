@@ -3,7 +3,7 @@ package com.hospital.enums;
 public enum ERole {
 
     ROLE_ROOT,
-    ROLE_ADMIN,
-    ROLE_USER,
-    ROLE_MEDECIN
+    ROLE_DOCTOR,
+    ROLE_PERSONNEL,
+    ROLE_PATIENT
 }

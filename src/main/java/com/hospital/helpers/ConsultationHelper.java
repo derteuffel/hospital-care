@@ -46,7 +46,7 @@ public class ConsultationHelper {
 
     private String code;
 
-    @NotBlank(message = "hospitalName must not be blank")
+//    @NotBlank(message = "hospitalName must not be blank")
     private String hospitalName;
 
     public ConsultationHelper() {
@@ -71,9 +71,9 @@ public class ConsultationHelper {
     }
 
     public static ConsultationHelper getConsultationHelperInstance(Consultation consultation){
-        return new ConsultationHelper(consultation.getDate(),consultation.getHeight(),consultation.getPressure(),consultation.getWeight(),
-                consultation.getTemperature(),consultation.getSex(),consultation.getAge(),consultation.getPersonnel().getLastName(),consultation.getPersonnel().getPhone(),
-                consultation.getObservations(),consultation.getHospital().getName());
+            return new ConsultationHelper(consultation.getDate(),consultation.getHeight(),consultation.getPressure(),consultation.getWeight(),
+                    consultation.getTemperature(),consultation.getSex(),consultation.getAge(),consultation.getPersonnel().getLastName(),consultation.getPersonnel().getPhone(),
+                    consultation.getObservations(),consultation.getHospital().getName());
     }
 
     public String getCode() {

@@ -1,10 +1,9 @@
-package com.hospital.controller;
+package com.hospital.Controller;
 
 
 import com.hospital.entities.*;
 import com.hospital.enums.ERole;
 import com.hospital.helpers.ConsultationHelper;
-import com.hospital.helpers.DosMedicalHelper;
 import com.hospital.repository.*;
 import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;

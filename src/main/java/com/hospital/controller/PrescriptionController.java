@@ -1,13 +1,14 @@
-package com.hospital.controller;
+package com.hospital.Controller;
 
-import com.hospital.entities.*;
+import com.hospital.entities.Compte;
+import com.hospital.entities.Consultation;
+import com.hospital.entities.Prescription;
+import com.hospital.entities.Role;
 import com.hospital.enums.ERole;
-import com.hospital.helpers.ExamenHelper;
 import com.hospital.helpers.PrescriptionHelper;
 import com.hospital.repository.CompteRepository;
 import com.hospital.repository.ConsultationRepository;
 import com.hospital.repository.PrescriptionRepository;
-import com.hospital.repository.HospitalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,11 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/prescription")
@@ -124,6 +121,7 @@ public class PrescriptionController {
         }
        /* Compte compte = compteRepository.findByUsername(username);
         boolean authorized = false;
+
         if(compte == null){
             model.addAttribute("error","There is no account with this username");
             return "redirect:/admin/medical-record/all";
@@ -133,6 +131,7 @@ public class PrescriptionController {
                     authorized = true;
                 }
             }
+
             if(!authorized){
                 model.addAttribute("error","you don't have rights to perform this operation");
                 return "redirect:/admin/medical-record/all";

@@ -63,10 +63,10 @@ public class CompteServiceImpl implements CompteService {
         compte.setAvatar(s);
         personnelRepository.save(personnel);
         Role role = new Role();
-        if (compteRepository.findAll().size()<=2){
+        if (compteRepository.findAll().size()<1){
             role.setName(ERole.ROLE_ROOT.toString());
         }else {
-            role.setName(ERole.ROLE_ADMIN.toString());
+            role.setName(ERole.ROLE_PERSONNEL.toString());
         }
         Optional<Role> existRole =  roleRepository.findByName(role.getName());
         if (existRole.isPresent()){
@@ -86,10 +86,10 @@ public class CompteServiceImpl implements CompteService {
     @Override
     public Compte savePatient(CompteRegistrationDto compteRegistrationDto, String s, DosMedical dosMedical) {
         Compte compte = new Compte();
-        Optional<Role> role = roleRepository.findByName(ERole.ROLE_USER.toString());
+        Optional<Role> role = roleRepository.findByName(ERole.ROLE_PATIENT.toString());
         if (!(role.isPresent())){
             Role role1 = new Role();
-            role1.setName(ERole.ROLE_USER.toString());
+            role1.setName(ERole.ROLE_PATIENT.toString());
             roleRepository.save(role1);
             compte.setRoles(Arrays.asList(role1));
         }else {
