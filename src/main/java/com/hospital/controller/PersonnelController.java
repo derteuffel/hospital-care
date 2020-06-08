@@ -1,25 +1,31 @@
-package com.hospital.Controller;
+package com.hospital.controller;
 
 
+import com.hospital.entities.Hospital;
 import com.hospital.entities.Personnel;
+import com.hospital.helpers.PersonnelHelper;
+import com.hospital.repository.HospitalRepository;
 import com.hospital.repository.PersonnelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/hospital-care/personnel")
+@RequestMapping("/admin/staff")
 public class PersonnelController {
 
 
@@ -29,31 +35,45 @@ public class PersonnelController {
     @Autowired
     private PersonnelRepository personnelRepository;
 
+    @Autowired
+    private HospitalRepository hospitalRepository;
 
+
+    /** Get all personnel in an application */
     @GetMapping("/lists")
     public String findAll(Model model){
         System.out.println(fileStorage);
         model.addAttribute("personnelForm", new Personnel());
-        model.addAttribute("personnels", personnelRepository.findAll());
+        model.addAttribute("staffs", personnelRepository.findAll());
 
-        return "personnel/all";
+        return "dashboard/pages/admin/doctors";
     }
 
-    @GetMapping("/form")
+/*    @GetMapping("/create")
+    public String form(Model model,@RequestParam("idHospital") int  idHospital, Long id){
+        List<Hospital> hospitals = hospitalRepository.findAll();
+        model.addAttribute("idHospital",idHospital);
+        model.addAttribute("hospital", hospitalRepository.getOne(id));
+        model.addAttribute("hospitalList",hospitals);
+        model.addAttribute(new PersonnelHelper());
+        return "dashboard/pages/admin/form-personnel";
+    }*/
+
+    @GetMapping("/create")
     public String form(Model model){
-        Personnel personnel = new Personnel();
-
-        model.addAttribute("personnel", personnel);
-        return "personnel/form";
+        model.addAttribute("hospitals", hospitalRepository.findAll());
+        model.addAttribute("personnel",new Personnel());
+        return "dashboard/pages/admin/form-personnel";
     }
 
 
-    @PostMapping("/save")
-    public String save(Personnel personnel, Model model,
+    @PostMapping("/create")
+    public String save(@ModelAttribute("personnel") @Valid Personnel personnel, Model model,
                        BindingResult bindingResult, @RequestParam("file") MultipartFile file){
 
         System.out.println(personnel.getLastName());
         Personnel persExists = personnelRepository.findByLastNameOrEmailOrPhone(personnel.getLastName(),
+
                 personnel.getEmail(), personnel.getPhone());
 
         if (persExists != null){
@@ -63,7 +83,7 @@ public class PersonnelController {
         }
 
         if(bindingResult.hasErrors()) {
-            return  "personnel/form";
+            return  "dashboard/pages/admin/form-personnel";
         }else {
             if (!(file.isEmpty())){
                 try {
@@ -78,11 +98,27 @@ public class PersonnelController {
                 personnel.setAvatar("/img/default.jpeg");
             }
             System.out.println(personnel.getLastName());
+           // Hospital hospital = hospitalRepository.getOne(personnelHelper.getIdHospital());
             personnelRepository.save(personnel);
         }
-        return "redirect:/hospital-care/personnel/lists";
+        return "redirect:/admin/staff/lists";
 
     }
+
+    @GetMapping("/update/{id}")
+    public String showEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs){
+
+        try{
+            Personnel personnel = personnelRepository.getOne(id);
+            model.addAttribute("personnel",personnel);
+            return "dashboard/pages/admin/edit-staff";
+        }catch (Exception e){
+            redirAttrs.addFlashAttribute("error", "This hospital seems to not exist");
+            return "redirect:/admin/staff/lists";
+        }
+    }
+
+
 
     @PostMapping("/update/{id}")
     public String updateUser(Personnel personnel, @PathVariable Long id, RedirectAttributes redirectAttributes,
@@ -116,11 +152,11 @@ public class PersonnelController {
             }
             personnelRepository.save(personnel2);
             redirectAttributes.addFlashAttribute("success", "The personnel has been updated successfully");
-            return "redirect:/hospital-care/personnel/get/"+personnel2.getId();
+            return "redirect:/admin/staff/get/"+personnel2.getId();
         }
         else {
             redirectAttributes.addFlashAttribute("error","There are no personnel with Id :" +id);
-            return "redirect:/hospital-care/personnel/lists";
+            return "redirect:/admin/staff/lists";
         }
     }
 
@@ -129,11 +165,11 @@ public class PersonnelController {
         Optional<Personnel> personnel = personnelRepository.findById(id);
         if (personnel.isPresent()){
             model.addAttribute("personnel",personnel.get());
-            return "personnel/detail";
+            return "dashboard/pages/admin/show-staff";
         }
         else {
             redirectAttributes.addFlashAttribute("error", "There no personnel with Id :" +id);
-            return "redirect:/hospital-care/personnel/lists";
+            return "redirect:/admin/staff/lists";
         }
     }
 
@@ -141,7 +177,7 @@ public class PersonnelController {
     public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         personnelRepository.deleteById(id);
         redirectAttributes.addFlashAttribute("success", "You deleted the personnel with Id:" +id);
-        return "redirect:/hospital/personnel/lists";
+        return "redirect:/admin/staff/lists";
     }
 
 }

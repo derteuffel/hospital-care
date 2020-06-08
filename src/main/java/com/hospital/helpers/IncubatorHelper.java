@@ -9,6 +9,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Data
 public class IncubatorHelper {
@@ -18,16 +19,22 @@ public class IncubatorHelper {
 
     private String number;
 
+    @NotNull(message = "you must specify a date of testing")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private String dateObtained;
+    private Date dateObtained;
 
     @NotNull(message = "idHospital field must not be null")
     private Long idHospital;
-
     @NotNull
-    @Size(min = 1, max = 1)
     private String status;
+
+    public IncubatorHelper(String type, String number,
+                          String status, Date dateObtained, String name) {
+    }
+
+    public IncubatorHelper() {
+    }
 
     public Incubator getIncubatorInstance(Hospital hospital){
         Incubator incubator = new Incubator();
@@ -37,6 +44,11 @@ public class IncubatorHelper {
         incubator.setStatus(getStatus());
         incubator.setHospital(hospital);
         return incubator;
+    }
+
+    public static IncubatorHelper getIncubatorHelperInstance(Incubator incubator){
+        return new IncubatorHelper(incubator.getType(), incubator.getNumber(),incubator.getStatus(),
+                incubator.getDateObtained(),incubator.getHospital().getName());
     }
 
 
@@ -56,11 +68,11 @@ public class IncubatorHelper {
         this.type = type;
     }
 
-    public String getDateObtained() {
+    public Date getDateObtained() {
         return dateObtained;
     }
 
-    public void setDateObtained(String dateObtained) {
+    public void setDateObtained(Date dateObtained) {
         this.dateObtained = dateObtained;
     }
 

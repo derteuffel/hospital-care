@@ -58,7 +58,7 @@
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right menu_">
                                     <a class="dropdown-item" th:href="@{'/admin/incubator/hospital/'+${hospital.id}}" th:text="@{'View Incubators ('+${hospital.incubators.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
-                                    <!--<a class="dropdown-item" th:href="@{'/admin/blood/hospital/'+${hospital.id}}" th:text="@{'View Blood Bank ('+${hospital.bloods.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>-->
+                                    <!--<a class="dropdown-item" th:href="@{'/admin/get/blood/hospital/'+${hospital.id}}" th:text="@{'View Bloods ('+${hospital.bloods.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>-->
                                     <a class="dropdown-item" th:href="@{'/admin/hospital/update/'+${hospital.id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_department"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                 </div>

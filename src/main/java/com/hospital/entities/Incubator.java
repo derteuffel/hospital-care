@@ -2,11 +2,13 @@ package com.hospital.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 
 
 @Entity
@@ -22,11 +24,11 @@ public class Incubator implements Serializable {
     private String type;
 
     private String number;
-
-    private String dateObtained;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dateObtained;
 
     @NotNull
-    @Size(min = 1, max = 1)
     private String status;
 
     @ManyToOne

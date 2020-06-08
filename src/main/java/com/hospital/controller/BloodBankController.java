@@ -35,35 +35,17 @@ public class BloodBankController {
 
     @GetMapping(value = "/all")
 
-    public ModelAndView getBloods(Model model, @RequestParam(name = "page") Optional<Integer> page) {
+    public ModelAndView getBloods(Model model) {
 
-        int currentPage = page.orElse(1);
+        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/blood");
 
-        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/blood-list");
-
-        PageRequest pageable = PageRequest.of(currentPage - 1, 10);
-
-        Page<BloodBank> bloodbanks = bloodBankRepository.findAll(pageable);
-
-        modelAndView.addObject("currentEntries",bloodbanks.getContent().size());
-
-        int totalPages = bloodbanks.getTotalPages();
-
-        if(totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1,totalPages).boxed().collect(Collectors.toList());
-            modelAndView.addObject("pageNumbers", pageNumbers);
-            modelAndView.addObject("entries",pageNumbers.size());
-        }
-
-        BloodBank bloodbank = new BloodBank();
-        modelAndView.addObject("blood",bloodbank);
-        //modelAndView.addObject("activeArticleList", true);
-        modelAndView.addObject("bloods", bloodbanks.getContent());
-        modelAndView.addObject("currentPage",currentPage);
+        List<BloodBank> bloods = bloodBankRepository.findAll();
+        BloodBank blood = new BloodBank();
+        modelAndView.addObject("blood",blood);
+        modelAndView.addObject("bloods",bloods);
 
         return modelAndView;
     }
-
 
 
     /** form for adding an blood */
@@ -112,7 +94,7 @@ public class BloodBankController {
     }
 
     /** Get all bloods of a hospital */
-    @GetMapping(value = "/hospital/{id}")
+    @GetMapping(value = "/get/hospital/{id}")
     public String getAllBloodOfHospital(@PathVariable Long id, Model model){
         Hospital hospital =  hospitalRepository.getOne(id);
         List<BloodBank> bloods = bloodBankRepository.findByHospital(hospital);

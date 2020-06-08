@@ -43,8 +43,15 @@ public class HospitalController {
 
         return "dashboard/pages/admin/show-hospital";
     }
-
+/*
     @GetMapping(value = "/all")
+    public String getAllHopitals(Model model){
+        model.addAttribute("hospitalList",hospitalRepository.findAll());
+        return "dashboard/pages/admin/hospital-list";
+    }
+*/
+
+  @GetMapping(value = "/all")
 
     public ModelAndView getHospitals(Model model) {
 

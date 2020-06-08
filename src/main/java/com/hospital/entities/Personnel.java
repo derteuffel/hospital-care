@@ -7,6 +7,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -19,21 +22,24 @@ public class Personnel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private String lastName;
+
     private String firstName;
     private String email;
     private String phone;
+
     private String city;
+
     private String function;
     private String gender;
     private Integer age;
+
     private String address;
     private String avatar;
-    @OneToOne
-    private Compte compte;
+
 
     @OneToMany(mappedBy = "personnel")
-
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Consultation> consultations;
