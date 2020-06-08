@@ -1,5 +1,4 @@
 package com.hospital.entities;
-
 import java.util.Date;
 
 public class RdvJointure {

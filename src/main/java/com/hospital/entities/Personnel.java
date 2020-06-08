@@ -29,8 +29,11 @@ public class Personnel implements Serializable {
     private Integer age;
     private String address;
     private String avatar;
+    @OneToOne
+    private Compte compte;
 
     @OneToMany(mappedBy = "personnel")
+
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Consultation> consultations;
