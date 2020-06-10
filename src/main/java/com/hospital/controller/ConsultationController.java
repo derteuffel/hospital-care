@@ -157,7 +157,7 @@ public class ConsultationController {
             List<Personnel> personnels = personnelRepository.findAllByHospital_Id(hospital.getId());
             List<Personnel> lists = new ArrayList<>();
             Long days = TimeUnit.DAYS.convert(new Date().getTime() - dosMedical.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
-            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_MEDECIN.toString());
+            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_DOCTOR.toString());
             for (Compte compte1 : comptes){
                 for (Personnel personnel : personnels){
                     if (compte1.getPersonnel() == personnel){
@@ -191,7 +191,7 @@ public class ConsultationController {
             List<Personnel> personnels = personnelRepository.findAllByHospital_Id(hospital.getId());
             List<Personnel> lists = new ArrayList<>();
             Long days = TimeUnit.DAYS.convert(new Date().getTime() - dosMedical.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
-            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_MEDECIN.toString());
+            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_DOCTOR.toString());
             for (Compte compte1 : comptes){
                 for (Personnel personnel : personnels){
                     if (compte1.getPersonnel() == personnel){
