@@ -37,7 +37,7 @@ public class BloodBankController {
 
     public ModelAndView getBloods(Model model) {
 
-        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/blood");
+        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/blood/blood");
 
         List<BloodBank> bloods = bloodBankRepository.findAll();
         BloodBank blood = new BloodBank();
@@ -55,7 +55,7 @@ public class BloodBankController {
         model.addAttribute("idHospital",idHospital);
         model.addAttribute("hospitalList",hospitals);
         model.addAttribute(new BloodBankHelper());
-        return "dashboard/pages/admin/add-blood";
+        return "dashboard/pages/admin/blood/add-blood";
     }
 
     /** Add an blood */
@@ -64,7 +64,7 @@ public class BloodBankController {
         if(errors.hasErrors()){
             model.addAttribute("hospitalList",hospitalRepository.findAll());
             model.addAttribute("idHospital",bloodBankHelper.getIdHospital());
-            return "dashboard/pages/admin/add-blood";
+            return "dashboard/pages/admin/blood/add-blood";
         }else{
             Hospital hospital = hospitalRepository.getOne(bloodBankHelper.getIdHospital());
             //Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());
@@ -79,7 +79,7 @@ public class BloodBankController {
 
         List<BloodBank> results =  bloodBankRepository.findByGroupeSanguinLike(bloodBank.getGroupeSanguin());
         model.addAttribute("results",results);
-        return "dashboard/pages/admin/search-blood";
+        return "dashboard/pages/admin/blood/search-blood";
     }
 
     @GetMapping("/delete/{id}")
@@ -100,7 +100,7 @@ public class BloodBankController {
         List<BloodBank> bloods = bloodBankRepository.findByHospital(hospital);
         model.addAttribute("bloods",bloods);
         model.addAttribute("idHospital",id);
-        return "dashboard/pages/admin/blood";
+        return "dashboard/pages/admin/blood/blood";
     }
 
 }

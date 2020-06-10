@@ -52,31 +52,31 @@ public class DosMedicalController {
     @GetMapping(value = "/all")
     public String getAllMedicalRecords(Model model){
         model.addAttribute("dosMedicalList",dos.findAll());
-        return "dashboard/pages/admin/dosMedical";
+        return "dashboard/pages/admin/patient/dosMedical";
     }
 
     /** form for adding a medical-record */
     @GetMapping(value = "/create")
     public String addMedicalRecords(Model model){
         model.addAttribute(new DosMedicalHelper());
-        return "dashboard/pages/admin/addDosMedical";
+        return "dashboard/pages/admin/patient/addDosMedical";
     }
 
     /** Add a medical record */
     @PostMapping(value = "/create")
     public String addMedicalRecord(@ModelAttribute @Valid DosMedicalHelper dosMedicalHelper, Errors errors, Model model){
         if(errors.hasErrors()) {
-            return "dashboard/pages/admin/addDosMedical";
+            return "dashboard/pages/admin/patient/addDosMedical";
         }
         Compte compte = compteRepository.findByEmail(dosMedicalHelper.getEmail());
         DosMedical dosMedical = dos.findByCode(dosMedicalHelper.getCode());
 
         if(compte != null){
             model.addAttribute("error","There is an existing account with the provided email");
-            return "dashboard/pages/admin/addDosMedical";
+            return "dashboard/pages/admin/patient/addDosMedical";
         }else if (dosMedical != null){
             model.addAttribute("error","There is an existing medical record with the provided code");
-            return "dashboard/pages/admin/addDosMedical";
+            return "dashboard/pages/admin/patient/addDosMedical";
         }else {
             CompteRegistrationDto compteDto = new CompteRegistrationDto();
             compteDto.setEmail(dosMedicalHelper.getEmail());
@@ -133,7 +133,7 @@ public class DosMedicalController {
         if(dosMedical != null){
             model.addAttribute("dosMedicalHelper",DosMedicalHelper.getDosMedicalHelperInstance(dosMedical));
         }
-        return "dashboard/pages/admin/updateDosMedical";
+        return "dashboard/pages/admin/patient/updateDosMedical";
     }
 
     /** Update a medical record */

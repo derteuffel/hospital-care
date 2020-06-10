@@ -43,7 +43,7 @@ public class IncubatorController {
 
         int currentPage = page.orElse(1);
 
-        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/incubator-list");
+        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/incubator/incubator-list");
 
         PageRequest pageable = PageRequest.of(currentPage - 1, 10);
 
@@ -76,7 +76,7 @@ public class IncubatorController {
         model.addAttribute("idHospital",idHospital);
         model.addAttribute("hospitalList",hospitals);
         model.addAttribute(new IncubatorHelper());
-        return "dashboard/pages/admin/add-incubator";
+        return "dashboard/pages/admin/incubator/add-incubator";
     }
 
     /** Add an incubator */
@@ -85,7 +85,7 @@ public class IncubatorController {
         if(errors.hasErrors()){
             model.addAttribute("hospitalList",hospitalRepository.findAll());
             model.addAttribute("idHospital",incubatorHelper.getIdHospital());
-            return "dashboard/pages/admin/add-incubator";
+            return "dashboard/pages/admin/incubator/add-incubator";
         }else{
             Hospital hospital = hospitalRepository.getOne(incubatorHelper.getIdHospital());
             //Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());
@@ -102,7 +102,7 @@ public class IncubatorController {
         model.addAttribute("hospitalList",hospitals);
         model.addAttribute("incubatorHelper", IncubatorHelper.getIncubatorHelperInstance(incubatorRepository.getOne(idIncubator)));
 
-        return "dashboard/pages/admin/updateIncubator";
+        return "dashboard/pages/admin/incubator/updateIncubator";
     }
 
     /** Update an incubator */
@@ -111,7 +111,7 @@ public class IncubatorController {
         if (errors.hasErrors()) {
             model.addAttribute("hospitalList", hospitalRepository.findAll());
             model.addAttribute("idHospital", incubatorHelper.getIdHospital());
-            return "dashboard/pages/admin/updateIncubator";
+            return "dashboard/pages/admin/incubator/updateIncubator";
         } else {
             Hospital hospital = hospitalRepository.getOne(incubatorHelper.getIdHospital());
             Incubator incubator = incubatorRepository.getOne(idIncubator);
@@ -154,7 +154,7 @@ public class IncubatorController {
 
         List<Incubator> results =  incubatorRepository.findByNumberLike(incubator.getNumber());
         model.addAttribute("results",results);
-        return "dashboard/pages/admin/search-incubator";
+        return "dashboard/pages/admin/incubator/search-incubator";
     }
 
     @GetMapping("/delete/{id}")
@@ -175,7 +175,7 @@ public class IncubatorController {
         List<Incubator> incubators = incubatorRepository.findByHospital(hospital);
         model.addAttribute("incubators",incubators);
         model.addAttribute("idHospital",id);
-        return "dashboard/pages/admin/incubator";
+        return "dashboard/pages/admin/incubator/incubator";
     }
 
 }
