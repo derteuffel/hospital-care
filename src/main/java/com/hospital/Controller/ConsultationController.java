@@ -152,7 +152,6 @@ public class ConsultationController {
         DosMedical dosMedical = dosMedicalRepository.findByCode(code);
 
         if (!compte.getRoles().contains(ERole.ROLE_PATIENT)){
-
             Hospital myHospital = compte.getPersonnel().getHospital();
             Long days = TimeUnit.DAYS.convert(new Date().getTime() - dosMedical.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
 

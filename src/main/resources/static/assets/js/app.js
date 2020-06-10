@@ -152,6 +152,35 @@ $(document).ready(function($) {
 		});
 	}
 
+	/* Research on medical-record */
+     $('.fa-create-dos-icon').on('click', () => window.location.href= `/admin/medical-record/create?code=${$('.dos-text').val()}`)
+     $(".fa-create-dos-icon").tooltip()
+
+     $('.dos-text').on('input',function(){
+       if($('.fa-create-dos-icon').is(":visible")){
+         $(".fa-create-dos-icon").hide()
+         $('.dos-search').show()
+       }
+     })
+
+	$('.dos-search').on('click',function(){
+	  if($('.dos-text').val() != ""){
+	    $('.dos-search').children('div').show()
+	    $.ajax({ url: `/admin/medical-record/exists/${$('.dos-text').val()}`,
+         type: 'GET', dataType: "text",  error: function (resultat, statut, erreur) { alert(erreur); },
+         success: function (data, statut) {
+           $('.dos-search').children('div').hide()
+           if(data == 1) window.location.href = `/admin/medical-record/search?search=${$('.dos-text').val()}`
+           else{
+             $('.dos-search').hide()
+             $('.fa-create-dos-icon').fadeIn(500)
+           }
+         }
+        });
+	  }
+      else alert('The search field must not be empty')
+    })
+
 	$('.date').attr("value",new Date().toISOString().substr(0,10))
 
     $('#doctorPhone').val($('select[name="doctorName"]').children("option:selected").attr('number'));

@@ -1,5 +1,6 @@
 package com.hospital.entities;
 
+import com.hospital.enums.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -59,6 +60,16 @@ public class Compte implements Serializable {
 
     public Compte(){
 
+    }
+
+    public boolean checkRole(ERole roleEnum){
+        boolean authorized = false;
+        for (Role role : this.getRoles()){
+            if(role.getName().equals(roleEnum.toString())){
+                authorized = true;
+            }
+        }
+        return authorized;
     }
 
     public Compte(String username, String email, String avatar) {
