@@ -59,7 +59,7 @@ public class ExamenController {
         List<Examen> exams = examenRepository.findByConsultation(consultation);
         model.addAttribute("examList",exams);
         model.addAttribute("idConsultation",id);
-        return "dashboard/pages/admin/exam";
+        return "dashboard/pages/admin/examen/exam";
     }
 
     /** form for adding an exam */
@@ -69,7 +69,7 @@ public class ExamenController {
         model.addAttribute("idConsultation",idConsultation);
         model.addAttribute("hospitalList",hospitals);
         model.addAttribute(new ExamenHelper());
-        return "dashboard/pages/admin/addExam";
+        return "dashboard/pages/admin/examen/addExam";
     }
 
     /** Add an exam */
@@ -78,7 +78,7 @@ public class ExamenController {
         if(errors.hasErrors()){
             model.addAttribute("hospitalList",hospitalRepository.findAll());
             model.addAttribute("idConsultation",examenHelper.getIdConsultation());
-            return "dashboard/pages/admin/addExam";
+            return "dashboard/pages/admin/examen/addExam";
         }else{
             Consultation consultation = consultationRepository.getOne(examenHelper.getIdConsultation());
             Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());
@@ -129,7 +129,7 @@ public class ExamenController {
         model.addAttribute("hospitalList",hospitals);
         model.addAttribute("examenHelper", ExamenHelper.getExamenHelperInstance(examenRepository.getOne(idExam)));
 
-        return "dashboard/pages/admin/updateExam";
+        return "dashboard/pages/admin/examen/updateExam";
     }
 
     /** Update an exam */
@@ -138,7 +138,7 @@ public class ExamenController {
         if(errors.hasErrors()){
             model.addAttribute("hospitalList",hospitalRepository.findAll());
             model.addAttribute("idConsultation",examenHelper.getIdConsultation());
-            return "dashboard/pages/admin/updateExam";
+            return "dashboard/pages/admin/examen/updateExam";
         }else{
             Consultation consultation = consultationRepository.getOne(examenHelper.getIdConsultation());
             Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());

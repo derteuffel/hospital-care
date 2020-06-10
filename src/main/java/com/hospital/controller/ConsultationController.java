@@ -1,4 +1,4 @@
-package com.hospital.Controller;
+package com.hospital.controller;
 
 
 import com.hospital.entities.*;
@@ -56,15 +56,11 @@ public class ConsultationController {
     @Autowired
     private CompteService compteService;
 
-
-
-  /*  @GetMapping("/lists")
+/*  @GetMapping("/lists")
     public String findAll(Model model){
         model.addAttribute("consultations", consultationRepository.findAll());
         return "consultation/consultations";
     }
-
-
     @GetMapping("/form")
     public String form(Model model, Long id){
         List<DosMedical> dosMedicals = dosMedicalRepository.findAll();
@@ -72,7 +68,6 @@ public class ConsultationController {
         model.addAttribute("dos", dosMedicals);
         return  "consultation/form";
     }
-
     @PostMapping("/save")
     public String saveConsultation(@Valid Consultation consultation, Long id, HttpSession httpSession){
         DosMedical dos = dosMedicalRepository.findById(id).get();
@@ -81,35 +76,26 @@ public class ConsultationController {
         consultationRepository.save(consultation);
         return "redirect:/hospital-care/dossier-medical/"+httpSession.getAttribute("id");
     }
-
     @GetMapping("/update/{id}")
     public String updateConsultation(Model model, @PathVariable Long id){
         Consultation consultation = consultationRepository.getOne(id);
         model.addAttribute("consultation", consultation);
         return "consultation/edit";
     }
-
     @PostMapping("/update/{id}")
     public String update(@Valid Consultation consultation, @PathVariable("id") Long id,
                          BindingResult bindingResult, HttpSession session, Model model){
-
         DosMedical dos = dosMedicalRepository.getOne((Long)session.getAttribute("id"));
         consultationRepository.save(consultation);
         model.addAttribute("consultations", consultationRepository.findAll());
-
         return "redirect: /hospital-care/dossier-medical/"+consultation.getId();
-
     }
-
-
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable("id") Long id){
-
         Consultation consultation = consultationRepository.findById(id).get();
         model.addAttribute("consultation", consultation);
         return  "consultation/detail";
     }
-
     @GetMapping("/delete/{id}")
     public String deleteConsultation(Model model, @PathVariable("id") Long id, HttpSession session){
         Consultation consultation = consultationRepository.findById(id)
@@ -132,7 +118,7 @@ public class ConsultationController {
         List<Consultation> consultations = consultationRepository.findByDosMedical(dosMedical);
         model.addAttribute("consultationList",consultations);
         model.addAttribute("code",code);
-        return "dashboard/pages/admin/consultation";
+        return "dashboard/pages/admin/consultation/consultation";
     }
 
     /** Get all consultations in an hospital */
@@ -170,7 +156,7 @@ public class ConsultationController {
             model.addAttribute("patient",dosMedical);
             model.addAttribute("code",code);
             model.addAttribute("consultationHelper", new ConsultationHelper());
-            return "dashboard/pages/admin/addConsultation";
+            return "dashboard/pages/admin/consultation/addConsultation";
 
         }else {
             redirectAttributes.addFlashAttribute("error","Your credentials are not authorized to access there");
@@ -204,7 +190,7 @@ public class ConsultationController {
             model.addAttribute("patient",dosMedical);
             model.addAttribute("code",consultationHelper.getCode());
             model.addAttribute("consultationHelper", new ConsultationHelper());
-            return "dashboard/pages/admin/addConsultation";
+            return "dashboard/pages/admin/consultation/addConsultation";
         }else {
 
             Personnel doctor = personnelRepository.findByLastName(consultationHelper.getDoctorName());
@@ -231,7 +217,7 @@ public class ConsultationController {
         model.addAttribute("code",code);
         model.addAttribute("consultationHelper", ConsultationHelper.getConsultationHelperInstance(consultationRepository.getOne(idConsultation)));
 
-        return "dashboard/pages/admin/updateConsultation";
+        return "dashboard/pages/admin/consultation/updateConsultation";
     }
 
     /** Update a consultation */
@@ -242,7 +228,7 @@ public class ConsultationController {
             model.addAttribute("doctors",doctors);
             model.addAttribute("hospitalList",hospitalRepository.findAll());
             model.addAttribute("code",consultationHelper.getCode());
-            return "dashboard/pages/admin/updateConsultation";
+            return "dashboard/pages/admin/consultation/updateConsultation";
         }
 
         DosMedical dosMedical = dosMedicalRepository.findByCode(consultationHelper.getCode());
@@ -257,7 +243,6 @@ public class ConsultationController {
         consultationRepository.save(newConsultation);
        /* Compte compte = compteRepository.findByUsername(username);
         boolean authorized = false;
-
         if(compte == null){
             model.addAttribute("error","There is no account with this username");
             return "redirect:/admin/medical-record/all";
@@ -267,7 +252,6 @@ public class ConsultationController {
                     authorized = true;
                 }
             }
-
             if(!authorized){
                 model.addAttribute("error","you don't have rights to perform this operation");
                 return "redirect:/admin/medical-record/all";
@@ -284,10 +268,7 @@ public class ConsultationController {
    /* @GetMapping(value = "research/")
     public Optional<Consultation> getMedicalRecord(@PathVariable Long id){
         return consultationRepository.findById(id);
-
     }
-
-
     }*/
 
 

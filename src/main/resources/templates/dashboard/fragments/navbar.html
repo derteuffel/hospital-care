@@ -120,24 +120,23 @@
                 <li class="active">
                     <a th:href="@{/admin/dashboard}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
                 </li>
+
                 <li>
-                    <a th:href="@{/admin/doctors}"><i class="fa fa-user-md"></i> <span>Doctors</span></a>
+                    <a th:href="@{/admin/staff/lists}"><i class="fa fa-user-md"></i> <span>Doctors</span></a>
                 </li>
                 <li>
                     <a th:href="@{/admin/medical-record/all}"><i class="fa fa-wheelchair"></i> <span>Patients</span></a>
                 </li>
                 <li>
-                    <a href="a.html"><i class="fa fa-calendar"></i> <span>Appointments</span></a>
+                    <a th:href="@{/admin/rdv/all}"><i class="fa fa-calendar"></i> <span>Appointments</span></a>
                 </li>
-
-                <li class="submenu">
-                    <a href="#"><i class="fa fa-hospital-o"></i> <span>Hospitals</span><span class="menu-arrow"></span></a>
-                    <ul style="display: none;">
-                        <li><a th:href="@{/admin/hospital/all}">Hospitals List</a></li>
-                        <li><a th:href="@{/admin/hospital/add}">Add Hospital</a></li>
-                    </ul>
+                <li>
+                    <a th:href="@{/admin/hospital/all}"><i class="fa fa-hospital-o"></i> <span>Hospitals</span></a>
                 </li>
-                <li class="submenu">
+                <li>
+                    <a th:href="@{/admin/hospital/add}"><i class="fa fa-hospital-o"></i> <span>Add Hospital</span></a>
+                </li>
+<!--                <li class="submenu">
                     <a href="#"><i class="fa fa-user"></i> <span> Employees </span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a href="employees.html">Employees List</a></li>
@@ -162,11 +161,15 @@
                         <li><a href="salary.html"> Employee Salary </a></li>
                         <li><a href="salary-view.html"> Payslip </a></li>
                     </ul>
-                </li>
+                </li>-->
                 <li>
-                    <a href="chat.html"><i class="fa fa-comments"></i> <span>Chat</span> <span class="badge badge-pill bg-primary float-right">5</span></a>
+                    <a href="#"><i class="fa fa-comments"></i> <span>Chat</span> <span class="badge badge-pill bg-primary float-right">5</span></a>
                 </li>
-                <li class="submenu">
+
+                <li>
+                    <a href="#"><i class="fa fa-cube"></i> <span>Accounts</span></a>
+                </li>
+<!--                <li class="submenu">
                     <a href="#"><i class="fa fa-video-camera camera"></i> <span> Calls</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a href="voice-call.html">Voice Call</a></li>
@@ -190,8 +193,8 @@
                         <li><a href="add-blog.html">Add Blog</a></li>
                         <li><a href="edit-blog.html">Edit Blog</a></li>
                     </ul>
-                </li>
-                <li>
+                </li>-->
+<!--                <li>
                     <a href="assets.html"><i class="fa fa-cube"></i> <span>Assets</span></a>
                 </li>
                 <li>
@@ -272,7 +275,7 @@
                             <a href="javascript:void(0);"><span>Level 1</span></a>
                         </li>
                     </ul>
-                </li>
+                </li>-->
             </ul>
         </div>
     </div>

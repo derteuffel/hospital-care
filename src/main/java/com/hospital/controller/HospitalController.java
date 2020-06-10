@@ -2,7 +2,7 @@ package com.hospital.controller;
 
 import com.hospital.entities.Hospital;
 import com.hospital.entities.HospitalSearch;
-import com.hospital.repository.HospitalRepository;
+import com.hospital.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -27,6 +28,21 @@ public class HospitalController {
     @Autowired
     private HospitalRepository hospitalRepository;
 
+    @Autowired
+    private PersonnelRepository personnelRepository;
+
+    @Autowired
+    private ConsultationRepository consultationRepository;
+
+    @Autowired
+    private DosMedicalRepository dos;
+
+    @Autowired
+    private IncubatorRepository incubatorRepository;
+
+    @Autowired
+    private BloodBankRepository bloodBankRepository;
+
     @PostMapping("/create")
     public String addHostpital(Hospital hospital){
 
@@ -36,26 +52,23 @@ public class HospitalController {
     }
 
     @GetMapping(value = "/{id}")
-    public String getHospital(@PathVariable Long id, Model model) {
+    public String getHospital(@PathVariable Long id, Model model,HttpSession session) {
 
         Optional<Hospital> hospital = hospitalRepository.findById(id);
         model.addAttribute("hospital", hospital);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        model.addAttribute("staffs", personnelRepository.findAll());
+        //model.addAttribute("incubators", incubatorRepository.findAll());
+       // model.addAttribute("bloods", bloodBankRepository.findAll());
 
-        return "dashboard/pages/admin/show-hospital";
+        return "dashboard/pages/admin/hospital/show-hospital";
     }
-/*
+
+
     @GetMapping(value = "/all")
-    public String getAllHopitals(Model model){
-        model.addAttribute("hospitalList",hospitalRepository.findAll());
-        return "dashboard/pages/admin/hospital-list";
-    }
-*/
-
-  @GetMapping(value = "/all")
 
     public ModelAndView getHospitals(Model model) {
 
-        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/hospital-list");
+        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/hospital/hospital-list");
 
         List<Hospital> hospitals = hospitalRepository.findAll();
         Hospital hospital = new Hospital();
@@ -68,7 +81,7 @@ public class HospitalController {
     @GetMapping("/add")
     public ModelAndView showForm() {
         Hospital hospital = new Hospital();
-        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/add-hospital");
+        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/hospital/add-hospital");
         modelAndView.addObject("hospital", hospital);
 
         return modelAndView;
@@ -81,24 +94,22 @@ public class HospitalController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("hospital",hospital);
             System.out.println(hospital.toString()) ;
-            return "dashboard/pages/admin/add-hospital";
+            return "dashboard/pages/admin/hospital/add-hospital";
         }
         hospitalRepository.save(hospital);
-        modelAndView.setViewName("/dashboard/pages/admin/hospital-list");
+        modelAndView.setViewName("/dashboard/pages/admin/hospital/hospital-list");
         redirAttrs.addFlashAttribute("message", "Successfully added hospital " + hospital.getName());
         return "redirect:/admin/hospital/all";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteHospital(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
-        try {
-            hospitalRepository.deleteById(id);
-            redirAttrs.addFlashAttribute("message", "Successfully deleted");
-            return "redirect:/admin/hospital/all";
-        }catch (Exception e){
-            redirAttrs.addFlashAttribute("error", "Error deleting this hospital");
-           return "redirect:/admin/hospital/all";
-        }
+    @GetMapping("/delete/{id}")
+    public String deleteById(@PathVariable Long id, Model model) {
+        Hospital hospital = hospitalRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid hospital id:" +id));
+        hospitalRepository.delete(hospital);
+        model.addAttribute("hospitals", hospitalRepository.findAll());
+        return "redirect:/admin/hospital/all";
+
     }
 
     @GetMapping("/edit/{id}")
@@ -107,7 +118,7 @@ public class HospitalController {
         try{
             Hospital hospital = hospitalRepository.getOne(id);
             model.addAttribute("hospital",hospital);
-            return "dashboard/pages/admin/edit-hospital";
+            return "dashboard/pages/admin/hospital/edit-hospital";
         }catch (Exception e){
             redirAttrs.addFlashAttribute("error", "This hospital seems to not exist");
             return "redirect:/admin/hospital/all";
@@ -117,11 +128,11 @@ public class HospitalController {
     @PostMapping("/edit/{id}")
     public String updateHospital(@PathVariable("id") Long id, @Valid Hospital hospital, BindingResult bindingResult, Errors errors, Model model, RedirectAttributes redirAttrs){
         if (bindingResult.hasErrors()) {
-            return "dashboard/pages/admin/edit-hospital";
+            return "dashboard/pages/admin/hospital/edit-hospital";
         }
         hospitalRepository.save(hospital);
         redirAttrs.addFlashAttribute("message", "Successfully edited");
         return "redirect:/admin/hospital/all";
     }
-    
+
 }

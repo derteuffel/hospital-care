@@ -46,7 +46,7 @@ public class PersonnelController {
         model.addAttribute("personnelForm", new Personnel());
         model.addAttribute("staffs", personnelRepository.findAll());
 
-        return "dashboard/pages/admin/doctors";
+        return "dashboard/pages/admin/doctor/doctors";
     }
 
 /*    @GetMapping("/create")
@@ -63,7 +63,7 @@ public class PersonnelController {
     public String form(Model model){
         model.addAttribute("hospitals", hospitalRepository.findAll());
         model.addAttribute("personnel",new Personnel());
-        return "dashboard/pages/admin/form-personnel";
+        return "dashboard/pages/admin/personnel/form-personnel";
     }
 
 
@@ -83,7 +83,7 @@ public class PersonnelController {
         }
 
         if(bindingResult.hasErrors()) {
-            return  "dashboard/pages/admin/form-personnel";
+            return  "dashboard/pages/admin/personnel/form-personnel";
         }else {
             if (!(file.isEmpty())){
                 try {
@@ -111,7 +111,7 @@ public class PersonnelController {
         try{
             Personnel personnel = personnelRepository.getOne(id);
             model.addAttribute("personnel",personnel);
-            return "dashboard/pages/admin/edit-staff";
+            return "dashboard/pages/admin/personnel/edit-staff";
         }catch (Exception e){
             redirAttrs.addFlashAttribute("error", "This hospital seems to not exist");
             return "redirect:/admin/staff/lists";
@@ -165,11 +165,11 @@ public class PersonnelController {
         Optional<Personnel> personnel = personnelRepository.findById(id);
         if (personnel.isPresent()){
             model.addAttribute("personnel",personnel.get());
-            return "dashboard/pages/admin/show-staff";
+            return "dashboard/pages/admin/personnel/show-staff";
         }
         else {
             redirectAttributes.addFlashAttribute("error", "There no personnel with Id :" +id);
-            return "redirect:/admin/staff/lists";
+            return "redirect:/admin/personnel/staff/lists";
         }
     }
 

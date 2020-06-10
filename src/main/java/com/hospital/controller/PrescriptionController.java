@@ -40,7 +40,7 @@ public class PrescriptionController {
         List<Prescription> prescriptions = prescriptionRepository.findByConsultation(consultation);
         model.addAttribute("prescriptionList",prescriptions);
         model.addAttribute("idConsultation",id);
-        return "dashboard/pages/admin/prescription";
+        return "dashboard/pages/admin/prescription/prescription";
     }
 
     /** form for adding an prescription */
@@ -48,7 +48,7 @@ public class PrescriptionController {
     public String addPrescription(@RequestParam("idConsultation") int  idConsultation, Model model){
         model.addAttribute("idConsultation",idConsultation);
         model.addAttribute(new PrescriptionHelper());
-        return "dashboard/pages/admin/addPrescription";
+        return "dashboard/pages/admin/prescription/addPrescription";
     }
 
     /** Add an prescription */
@@ -56,7 +56,7 @@ public class PrescriptionController {
     public String savePrescription(@ModelAttribute @Valid PrescriptionHelper prescriptionHelper, Errors errors, Model model){
         if(errors.hasErrors()){
             model.addAttribute("idConsultation",prescriptionHelper.getIdConsultation());
-            return "dashboard/pages/admin/addPrescription";
+            return "dashboard/pages/admin/prescription/addPrescription";
         }else{
             Consultation consultation = consultationRepository.getOne(prescriptionHelper.getIdConsultation());
             prescriptionRepository.save(prescriptionHelper.getPrescriptionInstance(consultation));
@@ -103,7 +103,7 @@ public class PrescriptionController {
     public String updatePrescription(@PathVariable Long idPrescription, @RequestParam("idConsultation") Long idConsultation, Model model){
         model.addAttribute("idConsultation",idConsultation);
         model.addAttribute("prescriptionHelper", PrescriptionHelper.getPrescriptionHelperInstance(prescriptionRepository.getOne(idPrescription)));
-        return "dashboard/pages/admin/updatePrescription";
+        return "dashboard/pages/admin/prescription/updatePrescription";
     }
 
     /** Update a prescription */
@@ -111,7 +111,7 @@ public class PrescriptionController {
     public String updatePrescription(@PathVariable Long idPrescription, @ModelAttribute @Valid PrescriptionHelper prescriptionHelper, Errors errors, Model model){
         if(errors.hasErrors()){
             model.addAttribute("idConsultation",prescriptionHelper.getIdConsultation());
-            return "dashboard/pages/admin/updatePrescription";
+            return "dashboard/pages/admin/prescription/updatePrescription";
         }else{
             Consultation consultation = consultationRepository.getOne(prescriptionHelper.getIdConsultation());
             Prescription exPrescription = prescriptionRepository.getOne(idPrescription);

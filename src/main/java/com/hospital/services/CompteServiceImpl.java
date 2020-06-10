@@ -64,7 +64,7 @@ public class CompteServiceImpl implements CompteService {
         personnelRepository.save(personnel);
         Role role = new Role();
         if (compteRepository.findAll().size()<1){
-            role.setName(ERole.ROLE_ROOT.toString());
+            role.setName(ERole.ROLE_ADMIN.toString());
         }else {
             role.setName(ERole.ROLE_PERSONNEL.toString());
         }

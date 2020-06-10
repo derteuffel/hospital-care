@@ -31,7 +31,7 @@ public class RdvController {
     @GetMapping("/create")
     public ModelAndView showform(){
 
-        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/add-rdv");
+        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/add-rdv");
         List<Compte> comptes= compteRepository.findAll();
         List<Compte> patients = comptes.stream()
                 .filter(d -> d.getRoles().stream().findFirst().get().getId() == 2)
@@ -51,7 +51,7 @@ public class RdvController {
     @PostMapping("/create")
     public String storeRdv(@ModelAttribute @Valid Rdv rdv, Errors errors, RedirectAttributes redirAttrs){
         if(errors.hasErrors()){
-            return "dashboard/pages/admin/add-rdv";
+            return "dashboard/pages/admin/appointment/add-rdv";
         }
         rdvRepository.save(rdv);
         redirAttrs.addFlashAttribute("message", "Rdv added Successfully");
@@ -62,7 +62,7 @@ public class RdvController {
     @GetMapping("/all")
     public ModelAndView getAllRdv(){
 
-        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/rdv-list");
+        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/rdv-list");
         List<Irdvjointure> rdvs = rdvRepository.findAllWithJoin();
         modelAndView.addObject("rdvs",rdvs);
         return modelAndView;
@@ -100,7 +100,7 @@ public class RdvController {
     @PostMapping("/edit/{id}")
     public String updateHospital(@PathVariable("id") Long id, @Valid Rdv rdv, Errors errors, RedirectAttributes redirAttrs){
         if (errors.hasErrors()) {
-            return "dashboard/pages/admin/edit-rdv";
+            return "dashboard/pages/appointment/admin/edit-rdv";
         }
         rdvRepository.save(rdv);
         redirAttrs.addFlashAttribute("message", "Successfully edited");
