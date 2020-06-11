@@ -16,4 +16,6 @@ public interface Irdvjointure {
     public String getMotif();
 
     public String getPersonnel();
+
+    public boolean getStatus();
 }

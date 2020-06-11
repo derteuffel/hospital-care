@@ -27,6 +27,10 @@ public class Rdv implements Serializable {
     @NotNull
     private Long personnelId;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean status;
+
+
     public Rdv() {
     }
 
@@ -36,6 +40,7 @@ public class Rdv implements Serializable {
         this.compteId = compteId;
         this.personnelId = personnelId;
     }
+
 
     public Long getCompteId() {
         return compteId;
@@ -55,5 +60,9 @@ public class Rdv implements Serializable {
 
     public String getMotif() {
         return motif;
+    }
+
+    public boolean getStatus(){
+        return status;
     }
 }
