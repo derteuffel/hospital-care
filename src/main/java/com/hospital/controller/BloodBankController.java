@@ -47,9 +47,44 @@ public class BloodBankController {
         return modelAndView;
     }
 
+    @GetMapping("/add")
+    public String form(Model model, Long shopId){
+        List<Hospital> hospitals=hospitalRepository.findAll();
+        model.addAttribute("blood", new BloodBank());
+        model.addAttribute("hospitals", hospitals);
+        return "dashboard/pages/admin/blood/add-blood";
+    }
+
+    @PostMapping("/add")
+    public String save(@Valid BloodBank blood, Long id, HttpSession session){
+        Hospital hospital = hospitalRepository.findById(id).get();
+        blood.setRhesus(blood.getRhesus());
+        blood.setGroupeSanguin(blood.getGroupeSanguin());
+        blood.setDate(blood.getDate());
+        blood.setHospital(hospital);
+        bloodBankRepository.save(blood);
+        return "dashboard/pages/admin/blood/add-blood";
+    }
+
+  /*  @GetMapping("/add")
+    public String save(@Valid @ModelAttribute("blood") BloodBank bloodBank,
+                                Model model){
+
+        model.addAttribute("hospitals",hospitalRepository.findAll());
+        bloodBankRepository.save(bloodBank);
+
+        return  "dashboard/pages/admin/blood/add-blood";
+    }
+
+    @PostMapping("/add")
+    public String add(Model model) {
+        model.addAttribute("blood", new BloodBank());
+        model.addAttribute("hospitals", hospitalRepository.findAll());
+        return "dashboard/pages/admin/blood/add-blood";
+    }*/
 
     /** form for adding an blood */
-    @GetMapping(value = "/create")
+/*    @GetMapping(value = "/create")
     public String add(@RequestParam("idHospital") int  idHospital, Model model){
         List<Hospital> hospitals = hospitalRepository.findAll();
         model.addAttribute("idHospital",idHospital);
@@ -58,7 +93,7 @@ public class BloodBankController {
         return "dashboard/pages/admin/blood/add-blood";
     }
 
-    /** Add an blood */
+    *//** Add an blood *//*
     @PostMapping("/create")
     public String save(@ModelAttribute @Valid BloodBankHelper bloodBankHelper, Errors errors, Model model){
         if(errors.hasErrors()){
@@ -80,7 +115,7 @@ public class BloodBankController {
         List<BloodBank> results =  bloodBankRepository.findByGroupeSanguinLike(bloodBank.getGroupeSanguin());
         model.addAttribute("results",results);
         return "dashboard/pages/admin/blood/search-blood";
-    }
+    }*/
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable Long id, Model model, HttpSession session) {

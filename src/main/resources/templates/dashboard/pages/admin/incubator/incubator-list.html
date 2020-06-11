@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{../templates/dashboard/index}"><head>
     <meta charset="UTF-8">
-    <title>Exam</title>
+    <title>Incubator</title>
 </head>
 <body>
 <div class="content" layout:fragment="content">
@@ -11,7 +11,7 @@
             <h4 class="page-title">Incubators</h4>
         </div>
         <div class="col-sm-8 col-9 text-right m-b-20">
-            <a th:href="@{'/admin/incubator/create?idHospital='+${idHospital}}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add an Incubator</a>
+            <a th:href="@{/admin/incubator/add}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add an Incubator</a>
         </div>
     </div>
     <div class="row">

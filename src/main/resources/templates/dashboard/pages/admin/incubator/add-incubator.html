@@ -14,8 +14,8 @@
     </div>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form method="post" action="/admin/incubator/create" th:object="${incubatorHelper}">
-                <input class="form-control" type="hidden" name="idHospital" th:value="${idHospital}">
+            <form method="post" th:action="@{/admin/incubator/add}" th:object="${incubator}">
+                <!--<input class="form-control" type="hidden" name="idHospital" th:value="${idHospital}">-->
 
                 <div class="form-group">
                     <label th:for="type">Type</label>
@@ -33,7 +33,16 @@
                 </div>
                 <div class="form-group">
                     <label>Etat de la couveuse</label>
-                    <input class="form-control" type="text" name="status">
+                    <select th:field="*{status}" class="form-control">
+                        <th:block th:each="s: ${T(com.hospital.enums.EStatusIncubator).values()}">
+                            <option  th:value="${s}" th:text="${s}"></option>
+                        </th:block>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select th:field="*{hospital}" class="form-control">
+                        <option th:each="hospital: ${hospitals}" th:value="${hospital.id}" th:text="${hospital.name}"></option>
+                    </select>
                 </div>
 
                 <div class="m-t-20 text-center">

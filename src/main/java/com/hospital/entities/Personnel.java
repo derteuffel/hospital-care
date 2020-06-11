@@ -30,6 +30,8 @@ public class Personnel implements Serializable {
     private String gender;
     private Integer age;
     private String address;
+    private String neighborhood;
+    private String localisation;
     private String avatar;
 
     @OneToMany(mappedBy = "personnel")
@@ -140,4 +142,19 @@ public class Personnel implements Serializable {
         return hospital;
     }
 
+    public String getNeighborhood() {
+        return neighborhood;
+    }
+
+    public void setNeighborhood(String neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
+    public String getLocalisation() {
+        return localisation;
+    }
+
+    public void setLocalisation(String localisation) {
+        this.localisation = localisation;
+    }
 }

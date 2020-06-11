@@ -2,6 +2,7 @@ package com.hospital.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -20,13 +21,13 @@ public class BloodBank implements Serializable {
 
     private String groupeSanguin;
 
-    @NotNull
     @Size(min = 1, max = 1)
     private String rhesus;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date date;
 
-    private Boolean status;
+
 
 
     @ManyToOne

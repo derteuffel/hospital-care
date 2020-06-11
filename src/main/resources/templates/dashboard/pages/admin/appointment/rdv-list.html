@@ -3,16 +3,33 @@
       layout:decorate="~{../templates/dashboard/index}">
 <head>
     <meta charset="UTF-8">
-    <title>DashBoard</title>
+    <title>Appointments</title>
 </head>
 <body>
 <div class="content" layout:fragment="content">
     <div class="row">
-        <div class="col-sm-5">
-            <h4 class="page-title">RDV</h4>
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+            <div class="dash-widget">
+                <span class="dash-widget-bg1"></span>
+                <div class="dash-widget-info text-right">
+                    <h3></h3>
+                    <span class="widget-title1">Active Appointment <i class="fa fa-check" aria-hidden="true"></i></span>
+                </div>
+            </div>
         </div>
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+            <div class="dash-widget">
+                <span class="dash-widget-bg2"></span>
+                <div class="dash-widget-info text-right">
+                    <h3></h3>
+                    <span class="widget-title2">Inactive Appointment <i class="fa fa-check" aria-hidden="true"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-7 col-7 text-right m-b-30">
-            <a th:href="@{/admin/rdv/create}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Add RDV</a>
+            <a th:href="@{/admin/rdv/create}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Add Appointment</a>
         </div>
     </div>
     <div class="row" th:if="${message}">
@@ -55,6 +72,8 @@
                         <td th:text="${{rdv.getPersonnel()}}"></td>
                         <td th:text="${{rdv.getDate()}}"></td>
                         <td th:text="${{rdv.getMotif()}}"></td>
+                        <td th:if="${rdv.getStatus() == true}"><span class="custom-badge status-red">Active</span></td>
+                        <td th:unless="${rdv.getStatus() == true}"><span class="custom-badge status-red">Inactive</span></td>
                         <td class="text-right">
                             <div class="dropdown dropdown-action">
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
@@ -70,10 +89,44 @@
                     </tr>
                     </tbody>
                 </table>
+               <!-- <table class="table table-striped custom-table">
+                    <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Medecin</th>
+                        <th>Motif</th>
+                        <th>Department</th>
+                        <th>Appointment Date</th>
+                        <th>Status</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="rdv : ${rdvs}">
+                        <td th:text="${{rdv.getId()}}"></td>
+                        <td th:text="${{rdv.getUsername()}}"></td>
+                        <td th:text="${{rdv.getPersonnel()}}"></td>
+                        <td th:text="${{rdv.getDate()}}"></td>
+                        <td th:text="${{rdv.getMotif()}}"></td>
+                        <td th:text="${{rdv.getStatus()}}"><span class="custom-badge status-red">Inactive</span></td>
+                        <td class="text-right">
+                            <div class="dropdown dropdown-action">
+                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" th:href="@{|/admin/rdv/${rdv.getId()}|}"><i class="fa fa-eye m-r-5"></i> Show</a>
+
+                                    <a class="dropdown-item" th:href="@{|/admin/rdv/edit/${rdv.getId()}|}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+
+                                    <a class="dropdown-item" href="#" data-toggle="modal" th:data-target="${'#delete_department-'+ {rdv.getId()}}"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>-->
             </div>
         </div>
     </div>
-
     <div th:id="${'delete_department-'+ {rdv.getId()}}" class="modal fade delete-modal" role="dialog" th:each="rdv : ${rdvs}">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">

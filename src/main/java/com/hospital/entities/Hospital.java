@@ -6,12 +6,15 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.hql.spi.id.local.LocalTemporaryTableBulkIdStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 @Entity
@@ -29,8 +32,8 @@ public class Hospital implements Serializable {
     @NotBlank
     private String city;
 
-    @NotBlank
-    private String type;
+    @NotNull
+    private ArrayList<String> types = new ArrayList<String>();
 
    @OneToMany(mappedBy = "hospital")
    @OnDelete(action= OnDeleteAction.NO_ACTION)

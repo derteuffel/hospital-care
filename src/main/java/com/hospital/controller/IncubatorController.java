@@ -43,7 +43,7 @@ public class IncubatorController {
 
         int currentPage = page.orElse(1);
 
-        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/incubator/incubator");
+        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/incubator/incubator-list");
 
         PageRequest pageable = PageRequest.of(currentPage - 1, 10);
 
@@ -69,9 +69,28 @@ public class IncubatorController {
     }
 
 
-    /** form for adding an exam */
+    @GetMapping("/add")
+    public String saveIncubator(@Valid @ModelAttribute("incubator") Incubator incubator,
+                                Model model){
+
+        model.addAttribute("hospitals",hospitalRepository.findAll());
+        incubatorRepository.save(incubator);
+
+        return  "dashboard/pages/admin/incubator/add-incubator";
+    }
+
+    @PostMapping("/add")
+    public String addIncubator(Model model) {
+        model.addAttribute("incubator", new Incubator());
+        model.addAttribute("hospitals", hospitalRepository.findAll());
+        return "dashboard/pages/admin/incubator/add-incubator";
+    }
+
+
+/*
+
     @GetMapping(value = "/create")
-    public String add(@RequestParam("idHospital") int  idHospital, Model model){
+    public String add(@RequestParam("idHospital") Long  idHospital, Model model){
         List<Hospital> hospitals = hospitalRepository.findAll();
         model.addAttribute("idHospital",idHospital);
         model.addAttribute("hospitalList",hospitals);
@@ -79,7 +98,11 @@ public class IncubatorController {
         return "dashboard/pages/admin/incubator/add-incubator";
     }
 
-    /** Add an incubator */
+
+*/
+/** Add an incubator *//*
+
+
     @PostMapping("/create")
     public String save(@ModelAttribute @Valid IncubatorHelper incubatorHelper, Errors errors, Model model){
         if(errors.hasErrors()){
@@ -93,6 +116,10 @@ public class IncubatorController {
         }
         return  "redirect:/admin/incubator/hospital/"+incubatorHelper.getIdHospital();
     }
+
+
+*/
+
 
     /** form for updating an incubator */
     @GetMapping(value = "/update/{idIncubator}")
@@ -148,12 +175,12 @@ public class IncubatorController {
 
     /** Get all incubators of a hospital */
     @GetMapping(value = "/hospital/{id}")
-    public String getAllIncubatorOfHospital(@PathVariable Long id, Model model){
+    public String getAllIncubatorOfHospital(@PathVariable Long id, Model model)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {
         Hospital hospital =  hospitalRepository.getOne(id);
         List<Incubator> incubators = incubatorRepository.findByHospital(hospital);
         model.addAttribute("incubators",incubators);
         model.addAttribute("idHospital",id);
-        return "dashboard/pages/admin/incubator/incubator";
+        return "dashboard/pages/admin/incubator/incubator-list";
     }
 
-}
+                                }
