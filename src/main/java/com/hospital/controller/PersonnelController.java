@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -69,8 +70,11 @@ public class PersonnelController {
 
     @PostMapping("/create")
     public String save(@ModelAttribute("personnel") @Valid Personnel personnel, Model model,
-                       BindingResult bindingResult, @RequestParam("file") MultipartFile file){
+                       BindingResult bindingResult,
+                       @RequestParam("file") MultipartFile file, Long id, HttpSession session){
 
+        Hospital hospital = hospitalRepository.getOne(id);
+        session.setAttribute("id",hospital);
         System.out.println(personnel.getLastName());
         Personnel persExists = personnelRepository.findByLastNameOrEmailOrPhone(personnel.getLastName(),
 
@@ -93,11 +97,13 @@ public class PersonnelController {
                 }catch (IOException e){
                     e.printStackTrace();
                 }
+                personnel.setHospital(hospital);
                 personnel.setAvatar("/downloadFile/"+file.getOriginalFilename());
             }else {
                 personnel.setAvatar("/img/default.jpeg");
             }
             System.out.println(personnel.getLastName());
+            personnel.setHospital(hospital);
            // Hospital hospital = hospitalRepository.getOne(personnelHelper.getIdHospital());
             personnelRepository.save(personnel);
         }
@@ -160,7 +166,7 @@ public class PersonnelController {
         }
     }
 
-    @GetMapping("/get/{id}")
+/*    @GetMapping("/get/{id}")
     public String findUserById(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes){
         Optional<Personnel> personnel = personnelRepository.findById(id);
         if (personnel.isPresent()){
@@ -171,13 +177,31 @@ public class PersonnelController {
             redirectAttributes.addFlashAttribute("error", "There no personnel with Id :" +id);
             return "redirect:/admin/personnel/staff/lists";
         }
-    }
+    }*/
 
-    @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        personnelRepository.deleteById(id);
-        redirectAttributes.addFlashAttribute("success", "You deleted the personnel with Id:" +id);
-        return "redirect:/admin/staff/lists";
+
+
+  @GetMapping("/getStaffByHospital/{hospitalId}")
+  public String getPersonnelByHospital(@PathVariable Long hospitalId, Model model){
+
+      Optional<Hospital> hospital = hospitalRepository.findById(hospitalId);
+      model.addAttribute("hospital", hospital.get());
+      model.addAttribute("staffs", personnelRepository.findAllByHospital_Id(hospitalId));
+      return "dashboard/pages/admin/personnel/staffByHospital";
+  }
+
+
+
+
+    @GetMapping("/delete/{id}")
+    public String deleteById(@PathVariable Long id, Model model, HttpSession session) {
+        Personnel personnel = personnelRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid personnel id:" +id));
+        System.out.println("personnel id: " + personnel.getId());
+        Hospital hospital = hospitalRepository.getOne((Long)session.getAttribute("id"));
+        personnelRepository.delete(personnel);
+        model.addAttribute("staffs", personnelRepository.findAll());
+        return "redirect:/admin/hospital/"+hospital.getId() ;
     }
 
 }

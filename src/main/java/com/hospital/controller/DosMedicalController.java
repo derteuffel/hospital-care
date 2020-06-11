@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -50,21 +51,28 @@ public class DosMedicalController {
 
     /** Retrieve all medical records */
     @GetMapping(value = "/all")
-    public String getAllMedicalRecords(Model model){
+    public String getAllMedicalRecords(Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+
+        if(compte.checkRole(ERole.ROLE_ROOT)) model.addAttribute("compte",compte);
         model.addAttribute("dosMedicalList",dos.findAll());
         return "dashboard/pages/admin/patient/dosMedical";
     }
 
     /** form for adding a medical-record */
     @GetMapping(value = "/create")
-    public String addMedicalRecords(Model model){
-        model.addAttribute(new DosMedicalHelper());
+    public String addMedicalRecords(HttpServletRequest request, Model model){
+        String code = request.getParameter("code");
+        DosMedicalHelper dosMedicalHelper = new DosMedicalHelper();
+        if(code != null) dosMedicalHelper.setCode(code);
+        model.addAttribute("dosMedicalHelper",dosMedicalHelper);
         return "dashboard/pages/admin/patient/addDosMedical";
     }
 
     /** Add a medical record */
     @PostMapping(value = "/create")
-    public String addMedicalRecord(@ModelAttribute @Valid DosMedicalHelper dosMedicalHelper, Errors errors, Model model){
+    public String addMedicalRecord(@ModelAttribute @Valid DosMedicalHelper dosMedicalHelper, Errors errors, Model model, HttpServletRequest request){
         if(errors.hasErrors()) {
             return "dashboard/pages/admin/patient/addDosMedical";
         }
@@ -86,7 +94,10 @@ public class DosMedicalController {
         }
 
         model.addAttribute("success","Operation successfully completed");
-        return "redirect:/admin/medical-record/all";
+        Principal principal = request.getUserPrincipal(); Compte loggedAccount = compteService.findByUsername(principal.getName());
+
+        if(loggedAccount.checkRole(ERole.ROLE_ROOT)) return "redirect:/admin/medical-record/all";
+        else return "redirect:/admin/medical-record/search?search="+dosMedicalHelper.getCode();
     }
 
     /** cancel a medical record */
@@ -133,7 +144,7 @@ public class DosMedicalController {
         if(dosMedical != null){
             model.addAttribute("dosMedicalHelper",DosMedicalHelper.getDosMedicalHelperInstance(dosMedical));
         }
-        return "dashboard/pages/admin/patient/updateDosMedical";
+        return "dashboard/pages/admin/updateDosMedical";
     }
 
     /** Update a medical record */
@@ -150,7 +161,6 @@ public class DosMedicalController {
         dos.save(newDosMedical);
        /* Compte compte = compteRepository.findByUsername(username);
         boolean authorized = false;
-
         if(compte == null){
             model.addAttribute("error","There is no account with this username");
             return "redirect:/admin/medical-record/all";
@@ -160,7 +170,6 @@ public class DosMedicalController {
                     authorized = true;
                 }
             }
-
             if(!authorized){
                 model.addAttribute("error","you don't have rights to perform this operation");
                 return "redirect:/admin/medical-record/all";
@@ -172,11 +181,24 @@ public class DosMedicalController {
         return "redirect:/admin/medical-record/all";
     }
 
-    /** get a medical record */
-    @GetMapping(value = "/{id}")
+    /** check if a medical record exists */
+    @GetMapping(value = "exists/{code}")
     @ResponseBody
-    public DosMedical getMedicalRecord(@PathVariable Long id){
-        return dos.getOne(id);
+    public int existsMedicalRecord(@PathVariable String code){
+        DosMedical dosMedical = dos.findByCode(code);
+        if(dosMedical != null) return 1;
+        else return 0;
+    }
+
+    /** search a medical record */
+    @GetMapping(value = "/search")
+    public String getMedicalRecord(@RequestParam("search") String search, Model model){
+        if(search != ""){
+            DosMedical dosMedical = dos.findByCode(search);
+            if(dosMedical != null) model.addAttribute("dosMedicalFound", dosMedical);
+        }
+
+        return "dashboard/pages/admin/patient/dosMedical";
     }
 
 }

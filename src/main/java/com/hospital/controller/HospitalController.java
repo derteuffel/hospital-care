@@ -2,6 +2,7 @@ package com.hospital.controller;
 
 import com.hospital.entities.Hospital;
 import com.hospital.entities.HospitalSearch;
+import com.hospital.entities.Personnel;
 import com.hospital.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,13 +53,11 @@ public class HospitalController {
     }
 
     @GetMapping(value = "/{id}")
-    public String getHospital(@PathVariable Long id, Model model,HttpSession session) {
+    public String getHospital(@PathVariable Long id, Model model) {
 
-        Optional<Hospital> hospital = hospitalRepository.findById(id);
-        model.addAttribute("hospital", hospital);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        model.addAttribute("staffs", personnelRepository.findAll());
-        //model.addAttribute("incubators", incubatorRepository.findAll());
-       // model.addAttribute("bloods", bloodBankRepository.findAll());
+        Hospital hos = hospitalRepository.getOne(id);
+        model.addAttribute("staff", new Personnel());
+        model.addAttribute("hospital", hos);
 
         return "dashboard/pages/admin/hospital/show-hospital";
     }

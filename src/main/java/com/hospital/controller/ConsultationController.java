@@ -134,25 +134,23 @@ public class ConsultationController {
     @GetMapping(value = "/create")
     public String addConsultation(@RequestParam("code") String code, Model model, HttpServletRequest request, RedirectAttributes redirectAttributes){
 
+
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         DosMedical dosMedical = dosMedicalRepository.findByCode(code);
-        if (compte.getPersonnel()!= null){
 
-            Hospital hospital = compte.getPersonnel().getHospital();
-            List<Personnel> personnels = personnelRepository.findAllByHospital_Id(hospital.getId());
-            List<Personnel> lists = new ArrayList<>();
+        if (!compte.getRoles().contains(ERole.ROLE_PATIENT)){
+            Hospital myHospital = compte.getPersonnel().getHospital();
             Long days = TimeUnit.DAYS.convert(new Date().getTime() - dosMedical.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
-            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_MEDECIN.toString());
-            for (Compte compte1 : comptes){
-                for (Personnel personnel : personnels){
-                    if (compte1.getPersonnel() == personnel){
-                        lists.add(personnel);
-                    }
-                }
-            }
+
+            /* Get all doctors in an hospital */
+            List<Personnel> personnels = personnelRepository.findAllByHospital_Id(myHospital.getId());
+            List<Personnel> doctors = new ArrayList<>();
+            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_DOCTOR.toString());
+            for (Compte compte1 : comptes){ for (Personnel personnel : personnels){ if (compte1.getPersonnel() == personnel) doctors.add(personnel); } }
+
             model.addAttribute("age",Math.round(days/365));
-            model.addAttribute("doctors",lists);
+            model.addAttribute("doctors",doctors);
             model.addAttribute("patient",dosMedical);
             model.addAttribute("code",code);
             model.addAttribute("consultationHelper", new ConsultationHelper());
@@ -167,34 +165,31 @@ public class ConsultationController {
 
     /** Add a consultation */
     @PostMapping(value = "/create")
-    public String saveConsultation(@ModelAttribute @Valid ConsultationHelper consultationHelper, Errors errors, Model model, HttpServletRequest request){
-
+    public String saveConsultation(@ModelAttribute @Valid ConsultationHelper consultationHelper, Errors errors,
+                                   Model model, HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         DosMedical dosMedical = dosMedicalRepository.findByCode(consultationHelper.getCode());
-        Hospital hospital = compte.getPersonnel().getHospital();
+        Hospital myHospital = compte.getPersonnel().getHospital();
         if(errors.hasErrors()){
-            List<Personnel> personnels = personnelRepository.findAllByHospital_Id(hospital.getId());
-            List<Personnel> lists = new ArrayList<>();
             Long days = TimeUnit.DAYS.convert(new Date().getTime() - dosMedical.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
-            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_MEDECIN.toString());
-            for (Compte compte1 : comptes){
-                for (Personnel personnel : personnels){
-                    if (compte1.getPersonnel() == personnel){
-                        lists.add(personnel);
-                    }
-                }
-            }
+
+            /* Get all doctors in an hospital */
+            List<Personnel> personnels = personnelRepository.findAllByHospital_Id(myHospital.getId());
+            List<Personnel> doctors = new ArrayList<>();
+            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_DOCTOR.toString());
+            for (Compte compte1 : comptes){ for (Personnel personnel : personnels){ if (compte1.getPersonnel() == personnel) doctors.add(personnel); } }
+
             model.addAttribute("age",Math.round(days/365));
-            model.addAttribute("doctors",lists);
+            model.addAttribute("doctors",doctors);
             model.addAttribute("patient",dosMedical);
             model.addAttribute("code",consultationHelper.getCode());
-            model.addAttribute("consultationHelper", new ConsultationHelper());
+            //model.addAttribute("consultationHelper", new ConsultationHelper());
             return "dashboard/pages/admin/consultation/addConsultation";
         }else {
 
             Personnel doctor = personnelRepository.findByLastName(consultationHelper.getDoctorName());
-            consultationRepository.save(consultationHelper.getConsultationInstance(hospital, dosMedical, doctor));
+            consultationRepository.save(consultationHelper.getConsultationInstance(myHospital, dosMedical, doctor));
 
             model.addAttribute("success", "consultation successfully added");
             System.out.println("done");
@@ -204,16 +199,29 @@ public class ConsultationController {
 
     /** form for updating a consultation */
     @GetMapping(value = "/update/{idConsultation}")
-    public String updateConsultation(@PathVariable Long idConsultation, @RequestParam("code") String code, Model model){
-        List<Hospital> hospitals = hospitalRepository.findAll();
+    public String updateConsultation(@PathVariable Long idConsultation, @RequestParam("code") String code,
+                                     Model model, HttpServletRequest request){
         DosMedical dosMedical = dosMedicalRepository.findByCode(code);
-        List<Compte> doctors = compteRepository.findByRolesName(ERole.ROLE_ROOT.toString());
         Long days = TimeUnit.DAYS.convert(new Date().getTime() - dosMedical.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
+
+        Consultation consultation = consultationRepository.getOne(idConsultation);
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital myHospital = compte.getPersonnel().getHospital();
+
+        List<Personnel> doctors = new ArrayList<>();
+        if(myHospital != consultation.getHospital()){
+            doctors.add(consultation.getPersonnel());
+        }else{
+            /* Get all doctors in an hospital */
+            List<Personnel> personnels = personnelRepository.findAllByHospital_Id(myHospital.getId());
+            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_DOCTOR.toString());
+            for (Compte compte1 : comptes){ for (Personnel personnel : personnels){ if (compte1.getPersonnel() == personnel) doctors.add(personnel); } }
+        }
+
 
         model.addAttribute("age",Math.round(days/365));
         model.addAttribute("doctors",doctors);
-        model.addAttribute("hospitalList",hospitals);
-        model.addAttribute("patient",dosMedical);
         model.addAttribute("code",code);
         model.addAttribute("consultationHelper", ConsultationHelper.getConsultationHelperInstance(consultationRepository.getOne(idConsultation)));
 
@@ -222,23 +230,42 @@ public class ConsultationController {
 
     /** Update a consultation */
     @PostMapping(value = "/update/{idConsultation}")
-    public String updateConsultation(@PathVariable Long idConsultation, @ModelAttribute @Valid ConsultationHelper consultationHelper, Errors errors, Model model){
+    public String updateConsultation(@PathVariable Long idConsultation, @ModelAttribute @Valid ConsultationHelper consultationHelper, Errors errors, Model model, HttpServletRequest request){
+        DosMedical dosMedical = dosMedicalRepository.findByCode(consultationHelper.getCode());
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Consultation exConsultation = consultationRepository.getOne(idConsultation);
+        Hospital myHospital = compte.getPersonnel().getHospital();
+        Long days = TimeUnit.DAYS.convert(new Date().getTime() - dosMedical.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
+
+        model.addAttribute("age",Math.round(days/365));
+        model.addAttribute("code",consultationHelper.getCode());
+        List<Personnel> doctors = new ArrayList<>();
+
+        /* Get all doctors in an hospital */
+        List<Personnel> personnels = personnelRepository.findAllByHospital_Id(myHospital.getId());
+        List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_DOCTOR.toString());
+        for (Compte compte1 : comptes){ for (Personnel personnel : personnels){ if (compte1.getPersonnel() == personnel) doctors.add(personnel); } }
+
         if(errors.hasErrors()){
-            List<Compte> doctors = compteRepository.findByRolesName(ERole.ROLE_ROOT.toString());
+            if(myHospital != exConsultation.getHospital()){ doctors.clear(); doctors.add(exConsultation.getPersonnel()); }
             model.addAttribute("doctors",doctors);
-            model.addAttribute("hospitalList",hospitalRepository.findAll());
-            model.addAttribute("code",consultationHelper.getCode());
             return "dashboard/pages/admin/consultation/updateConsultation";
         }
 
-        DosMedical dosMedical = dosMedicalRepository.findByCode(consultationHelper.getCode());
-        Hospital hospital = hospitalRepository.findByName(consultationHelper.getHospitalName());
+        if(myHospital != exConsultation.getHospital()){
+            doctors.clear(); doctors.add(exConsultation.getPersonnel());
+            model.addAttribute("doctors",doctors);
+            model.addAttribute("error","This consultation was not done in your hospital, you cannot modify it");
+            return "dashboard/pages/admin/consultation/updateConsultation";
+        }
+
+        model.addAttribute("doctors",doctors);
+        Hospital hospital = hospitalRepository.findByName(exConsultation.getHospital().getName());
         Personnel doctor = personnelRepository.findByLastName(consultationHelper.getDoctorName());
 
-        Consultation exConsultation = consultationRepository.getOne(idConsultation);
         Consultation newConsultation = consultationHelper.getConsultationInstance(hospital,dosMedical,doctor);
         newConsultation.setId(exConsultation.getId());
-        newConsultation.setHospital(hospital);
         newConsultation.setPersonnel(doctor);
         consultationRepository.save(newConsultation);
        /* Compte compte = compteRepository.findByUsername(username);

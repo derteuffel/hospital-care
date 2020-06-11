@@ -43,7 +43,7 @@ public class IncubatorController {
 
         int currentPage = page.orElse(1);
 
-        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/incubator/incubator-list");
+        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/incubator/incubator");
 
         PageRequest pageable = PageRequest.of(currentPage - 1, 10);
 
@@ -126,28 +126,6 @@ public class IncubatorController {
         return  "redirect:/admin/incubator/hospital/"+incubatorHelper.getIdHospital();
     }
 
-  /*  @GetMapping("/update/{id}")
-    public String showEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs){
-
-        try{
-            Incubator incubator = incubatorRepository.getOne(id);
-            model.addAttribute("incubator",incubator);
-            return "dashboard/pages/admin/UpdateIncubator";
-        }catch (Exception e){
-            redirAttrs.addFlashAttribute("error", "This incubator seems to not exist");
-            return "redirect:/admin/incubator/all";
-        }
-    }
-
-    @PostMapping("/update/{id}")
-    public String update(@PathVariable("id") Long id, @Valid Incubator incubator, BindingResult bindingResult, Errors errors, Model model, RedirectAttributes redirAttrs){
-        if (bindingResult.hasErrors()) {
-            return "dashboard/pages/admin/UpdateIncubator";
-        }
-        incubatorRepository.save(incubator);
-        redirAttrs.addFlashAttribute("message", "Successfully edited");
-        return "redirect:/admin/incubator/all";
-    }*/
 
     @PostMapping("/search")
     public String searchIncubator(Incubator incubator,Model model){

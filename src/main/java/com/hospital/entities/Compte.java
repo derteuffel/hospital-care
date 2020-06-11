@@ -1,5 +1,6 @@
 package com.hospital.entities;
 
+import com.hospital.enums.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,10 +24,13 @@ public class Compte implements Serializable {
     private Boolean status;
 
 
+    @OneToOne
+    private Personnel personnel;
 
     //@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
 
     @JoinTable(
             name = "comptes_roles",
@@ -36,15 +40,14 @@ public class Compte implements Serializable {
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
-    /* @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-     @JoinTable(
-             name = "comptes_personnels",
-             joinColumns = @JoinColumn(
-                     name = "compte_id", referencedColumnName = "id"),
-             inverseJoinColumns = @JoinColumn(
-                     name = "personnel_id", referencedColumnName = "id"))*/
-    @OneToOne
-    private Personnel personnel;
+   /* @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "comptes_personnels",
+            joinColumns = @JoinColumn(
+                    name = "compte_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "personnel_id", referencedColumnName = "id"))*/
+
 
 
     public Compte(String username, String email, Boolean status, String password) {
@@ -56,6 +59,16 @@ public class Compte implements Serializable {
 
     public Compte(){
 
+    }
+
+    public boolean checkRole(ERole roleEnum){
+        boolean authorized = false;
+        for (Role role : this.getRoles()){
+            if(role.getName().equals(roleEnum.toString())){
+                authorized = true;
+            }
+        }
+        return authorized;
     }
 
     public Compte(String username, String email, String avatar) {
@@ -109,7 +122,7 @@ public class Compte implements Serializable {
     }
 
     public Collection<Role> getRoles() {
-        return roles;
+        return this.roles;
     }
 
     public void setRoles(Collection<Role> roles) {
