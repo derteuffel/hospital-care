@@ -10,20 +10,32 @@
 <div class="content" layout:fragment="content">
     <div class="row">
 
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                <a th:href="@{/admin/staff/lists}">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+                <a th:href="@{/admin/staff/lists/doctors/}+${hospital.id}">
                 <div class="dash-widget">
                     <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
-                        <h3 th:text="${hospital.personnels.size()}"></h3>
+                        <h3 th:text="${doctors.size()}"></h3>
                         <span class="widget-title1">Doctors <i class="fa fa-check" aria-hidden="true"></i></span>
                     </div>
                 </div>
                 </a>
             </div>
 
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                <a th:href="@{/admin/incubator/all}">
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+            <a th:href="@{/admin/staff/lists/simples/}+${hospital.id}">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3 th:text="${simples.size()}"></h3>
+                        <span class="widget-title1">Others staffs <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+                <a th:href="@{/admin/incubator/all/}+${hospital.id}">
                 <div class="dash-widget">
                     <span class="dash-widget-bg2"><i class="fa fa-user-o"></i></span>
                     <div class="dash-widget-info text-right">
@@ -34,8 +46,8 @@
                 </a>
             </div>
 
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                <a th:href="@{/admin/blood/all}">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+                <a th:href="@{/admin/blood/all/}+${hospital.id}">
                 <div class="dash-widget">
                     <span class="dash-widget-bg3"><i class="fa fa-user-md" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
@@ -46,7 +58,7 @@
                 </a>
             </div>
         <!--<a th:href="@{'/admin/consultation/medical-record/'+${dosMedical.code}}">-->
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
                 <div class="dash-widget">
                     <span class="dash-widget-bg4"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
@@ -60,14 +72,9 @@
     </div>
     <div class="row">
         <div class="col-12 col-md-6 col-lg-8 col-xl-6">
-            <div class="card">
-                <div class="card-header">
-
-                </div>
-                <div class="card-block">
-                    <h4 class="card-title d-inline-block" th:text="${hospital.name}"></h4>
-                    <h4 th:text="${hospital.city}"></h4>
-                </div>
+            <div class="hospital-barchart">
+                <h4 class="card-title d-inline-block" th:text="${hospital.name}"></h4>
+                <h4 th:text="${hospital.city}"></h4>
             </div>
         </div>
         <div class="col-12 col-md-6 col-lg-4 col-xl-6">

@@ -56,9 +56,9 @@ public class HospitalController {
     public String getHospital(@PathVariable Long id, Model model) {
 
         Hospital hos = hospitalRepository.getOne(id);
-        model.addAttribute("staff", new Personnel());
         model.addAttribute("hospital", hos);
-
+        model.addAttribute("doctors", personnelRepository.findAllByFunctionAndHospital_Id("DOCTOR",hos.getId()));
+        model.addAttribute("simples", personnelRepository.findAllByFunctionAndHospital_Id("SIMPLE",hos.getId()));
         return "dashboard/pages/admin/hospital/show-hospital";
     }
 

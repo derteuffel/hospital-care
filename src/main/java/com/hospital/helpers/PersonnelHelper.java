@@ -3,10 +3,12 @@ package com.hospital.helpers;
 import com.hospital.entities.Hospital;
 import com.hospital.entities.Personnel;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.*;
+import java.util.Date;
 
 @Data
 public class PersonnelHelper {
@@ -29,46 +31,38 @@ public class PersonnelHelper {
     @NotBlank(message = "function field must not be blank")
     private String function;
 
-    private String gender;
-
-    private Integer age;
-
     private String address;
     private String avatar;
-    @NotNull(message = "idHospital field must not be null")
-    private Long idHospital;
+    private String localisation;
+    @Pattern(regexp = "^[0-9]{9}$", message = "code is a sequence of 9 digits")
+    @NotBlank(message = "code must not be blank")
+    private String code;
 
-    public PersonnelHelper() {
-    }
+    @NotNull(message = "blood Type must not be null")
+    private String bloodType;
 
-    public PersonnelHelper(String lastName,  String firstName, String email,String phone, String city,  String function,
-                           String gender, Integer age, String address, String avatar,Long idHospital) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.email = email;
-        this.phone = phone;
-        this.city = city;
-        this.function = function;
-        this.gender = gender;
-        this.age = age;
-        this.address = address;
-        this.avatar = avatar;
-        this.idHospital = idHospital;
-    }
+    @Size(min = 1, max = 1, message = "rhesus must only be one character")
+    private String rhesus;
 
-    public Personnel getPersonnelInstance(Hospital hospital){
-        Personnel per = new Personnel();
-        per.setLastName(getLastName());
-        per.setFirstName(getFirstName());
-        per.setEmail(getEmail());
-        per.setCity(getCity());
-        per.setGender(getGender());
-        per.setAddress(getAddress());
-        per.setAge(getAge());
-        per.setFunction(getFunction());
-        per.setAvatar(getAvatar());
+    @NotBlank(message = "sex must not be null")
+    @Size(min = 1, max = 1, message = "sex one character")
+    private String sex;
 
-        per.setHospital(hospital);
-        return per;
-    }
+    // @NotBlank(message = "weight must not be null")
+    private String weight;
+
+    @NotBlank(message = "height must not be null")
+    private String height;
+
+    @NotNull(message = "you must specify a date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date birthDate;
+
+    private String hereditaryDiseases;
+
+    private String description;
+
+
+
 }

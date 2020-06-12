@@ -10,7 +10,10 @@
 <div class="content" layout:fragment="content">
     <div class="row">
         <div class="col-sm-4 col-3">
-            <h4 class="page-title">Doctors</h4>
+            <h4 class="page-title">Doctors | <span th:text="${hospital.name}"></span></h4>
+        </div>
+        <div class="col-sm-8 col-9">
+            <a th:href="@{/admin/staff/add/doctor/}+${hospital.id}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i>Add Doctor</a>
         </div>
     </div>
     <div class="row doctor-grid">

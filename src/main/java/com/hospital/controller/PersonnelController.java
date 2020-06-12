@@ -41,13 +41,35 @@ public class PersonnelController {
 
 
     /** Get all personnel in an application */
-    @GetMapping("/lists")
+    @GetMapping("/lists/doctors")
     public String findAll(Model model){
         System.out.println(fileStorage);
-        model.addAttribute("personnelForm", new Personnel());
-        model.addAttribute("staffs", personnelRepository.findAll());
-
+        model.addAttribute("lists", personnelRepository.findAllByFunction("DOCTOR"));
         return "dashboard/pages/admin/doctor/doctors";
+    }
+
+    @GetMapping("/lists/doctors/{id}")
+    public String findAllByHospital(Model model, @PathVariable Long id){
+        System.out.println(fileStorage);
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("hospital", hospital);
+        model.addAttribute("lists", personnelRepository.findAllByFunctionAndHospital_Id("DOCTOR",hospital.getId()));
+        return "dashboard/pages/admin/hospital/doctors";
+    }
+
+    @GetMapping("/add/doctor/{id}")
+    public String addDoctor(@PathVariable Long id,Model model){
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("hospital",hospital);
+        model.addAttribute("form",new PersonnelHelper());
+        return "dashboard/pages/admin/hospital/new-doctor";
+    }
+
+    @GetMapping("/lists/simples")
+    public String findAllSimples(Model model){
+        System.out.println(fileStorage);
+        model.addAttribute("lists", personnelRepository.findAllByFunction("SIMPLE"));
+        return "dashboard/pages/admin/simple/simples";
     }
 
 /*    @GetMapping("/create")
@@ -63,7 +85,7 @@ public class PersonnelController {
     @GetMapping("/create")
     public String form(Model model){
         model.addAttribute("hospitals", hospitalRepository.findAll());
-        model.addAttribute("personnel",new Personnel());
+        model.addAttribute("form",new PersonnelHelper());
         return "dashboard/pages/admin/personnel/form-personnel";
     }
 
