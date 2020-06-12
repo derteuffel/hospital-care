@@ -28,9 +28,6 @@ public class PersonnelHelper {
     @NotBlank(message = "city field must not be blank")
     private String city;
 
-    @NotBlank(message = "function field must not be blank")
-    private String function;
-
     private String address;
     private String avatar;
     private String localisation;

@@ -1,11 +1,15 @@
 package com.hospital.controller;
 
 
+import com.hospital.entities.Compte;
+import com.hospital.entities.DosMedical;
 import com.hospital.entities.Hospital;
 import com.hospital.entities.Personnel;
 import com.hospital.helpers.PersonnelHelper;
+import com.hospital.repository.DosMedicalRepository;
 import com.hospital.repository.HospitalRepository;
 import com.hospital.repository.PersonnelRepository;
+import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -22,8 +26,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/admin/staff")
@@ -38,6 +44,12 @@ public class PersonnelController {
 
     @Autowired
     private HospitalRepository hospitalRepository;
+
+    @Autowired
+    private CompteService compteService;
+
+    @Autowired
+    private DosMedicalRepository dosMedicalRepository;
 
 
     /** Get all personnel in an application */
@@ -65,12 +77,166 @@ public class PersonnelController {
         return "dashboard/pages/admin/hospital/new-doctor";
     }
 
+    @PostMapping("/create/doctor/{id}")
+    public String saveDoctor( @Valid PersonnelHelper form, Model model,
+                       BindingResult bindingResult,
+                       @RequestParam("file") MultipartFile file, @PathVariable Long id, HttpSession session){
+
+        Hospital hospital = hospitalRepository.getOne(id);
+        Personnel persExists = personnelRepository.findByLastNameOrEmailOrPhone(form.getLastName(),
+
+                form.getEmail(), form.getPhone());
+
+        Personnel personnel = new Personnel();
+        DosMedical dosMedical = new DosMedical();
+
+        if (persExists != null){
+            bindingResult
+                    .rejectValue("email", "error.personnel",
+                            "there is already a personnel registered with an email or name or telephone provided ");
+        }
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("hospital",hospital);
+            model.addAttribute("form",new PersonnelHelper());
+            return  "dashboard/pages/admin/hospital/new-doctor";
+        }else {
+            if (!(file.isEmpty())){
+                try {
+                    byte[] bytes = file.getBytes();
+                    Path path = Paths.get(fileStorage + file.getOriginalFilename());
+                    Files.write(path, bytes);
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                personnel.setAvatar("/downloadFile/"+file.getOriginalFilename());
+            }else {
+                personnel.setAvatar("/img/default.jpeg");
+            }
+            Long days = TimeUnit.DAYS.convert(new Date().getTime() - form.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
+            personnel.setHospital(hospital);
+            personnel.setAddress(form.getAddress());
+            personnel.setEmail(form.getEmail());
+            personnel.setLastName(form.getLastName());
+            personnel.setFirstName(form.getFirstName());
+            personnel.setAge(Math.round(days/365));
+            personnel.setCity(form.getCity());
+            personnel.setFunction("DOCTOR");
+            personnel.setPhone(form.getPhone());
+            personnel.setGender(form.getSex());
+            personnel.setLocalisation(form.getLocalisation());
+            personnelRepository.save(personnel);
+            dosMedical.setSex(form.getSex());
+            dosMedical.setName(personnel.getLastName()+" "+personnel.getFirstName());
+            dosMedical.setBloodType(form.getBloodType());
+            dosMedical.setHeight(Integer.parseInt(form.getHeight()));
+            dosMedical.setWeight(Integer.parseInt(form.getWeight()));
+            dosMedical.setBirthDate(form.getBirthDate());
+            dosMedical.setRhesus(form.getRhesus());
+            dosMedical.setHereditaryDiseases(form.getHereditaryDiseases());
+            dosMedical.setDescription(form.getDescription());
+            dosMedical.setCode(form.getCode());
+            dosMedicalRepository.save(dosMedical);
+            compteService.saveDoctor(form,personnel.getAvatar(),dosMedical,personnel);
+            System.out.println(personnel.getLastName());
+        }
+        return "redirect:/admin/staff/lists/doctors/"+hospital.getId();
+
+    }
+
+
+    @GetMapping("/lists/simples/{id}")
+    public String findAllByHospitalS(Model model, @PathVariable Long id){
+        System.out.println(fileStorage);
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("hospital", hospital);
+        model.addAttribute("lists", personnelRepository.findAllByFunctionAndHospital_Id("SIMPLE",hospital.getId()));
+        return "dashboard/pages/admin/hospital/simples";
+    }
+
+
     @GetMapping("/lists/simples")
     public String findAllSimples(Model model){
         System.out.println(fileStorage);
         model.addAttribute("lists", personnelRepository.findAllByFunction("SIMPLE"));
         return "dashboard/pages/admin/simple/simples";
     }
+
+    @GetMapping("/add/simple/{id}")
+    public String addSimple(@PathVariable Long id,Model model){
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("hospital",hospital);
+        model.addAttribute("form",new PersonnelHelper());
+        return "dashboard/pages/admin/hospital/new-simple";
+    }
+
+    @PostMapping("/create/simple/{id}")
+    public String saveSimple( @Valid PersonnelHelper form, Model model,
+                              BindingResult bindingResult,
+                              @RequestParam("file") MultipartFile file, @PathVariable Long id, HttpSession session){
+
+        Hospital hospital = hospitalRepository.getOne(id);
+        Personnel persExists = personnelRepository.findByLastNameOrEmailOrPhone(form.getLastName(),
+
+                form.getEmail(), form.getPhone());
+
+        Personnel personnel = new Personnel();
+        DosMedical dosMedical = new DosMedical();
+
+        if (persExists != null){
+            bindingResult
+                    .rejectValue("email", "error.personnel",
+                            "there is already a personnel registered with an email or name or telephone provided ");
+        }
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("hospital",hospital);
+            model.addAttribute("form",new PersonnelHelper());
+            return  "dashboard/pages/admin/hospital/new-simple";
+        }else {
+            if (!(file.isEmpty())){
+                try {
+                    byte[] bytes = file.getBytes();
+                    Path path = Paths.get(fileStorage + file.getOriginalFilename());
+                    Files.write(path, bytes);
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                personnel.setAvatar("/downloadFile/"+file.getOriginalFilename());
+            }else {
+                personnel.setAvatar("/img/default.jpeg");
+            }
+            Long days = TimeUnit.DAYS.convert(new Date().getTime() - form.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
+            personnel.setHospital(hospital);
+            personnel.setAddress(form.getAddress());
+            personnel.setEmail(form.getEmail());
+            personnel.setLastName(form.getLastName());
+            personnel.setFirstName(form.getFirstName());
+            personnel.setAge(Math.round(days/365));
+            personnel.setCity(form.getCity());
+            personnel.setFunction("SIMPLE");
+            personnel.setPhone(form.getPhone());
+            personnel.setGender(form.getSex());
+            personnel.setLocalisation(form.getLocalisation());
+            personnelRepository.save(personnel);
+            dosMedical.setSex(form.getSex());
+            dosMedical.setName(personnel.getLastName()+" "+personnel.getFirstName());
+            dosMedical.setBloodType(form.getBloodType());
+            dosMedical.setHeight(Integer.parseInt(form.getHeight()));
+            dosMedical.setWeight(Integer.parseInt(form.getWeight()));
+            dosMedical.setBirthDate(form.getBirthDate());
+            dosMedical.setRhesus(form.getRhesus());
+            dosMedical.setHereditaryDiseases(form.getHereditaryDiseases());
+            dosMedical.setDescription(form.getDescription());
+            dosMedical.setCode(form.getCode());
+            dosMedicalRepository.save(dosMedical);
+            compteService.saveSimple(form,personnel.getAvatar(),dosMedical,personnel);
+            System.out.println(personnel.getLastName());
+        }
+        return "redirect:/admin/staff/lists/simples/"+hospital.getId();
+
+    }
+
 
 /*    @GetMapping("/create")
     public String form(Model model,@RequestParam("idHospital") int  idHospital, Long id){

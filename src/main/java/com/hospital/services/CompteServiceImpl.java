@@ -7,6 +7,7 @@ import com.hospital.entities.Personnel;
 import com.hospital.entities.Role;
 import com.hospital.enums.ERole;
 import com.hospital.helpers.CompteRegistrationDto;
+import com.hospital.helpers.PersonnelHelper;
 import com.hospital.repository.CompteRepository;
 import com.hospital.repository.DosMedicalRepository;
 import com.hospital.repository.PersonnelRepository;
@@ -106,6 +107,64 @@ public class CompteServiceImpl implements CompteService {
         dosMedicalRepository.save(dosMedical);
         return compte;
 
+    }
+
+    @Override
+    public Compte saveDoctor(PersonnelHelper personnelHelper, String s, DosMedical dosMedical, Personnel personnel) {
+        Compte compte = new Compte();
+        Optional<Role> role = roleRepository.findByName(ERole.ROLE_PATIENT.toString());
+        Optional<Role> role1 = roleRepository.findByName(ERole.ROLE_DOCTOR.toString());
+        if (!(role.isPresent())){
+            Role role2 = new Role();
+            role2.setName(ERole.ROLE_PATIENT.toString());
+            roleRepository.save(role2);
+            compte.setRoles(Arrays.asList(role2));
+
+        }else{
+            compte.setRoles(Arrays.asList(role.get(),role1.get()));
+        }
+
+
+
+        compte.setAvatar(s);
+        compte.setEmail(personnelHelper.getEmail());
+        compte.setPassword(passwordEncoder.encode(personnelHelper.getCode()));
+        compte.setUsername(personnelHelper.getCode());
+        compte.setStatus(true);
+        compte.setPersonnel(personnel);
+        compteRepository.save(compte);
+        dosMedical.setCompte(compte);
+        dosMedicalRepository.save(dosMedical);
+
+        return compte;
+    }
+
+    @Override
+    public Compte saveSimple(PersonnelHelper personnelHelper, String s, DosMedical dosMedical, Personnel personnel) {
+        Compte compte = new Compte();
+        Optional<Role> role = roleRepository.findByName(ERole.ROLE_PATIENT.toString());
+        Optional<Role> role1 = roleRepository.findByName(ERole.ROLE_PERSONNEL.toString());
+        if (!(role.isPresent())){
+            Role role2 = new Role();
+            role2.setName(ERole.ROLE_PATIENT.toString());
+            roleRepository.save(role2);
+            compte.setRoles(Arrays.asList(role2));
+
+        }else{
+            compte.setRoles(Arrays.asList(role.get(),role1.get()));
+        }
+
+        compte.setAvatar(s);
+        compte.setEmail(personnelHelper.getEmail());
+        compte.setPassword(passwordEncoder.encode(personnelHelper.getCode()));
+        compte.setUsername(personnelHelper.getCode());
+        compte.setStatus(true);
+        compte.setPersonnel(personnel);
+        compteRepository.save(compte);
+        dosMedical.setCompte(compte);
+        dosMedicalRepository.save(dosMedical);
+
+        return compte;
     }
 
     @Override
