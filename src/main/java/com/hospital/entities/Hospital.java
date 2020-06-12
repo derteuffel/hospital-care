@@ -32,6 +32,10 @@ public class Hospital implements Serializable {
     @NotBlank
     private String city;
 
+    private String pays;
+
+    private String neighborhood;
+
     @NotNull
     private ArrayList<String> types = new ArrayList<String>();
 

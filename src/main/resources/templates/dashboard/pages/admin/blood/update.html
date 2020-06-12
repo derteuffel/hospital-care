@@ -3,18 +3,18 @@
       layout:decorate="~{../templates/dashboard/index}">
 <head>
     <meta charset="UTF-8">
-    <title>Add an Blood</title>
+    <title>Update an Blood</title>
 </head>
 <body>
 <div class="content" layout:fragment="content">
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <h4 class="page-title">Add Blood</h4>
+            <h4 class="page-title">Update Blood</h4>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form method="post" th:action="@{/admin/blood/add/}+${hospital.id}" th:object="${blood}">
+            <form method="post" th:action="@{/admin/blood/update/{id}(id = ${incubator.id})}" th:object="${blood}">
                 <!--<input class="form-control" type="hidden" name="idHospital" th:value="${idHospital}">-->
 
                 <div class="form-group">
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="m-t-20 text-center">
-                    <button class="btn btn-primary submit-btn">Create Blood</button>
+                    <button class="btn btn-primary submit-btn">Update Blood</button>
                 </div>
             </form>
         </div>

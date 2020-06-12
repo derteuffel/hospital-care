@@ -14,7 +14,7 @@
     </div>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form method="post" th:action="@{/admin/incubator/add}" th:object="${incubator}">
+            <form method="post" th:action="@{/admin/incubator/add/}+${hospital.id}" th:object="${incubator}">
                 <!--<input class="form-control" type="hidden" name="idHospital" th:value="${idHospital}">-->
 
                 <div class="form-group">
@@ -39,11 +39,11 @@
                         </th:block>
                     </select>
                 </div>
-                <div class="form-group">
+<!--                <div class="form-group">
                     <select th:field="*{hospital}" class="form-control">
                         <option th:each="hospital: ${hospitals}" th:value="${hospital.id}" th:text="${hospital.name}"></option>
                     </select>
-                </div>
+                </div>-->
 
                 <div class="m-t-20 text-center">
                     <button class="btn btn-primary submit-btn">Create Incubator</button>

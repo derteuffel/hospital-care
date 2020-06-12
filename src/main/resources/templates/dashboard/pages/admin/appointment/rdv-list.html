@@ -8,29 +8,41 @@
 <body>
 <div class="content" layout:fragment="content">
     <div class="row">
-        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
-            <div class="dash-widget">
-                <span class="dash-widget-bg1"></span>
-                <div class="dash-widget-info text-right">
-                    <h3></h3>
-                    <span class="widget-title1">Active Appointment <i class="fa fa-check" aria-hidden="true"></i></span>
+        <div class="col-md-12 col-sm-6 col-lg-6 col-xl-3">
+            <a href="#">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg2"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3></h3>
+                        <span class="widget-title2">Active Appointment <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
                 </div>
-            </div>
+            </a>
+
         </div>
-        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
-            <div class="dash-widget">
-                <span class="dash-widget-bg2"></span>
-                <div class="dash-widget-info text-right">
-                    <h3></h3>
-                    <span class="widget-title2">Inactive Appointment <i class="fa fa-check" aria-hidden="true"></i></span>
+        <div class="col-md-12 col-sm-6 col-lg-6 col-xl-3">
+            <a href="#">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg4"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3></h3>
+                        <span class="widget-title4">Inactive Appointment <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
+
     <div class="row">
-        <div class="col-sm-7 col-7 text-right m-b-30">
-            <a th:href="@{/admin/rdv/create}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Add Appointment</a>
+        <div class="col-sm-4 col-3">
+            <h4 class="page-title"> Add Appointment</h4>
         </div>
+        <div class="col-sm-8 col-9 text-right m-b-20">
+            <a  th:href="@{/admin/rdv/create}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add a consultation</a>
+        </div>
+    </div>
+    <div th:if="${success}">
+        <div class="alert alert-success" th:text="${success}"></div>
     </div>
     <div class="row" th:if="${message}">
         <div class="alert alert-success alert-dismissible fade show" role="alert">

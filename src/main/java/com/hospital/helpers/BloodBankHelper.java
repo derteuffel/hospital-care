@@ -21,19 +21,6 @@ public class BloodBankHelper {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @NotNull(message = "idHospital field must not be null")
-    private Long idHospital;
-
-    public BloodBank getBloodBankInstance(Hospital hospital){
-        BloodBank incubator = new BloodBank();
-        incubator.setGroupeSanguin(getGroupeSanguin());
-        incubator.setRhesus(getRhesus());
-        incubator.setHospital(hospital);
-        return incubator;
-    }
-
-
-
 
 
 

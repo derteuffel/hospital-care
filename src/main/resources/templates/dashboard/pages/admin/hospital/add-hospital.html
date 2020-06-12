@@ -27,6 +27,19 @@
                     <td th:if="${#fields.hasErrors('city')}" th:errors="*{city}">City Error</td>
                 </div>
                 <div class="form-group">
+                    <label>Neighborhood</label>
+                    <input class="form-control" type="text" th:field="*{neighborhood}" required autofocus>
+                    <td th:if="${#fields.hasErrors('neighborhood')}" th:errors="*{neighborhood}">neighborhood Error</td>
+                </div>
+                <div class="form-group">
+                    <label>Country</label>
+                    <select th:field="*{pays}" class="form-control">
+                        <th:block th:each="p: ${T(com.hospital.enums.EPaysHospital).values()}">
+                            <option  th:value="${p}" th:text="${p}"></option>
+                        </th:block>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>Spécialités</label>
                     <select th:field="*{types}" class="form-control" multiple size="10">
                         <th:block th:each="item: ${T(com.hospital.enums.ETypeHospital).values()}">

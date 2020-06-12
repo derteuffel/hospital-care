@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -47,75 +48,70 @@ public class BloodBankController {
         return modelAndView;
     }
 
-    @GetMapping("/add")
-    public String form(Model model, Long shopId){
-        List<Hospital> hospitals=hospitalRepository.findAll();
-        model.addAttribute("blood", new BloodBank());
-        model.addAttribute("hospitals", hospitals);
-        return "dashboard/pages/admin/blood/add-blood";
+    @GetMapping("/lists/bloods/{id}")
+    public String findAllByHospital(Model model, @PathVariable Long id){
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("hospital", hospital);
+        model.addAttribute("bloods", bloodBankRepository.findAll());
+        return "dashboard/pages/admin/blood/blood";
     }
 
-    @PostMapping("/add")
-    public String save(@Valid BloodBank blood, Long id, HttpSession session){
-        Hospital hospital = hospitalRepository.findById(id).get();
-        blood.setRhesus(blood.getRhesus());
-        blood.setGroupeSanguin(blood.getGroupeSanguin());
-        blood.setDate(blood.getDate());
-        blood.setHospital(hospital);
-        bloodBankRepository.save(blood);
-        return "dashboard/pages/admin/blood/add-blood";
-    }
 
-  /*  @GetMapping("/add")
-    public String save(@Valid @ModelAttribute("blood") BloodBank bloodBank,
-                                Model model){
-
-        model.addAttribute("hospitals",hospitalRepository.findAll());
-        bloodBankRepository.save(bloodBank);
-
+    @GetMapping("/add/{id}")
+    public String saveBlood(Model model, @PathVariable Long id){
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("hospital",hospital);
+        model.addAttribute("blood",new BloodBankHelper());
         return  "dashboard/pages/admin/blood/add-blood";
     }
 
-    @PostMapping("/add")
-    public String add(Model model) {
-        model.addAttribute("blood", new BloodBank());
-        model.addAttribute("hospitals", hospitalRepository.findAll());
-        return "dashboard/pages/admin/blood/add-blood";
-    }*/
-
-    /** form for adding an blood */
-/*    @GetMapping(value = "/create")
-    public String add(@RequestParam("idHospital") int  idHospital, Model model){
-        List<Hospital> hospitals = hospitalRepository.findAll();
-        model.addAttribute("idHospital",idHospital);
-        model.addAttribute("hospitalList",hospitals);
-        model.addAttribute(new BloodBankHelper());
-        return "dashboard/pages/admin/blood/add-blood";
+    @PostMapping("/add/{id}")
+    public String addBlood(Model model, @PathVariable Long id, @Valid BloodBankHelper bloodBankHelper) {
+        Hospital hospital = hospitalRepository.getOne(id);
+        BloodBank blood = new BloodBank();
+        blood.setHospital(hospital);
+        blood.setDate(bloodBankHelper.getDate());
+        blood.setRhesus(bloodBankHelper.getRhesus());
+        blood.setGroupeSanguin(bloodBankHelper.getGroupeSanguin());
+        bloodBankRepository.save(blood);
+        return "dashboard/pages/admin/blood/blood";
     }
 
-    *//** Add an blood *//*
-    @PostMapping("/create")
-    public String save(@ModelAttribute @Valid BloodBankHelper bloodBankHelper, Errors errors, Model model){
-        if(errors.hasErrors()){
-            model.addAttribute("hospitalList",hospitalRepository.findAll());
-            model.addAttribute("idHospital",bloodBankHelper.getIdHospital());
-            return "dashboard/pages/admin/blood/add-blood";
-        }else{
-            Hospital hospital = hospitalRepository.getOne(bloodBankHelper.getIdHospital());
-            //Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());
-            bloodBankRepository.save(bloodBankHelper.getBloodBankInstance(hospital));
+    @GetMapping("/update/{id}")
+    public String showEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs){
+
+        try{
+            BloodBank blood = bloodBankRepository.getOne(id);
+            model.addAttribute("blood",blood);
+            return "dashboard/pages/admin/blood/update";
+        }catch (Exception e){
+            redirAttrs.addFlashAttribute("error", "This hospital seems to not exist");
+            return "admin/pages/blood/blood";
         }
-        return  "redirect:/admin/blood/hospital/"+bloodBankHelper.getIdHospital();
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateBlood( BloodBank blood, @PathVariable Long id, RedirectAttributes redirectAttributes){
+        Optional<BloodBank> blood1 = bloodBankRepository.findById(id);
+
+
+        if (blood1.isPresent()) {
+            BloodBank blood2 = blood1.get();
+            blood2.setGroupeSanguin(blood.getGroupeSanguin());
+            blood2.setRhesus(blood.getRhesus());
+            blood2.setDate(blood.getDate());
+
+            bloodBankRepository.save(blood2);
+            redirectAttributes.addFlashAttribute("success", "The blood has been updated successfully");
+            return "admin/pages/blood/update";
+        }
+        else {
+            redirectAttributes.addFlashAttribute("error","There are no blood with Id :" +id);
+            return "admin/pages/blood/blood";
+        }
     }
 
 
-    @PostMapping("/search")
-    public String searchBloodBank(BloodBank bloodBank,Model model){
-
-        List<BloodBank> results =  bloodBankRepository.findByGroupeSanguinLike(bloodBank.getGroupeSanguin());
-        model.addAttribute("results",results);
-        return "dashboard/pages/admin/blood/search-blood";
-    }*/
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable Long id, Model model, HttpSession session) {

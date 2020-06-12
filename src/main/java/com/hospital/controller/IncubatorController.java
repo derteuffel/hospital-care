@@ -68,90 +68,71 @@ public class IncubatorController {
         return modelAndView;
     }
 
+    @GetMapping("/lists/incubators/{id}")
+    public String findAllByHospital(Model model, @PathVariable Long id){
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("hospital", hospital);
+        model.addAttribute("incubators", incubatorRepository.findAll());
+        return "dashboard/pages/admin/incubator/incubator-list";
+    }
 
-    @GetMapping("/add")
-    public String saveIncubator(@Valid @ModelAttribute("incubator") Incubator incubator,
-                                Model model){
 
-        model.addAttribute("hospitals",hospitalRepository.findAll());
-        incubatorRepository.save(incubator);
-
+    @GetMapping("/add/{id}")
+    public String saveIncubator(Model model, @PathVariable Long id){
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("hospital",hospital);
+        model.addAttribute("incubator",new IncubatorHelper());
         return  "dashboard/pages/admin/incubator/add-incubator";
     }
 
-    @PostMapping("/add")
-    public String addIncubator(Model model) {
-        model.addAttribute("incubator", new Incubator());
-        model.addAttribute("hospitals", hospitalRepository.findAll());
-        return "dashboard/pages/admin/incubator/add-incubator";
+    @PostMapping("/add/{id}")
+    public String addIncubator(Model model, @PathVariable Long id, @Valid IncubatorHelper incubatorHelper) {
+        Hospital hospital = hospitalRepository.getOne(id);
+        Incubator incubator = new Incubator();
+        incubator.setHospital(hospital);
+        incubator.setDateObtained(incubatorHelper.getDateObtained());
+        incubator.setStatus(incubatorHelper.getStatus());
+        incubator.setNumber(incubatorHelper.getNumber());
+        incubatorRepository.save(incubator);
+        return "dashboard/pages/admin/incubator/incubator-list";
     }
 
+    @GetMapping("/update/{id}")
+    public String showEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs){
 
-/*
-
-    @GetMapping(value = "/create")
-    public String add(@RequestParam("idHospital") Long  idHospital, Model model){
-        List<Hospital> hospitals = hospitalRepository.findAll();
-        model.addAttribute("idHospital",idHospital);
-        model.addAttribute("hospitalList",hospitals);
-        model.addAttribute(new IncubatorHelper());
-        return "dashboard/pages/admin/incubator/add-incubator";
-    }
-
-
-*/
-/** Add an incubator *//*
-
-
-    @PostMapping("/create")
-    public String save(@ModelAttribute @Valid IncubatorHelper incubatorHelper, Errors errors, Model model){
-        if(errors.hasErrors()){
-            model.addAttribute("hospitalList",hospitalRepository.findAll());
-            model.addAttribute("idHospital",incubatorHelper.getIdHospital());
-            return "dashboard/pages/admin/incubator/add-incubator";
-        }else{
-            Hospital hospital = hospitalRepository.getOne(incubatorHelper.getIdHospital());
-            //Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());
-            incubatorRepository.save(incubatorHelper.getIncubatorInstance(hospital));
-        }
-        return  "redirect:/admin/incubator/hospital/"+incubatorHelper.getIdHospital();
-    }
-
-
-*/
-
-
-    /** form for updating an incubator */
-    @GetMapping(value = "/update/{idIncubator}")
-    public String updateIncubator(@PathVariable Long idIncubator, @RequestParam("idHospital") Long idHospital, Model model){
-        List<Hospital> hospitals = hospitalRepository.findAll();
-        model.addAttribute("idHospital",idHospital);
-        model.addAttribute("hospitalList",hospitals);
-        model.addAttribute("incubatorHelper", IncubatorHelper.getIncubatorHelperInstance(incubatorRepository.getOne(idIncubator)));
-
-        return "dashboard/pages/admin/incubator/updateIncubator";
-    }
-
-    /** Update an incubator */
-    @PostMapping(value = "/update/{idIncubator}")
-    public String update(@PathVariable Long idIncubator, @ModelAttribute @Valid IncubatorHelper incubatorHelper, Errors errors, Model model) {
-        if (errors.hasErrors()) {
-            model.addAttribute("hospitalList", hospitalRepository.findAll());
-            model.addAttribute("idHospital", incubatorHelper.getIdHospital());
+        try{
+            Incubator incubator = incubatorRepository.getOne(id);
+            model.addAttribute("incubator",incubator);
             return "dashboard/pages/admin/incubator/updateIncubator";
-        } else {
-            Hospital hospital = hospitalRepository.getOne(incubatorHelper.getIdHospital());
-            Incubator incubator = incubatorRepository.getOne(idIncubator);
-            Incubator newExam = incubatorHelper.getIncubatorInstance(hospital);
-            newExam.setId(incubator.getId());
-            newExam.setHospital(hospital);
-            incubatorRepository.save(newExam);
+        }catch (Exception e){
+            redirAttrs.addFlashAttribute("error", "This hospital seems to not exist");
+            return "admin/pages/incubator/incubator-list";
         }
-
-        model.addAttribute("success","Operation successfully completed");
-        System.out.println(model.getAttribute("success"));
-        return  "redirect:/admin/incubator/hospital/"+incubatorHelper.getIdHospital();
     }
+
+    @PostMapping("/update/{id}")
+    public String updateIncubator(Incubator incubator, @PathVariable Long id, RedirectAttributes redirectAttributes){
+        Optional<Incubator> incubator1 = incubatorRepository.findById(id);
+
+
+        if (incubator1.isPresent()) {
+            Incubator incubator2 = incubator1.get();
+            incubator2.setNumber(incubator.getNumber());
+            incubator2.setStatus(incubator.getStatus());
+            incubator2.setDateObtained(incubator.getDateObtained());
+
+            incubatorRepository.save(incubator2);
+            redirectAttributes.addFlashAttribute("success", "The incubator has been updated successfully");
+            return "admin/pages/incubator/updateIncubator";
+        }
+        else {
+            redirectAttributes.addFlashAttribute("error","There are no incubator with Id :" +id);
+            return "admin/pages/incubator/incubator-list";
+        }
+    }
+
+
+
 
 
     @PostMapping("/search")

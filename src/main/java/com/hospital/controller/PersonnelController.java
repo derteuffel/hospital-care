@@ -124,7 +124,7 @@ public class PersonnelController {
             personnel.setFunction("DOCTOR");
             personnel.setPhone(form.getPhone());
             personnel.setGender(form.getSex());
-            personnel.setLocalisation(form.getLocalisation());
+            //personnel.setLocalisation(form.getLocalisation());
             personnelRepository.save(personnel);
             dosMedical.setSex(form.getSex());
             dosMedical.setName(personnel.getLastName()+" "+personnel.getFirstName());
@@ -217,7 +217,7 @@ public class PersonnelController {
             personnel.setFunction("SIMPLE");
             personnel.setPhone(form.getPhone());
             personnel.setGender(form.getSex());
-            personnel.setLocalisation(form.getLocalisation());
+            //personnel.setLocalisation(form.getLocalisation());
             personnelRepository.save(personnel);
             dosMedical.setSex(form.getSex());
             dosMedical.setName(personnel.getLastName()+" "+personnel.getFirstName());
@@ -238,15 +238,7 @@ public class PersonnelController {
     }
 
 
-/*    @GetMapping("/create")
-    public String form(Model model,@RequestParam("idHospital") int  idHospital, Long id){
-        List<Hospital> hospitals = hospitalRepository.findAll();
-        model.addAttribute("idHospital",idHospital);
-        model.addAttribute("hospital", hospitalRepository.getOne(id));
-        model.addAttribute("hospitalList",hospitals);
-        model.addAttribute(new PersonnelHelper());
-        return "dashboard/pages/admin/form-personnel";
-    }*/
+
 
     @GetMapping("/create")
     public String form(Model model){
