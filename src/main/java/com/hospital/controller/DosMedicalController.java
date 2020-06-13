@@ -101,7 +101,7 @@ public class DosMedicalController {
     }
 
     /** cancel a medical record */
-    @PostMapping(value = "/cancel")
+    @GetMapping(value = "/cancel")
     public String cancelDosMedical(HttpServletRequest request, Model model){
 
         Long id = Long.parseLong(request.getParameter("id"));
@@ -144,7 +144,7 @@ public class DosMedicalController {
         if(dosMedical != null){
             model.addAttribute("dosMedicalHelper",DosMedicalHelper.getDosMedicalHelperInstance(dosMedical));
         }
-        return "dashboard/pages/admin/updateDosMedical";
+        return "dashboard/pages/admin/patient/updateDosMedical";
     }
 
     /** Update a medical record */
