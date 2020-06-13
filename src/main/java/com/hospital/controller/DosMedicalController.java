@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -192,13 +193,14 @@ public class DosMedicalController {
 
     /** search a medical record */
     @GetMapping(value = "/search")
-    public String getMedicalRecord(@RequestParam("search") String search, Model model){
+    public String getMedicalRecord(@RequestParam("search") String search, Model model, RedirectAttributes redirectAttributes){
         if(search != ""){
             DosMedical dosMedical = dos.findByCode(search);
             if(dosMedical != null) {
 
                 model.addAttribute("dosMedicalFound", dosMedical);
             }else {
+                redirectAttributes.addFlashAttribute("error","There are no account and medical records with provided code. Please add new medical record");
                 return "redirect:/admin/medical-record/create";
             }
         }
