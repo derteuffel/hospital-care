@@ -14,7 +14,7 @@
     </div>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form method="post" th:action="@{/admin/blood/update/{id}(id = ${incubator.id})}" th:object="${blood}">
+            <form method="post" th:action="@{/admin/blood/update/{id}(id = ${blood.id})}" th:object="${blood}">
                 <!--<input class="form-control" type="hidden" name="idHospital" th:value="${idHospital}">-->
 
                 <div class="form-group">
@@ -45,6 +45,7 @@
                 </div>
 
                 <div class="m-t-20 text-center">
+                    <a th:href="@{/admin/blood/lists/bloods/}+${blood.id}" class="btn btn-secondary submit-btn">Annuler</a>
                     <button class="btn btn-primary submit-btn">Update Blood</button>
                 </div>
             </form>
