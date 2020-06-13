@@ -101,7 +101,7 @@ public class DosMedicalController {
     }
 
     /** cancel a medical record */
-    @PostMapping(value = "/cancel")
+    @GetMapping(value = "/cancel")
     public String cancelDosMedical(HttpServletRequest request, Model model){
 
         Long id = Long.parseLong(request.getParameter("id"));
@@ -144,14 +144,14 @@ public class DosMedicalController {
         if(dosMedical != null){
             model.addAttribute("dosMedicalHelper",DosMedicalHelper.getDosMedicalHelperInstance(dosMedical));
         }
-        return "dashboard/pages/admin/updateDosMedical";
+        return "dashboard/pages/admin/patient/updateDosMedical";
     }
 
     /** Update a medical record */
     @PostMapping(value = "/update/{code}")
     public String updateMedicalRecord(@PathVariable String code, @ModelAttribute @Valid DosMedicalHelper dosMedicalHelper, Errors errors, Model model){
         if(errors.hasErrors()) {
-            return "dashboard/pages/admin/updateDosMedical";
+            return "dashboard/pages/admin/patient/updateDosMedical";
         }
         DosMedical exDosMedical = dos.findByCode(code);
         DosMedical newDosMedical = dosMedicalHelper.getDosMedicalInstance();
@@ -195,7 +195,12 @@ public class DosMedicalController {
     public String getMedicalRecord(@RequestParam("search") String search, Model model){
         if(search != ""){
             DosMedical dosMedical = dos.findByCode(search);
-            if(dosMedical != null) model.addAttribute("dosMedicalFound", dosMedical);
+            if(dosMedical != null) {
+
+                model.addAttribute("dosMedicalFound", dosMedical);
+            }else {
+                return "redirect:/admin/medical-record/create";
+            }
         }
 
         return "dashboard/pages/admin/patient/dosMedical";
