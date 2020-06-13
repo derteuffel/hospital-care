@@ -74,7 +74,7 @@ public class BloodBankController {
         blood.setRhesus(bloodBankHelper.getRhesus());
         blood.setGroupeSanguin(bloodBankHelper.getGroupeSanguin());
         bloodBankRepository.save(blood);
-        return "dashboard/pages/admin/blood/blood";
+        return "0dashboard/pages/admin/blood/blood";
     }
 
     @GetMapping("/update/{id}")
@@ -118,10 +118,8 @@ public class BloodBankController {
         BloodBank bloodBank = bloodBankRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid bloodBankRepository id:" +id));
         System.out.println("bloodBankRepository id: " + bloodBank.getId());
-        Hospital hospital = hospitalRepository.getOne((Long)session.getAttribute("id"));
         bloodBankRepository.delete(bloodBank);
-        model.addAttribute("bloodBankRepositorys", bloodBankRepository.findAll());
-        return "redirect:/admin/hospital/"+hospital.getId() ;
+        return "dashboard/pages/admin/blood/blood" ;
     }
 
     /** Get all bloods of a hospital */

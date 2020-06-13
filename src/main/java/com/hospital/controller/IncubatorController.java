@@ -146,22 +146,9 @@ public class IncubatorController {
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable Long id, Model model, HttpSession session) {
         Incubator incubator = incubatorRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid incubator id:" +id));
-        System.out.println("incubator id: " + incubator.getId());
-        Hospital hospital = hospitalRepository.getOne((Long)session.getAttribute("id"));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid hospital id:" +id));
         incubatorRepository.delete(incubator);
-        model.addAttribute("incubators", incubatorRepository.findAll());
-        return "redirect:/admin/hospital/"+hospital.getId() ;
+        return "dashboard/pages/admin/incubator/incubator-list" ;
     }
 
-    /** Get all incubators of a hospital */
-    @GetMapping(value = "/hospital/{id}")
-    public String getAllIncubatorOfHospital(@PathVariable Long id, Model model)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {
-        Hospital hospital =  hospitalRepository.getOne(id);
-        List<Incubator> incubators = incubatorRepository.findByHospital(hospital);
-        model.addAttribute("incubators",incubators);
-        model.addAttribute("idHospital",id);
-        return "dashboard/pages/admin/incubator/incubator-list";
     }
-
-                                }
