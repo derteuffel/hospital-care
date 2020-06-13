@@ -19,9 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -44,13 +42,13 @@ public class ExamenController {
 
 
     /** Get all exams made in an hospital */
-    @GetMapping(value = "/hospital/{id}")
+   /* @GetMapping(value = "/hospital/{id}")
     @ResponseBody
     public List<Examen> getAllExamsInHospital(@PathVariable Long id){
         Hospital hospital =  hospitalRepository.getOne(id);
         List<Examen> exams = examenRepository.findByHospital(hospital);
         return exams;
-    }
+    }*/
 
     /** Get all exams of a consultation */
     @GetMapping(value = "/consultation/{id}")
@@ -60,6 +58,20 @@ public class ExamenController {
         model.addAttribute("examList",exams);
         model.addAttribute("idConsultation",id);
         return "dashboard/pages/admin/examen/exam";
+    }
+
+
+    @GetMapping("/hospital/{id}")
+    public String getAllExamensOfHospital(@PathVariable Long id, Model model){
+        Hospital hospital = hospitalRepository.getOne(id);
+
+        List<Examen> examens = new ArrayList<>();
+        Collection<Consultation> consultations = hospital.getConsultations();
+        for (Consultation consultation : consultations){
+            examens.addAll(consultation.getExamens());
+        }
+        model.addAttribute("lists",examens);
+        return "dashboard/pages/admin/hospital/exams";
     }
 
     /** form for adding an exam */

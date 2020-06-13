@@ -67,7 +67,7 @@ public class RdvController {
         modelAndView.addObject("rdvs",rdvs);
         return modelAndView;
     }
-    @PostMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteHospital(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
         try {
             rdvRepository.deleteById(id);

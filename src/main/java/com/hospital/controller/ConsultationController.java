@@ -123,12 +123,16 @@ public class ConsultationController {
 
     /** Get all consultations in an hospital */
     @GetMapping(value = "/hospital/{id}")
-    @ResponseBody
-    public List<Consultation> getAllConsultationsInHospital(@PathVariable Long id){
+    public String getAllConsultationsInHospital(@PathVariable Long id,Model model){
         Optional<Hospital> hospital =  hospitalRepository.findById(id);
         List<Consultation> consultations = consultationRepository.findByHospital(hospital);
-        return consultations;
+        model.addAttribute("lists", consultations);
+        model.addAttribute("hospital",hospital.get());
+
+        return "dashboard/pages/admin/hospital/consultations";
     }
+
+
 
     /** form for adding a consultation */
     @GetMapping(value = "/create")
@@ -137,13 +141,13 @@ public class ConsultationController {
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         DosMedical dosMedical = dosMedicalRepository.findByCode(code);
-        if (compte.getPersonnel()!= null){
+        if (compte.getPersonnel().getFunction().contains("DOCTOR") || compte.getPersonnel().getFunction().contains("SIMPLE")){
 
             Hospital hospital = compte.getPersonnel().getHospital();
             List<Personnel> personnels = personnelRepository.findAllByHospital_Id(hospital.getId());
             List<Personnel> lists = new ArrayList<>();
             Long days = TimeUnit.DAYS.convert(new Date().getTime() - dosMedical.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
-            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_MEDECIN.toString());
+            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_DOCTOR.toString());
             for (Compte compte1 : comptes){
                 for (Personnel personnel : personnels){
                     if (compte1.getPersonnel() == personnel){
@@ -177,7 +181,7 @@ public class ConsultationController {
             List<Personnel> personnels = personnelRepository.findAllByHospital_Id(hospital.getId());
             List<Personnel> lists = new ArrayList<>();
             Long days = TimeUnit.DAYS.convert(new Date().getTime() - dosMedical.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
-            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_MEDECIN.toString());
+            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_DOCTOR.toString());
             for (Compte compte1 : comptes){
                 for (Personnel personnel : personnels){
                     if (compte1.getPersonnel() == personnel){
