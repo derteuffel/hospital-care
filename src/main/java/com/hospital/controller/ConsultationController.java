@@ -197,7 +197,7 @@ public class ConsultationController {
             return "dashboard/pages/admin/consultation/addConsultation";
         }else {
 
-            Personnel doctor = personnelRepository.findByLastName(consultationHelper.getDoctorName());
+            Personnel doctor = personnelRepository.getOne(Long.parseLong(consultationHelper.getDoctorName()));
             consultationRepository.save(consultationHelper.getConsultationInstance(hospital, dosMedical, doctor));
 
             model.addAttribute("success", "consultation successfully added");

@@ -46,6 +46,8 @@ public class ConsultationHelper {
 
     private String code;
 
+    private Double tension;
+
 //    @NotBlank(message = "hospitalName must not be blank")
     private String hospitalName;
 
@@ -67,12 +69,12 @@ public class ConsultationHelper {
     }
 
     public Consultation getConsultationInstance(Hospital hospital, DosMedical dosMedical, Personnel personnel){
-        return new Consultation(date,height,weight,temperature,sex,age,pressure,hospital,dosMedical,personnel,observations);
+        return new Consultation(date,height,weight,temperature,sex,age,pressure,tension,hospital,dosMedical,personnel,observations);
     }
 
     public static ConsultationHelper getConsultationHelperInstance(Consultation consultation){
             return new ConsultationHelper(consultation.getDate(),consultation.getHeight(),consultation.getPressure(),consultation.getWeight(),
-                    consultation.getTemperature(),consultation.getSex(),consultation.getAge(),consultation.getPersonnel().getLastName(),consultation.getPersonnel().getPhone(),
+                    consultation.getTemperature(),consultation.getSex(),consultation.getAge(), consultation.getPersonnel().getLastName(),consultation.getPersonnel().getPhone(),
                     consultation.getObservations(),consultation.getHospital().getName());
     }
 
@@ -170,5 +172,13 @@ public class ConsultationHelper {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Double getTension() {
+        return tension;
+    }
+
+    public void setTension(Double tension) {
+        this.tension = tension;
     }
 }
