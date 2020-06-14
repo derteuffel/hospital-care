@@ -39,6 +39,7 @@ public class PrescriptionController {
         Consultation consultation =  consultationRepository.getOne(id);
         List<Prescription> prescriptions = prescriptionRepository.findByConsultation(consultation);
         model.addAttribute("prescriptionList",prescriptions);
+        model.addAttribute("consultation", consultation);
         model.addAttribute("idConsultation",id);
         return "dashboard/pages/admin/prescription/prescription";
     }

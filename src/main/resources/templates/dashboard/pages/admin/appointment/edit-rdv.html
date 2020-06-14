@@ -1,19 +1,9 @@
 <!DOCTYPE html>
-
-<<<<<<< HEAD
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{../templates/dashboard/index}">
 <head>
     <meta charset="UTF-8">
-    <title>DashBoard</title>
+    <title>Edit RDV</title>
 </head>
 <body>
 <div class="content" layout:fragment="content">
@@ -55,6 +45,8 @@
                     <td th:if="${#fields.hasErrors('motif')}" th:errors="*{motif}">Type Error</td>
                 </div>
                 <div class="m-t-20 text-center">
+                    <a th:href="@{/admin/rdv/all}" class="btn btn-secondary submit-btn">Annuler</a>
+
                     <button class="btn btn-primary submit-btn" type="submit">Update RDV</button>
                 </div>
             </form>

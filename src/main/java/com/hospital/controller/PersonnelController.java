@@ -1,10 +1,7 @@
 package com.hospital.controller;
 
 
-import com.hospital.entities.Compte;
-import com.hospital.entities.DosMedical;
-import com.hospital.entities.Hospital;
-import com.hospital.entities.Personnel;
+import com.hospital.entities.*;
 import com.hospital.helpers.PersonnelHelper;
 import com.hospital.repository.DosMedicalRepository;
 import com.hospital.repository.HospitalRepository;
@@ -239,58 +236,6 @@ public class PersonnelController {
 
 
 
-
-    @GetMapping("/create")
-    public String form(Model model){
-        model.addAttribute("hospitals", hospitalRepository.findAll());
-        model.addAttribute("form",new PersonnelHelper());
-        return "dashboard/pages/admin/personnel/form-personnel";
-    }
-
-
-    @PostMapping("/create")
-    public String save(@ModelAttribute("personnel") @Valid Personnel personnel, Model model,
-                       BindingResult bindingResult,
-                       @RequestParam("file") MultipartFile file, Long id, HttpSession session){
-
-        Hospital hospital = hospitalRepository.getOne(id);
-        session.setAttribute("id",hospital);
-        System.out.println(personnel.getLastName());
-        Personnel persExists = personnelRepository.findByLastNameOrEmailOrPhone(personnel.getLastName(),
-
-                personnel.getEmail(), personnel.getPhone());
-
-        if (persExists != null){
-            bindingResult
-                    .rejectValue("email", "error.personnel",
-                            "there is already a personnel registered with an email or name or telephone provided ");
-        }
-
-        if(bindingResult.hasErrors()) {
-            return  "dashboard/pages/admin/personnel/form-personnel";
-        }else {
-            if (!(file.isEmpty())){
-                try {
-                    byte[] bytes = file.getBytes();
-                    Path path = Paths.get(fileStorage + file.getOriginalFilename());
-                    Files.write(path, bytes);
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
-                personnel.setHospital(hospital);
-                personnel.setAvatar("/downloadFile/"+file.getOriginalFilename());
-            }else {
-                personnel.setAvatar("/img/default.jpeg");
-            }
-            System.out.println(personnel.getLastName());
-            personnel.setHospital(hospital);
-           // Hospital hospital = hospitalRepository.getOne(personnelHelper.getIdHospital());
-            personnelRepository.save(personnel);
-        }
-        return "redirect:/admin/staff/lists";
-
-    }
-
     @GetMapping("/update/{id}")
     public String showEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs){
 
@@ -382,6 +327,17 @@ public class PersonnelController {
         personnelRepository.delete(personnel);
         model.addAttribute("staffs", personnelRepository.findAll());
         return "redirect:/admin/hospital/"+hospital.getId() ;
+    }
+
+
+    @GetMapping("/doctors/{id}")
+    public String findDoctorById(@PathVariable Long id, Model model){
+
+        Personnel personnel = personnelRepository.findByFunction("DOCTOR");
+        model.addAttribute("personnel", personnel);
+
+      return "dashboard/pages/admin/hospital/update-doctor";
+
     }
 
 }

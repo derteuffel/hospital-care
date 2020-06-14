@@ -4,7 +4,7 @@
       layout:decorate="~{../templates/dashboard/index}">
 <head>
     <meta charset="UTF-8">
-    <title>DashBoard</title>
+    <title>Add RDV</title>
 </head>
 <body>
 <div class="content" layout:fragment="content">
@@ -60,6 +60,7 @@
                     </div>
                 </div>
                 <div class="m-t-20 text-center">
+                    <a th:href="@{/admin/rdv/all}" class="btn btn-secondary submit-btn">Annuler</a>
                     <button class="btn btn-primary submit-btn" type="submit">Create RDV</button>
                 </div>
             </form>

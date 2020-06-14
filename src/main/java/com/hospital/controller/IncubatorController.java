@@ -114,16 +114,15 @@ public class IncubatorController {
     public String updateIncubator(Incubator incubator, @PathVariable Long id, RedirectAttributes redirectAttributes){
         Optional<Incubator> incubator1 = incubatorRepository.findById(id);
 
-
         if (incubator1.isPresent()) {
             Incubator incubator2 = incubator1.get();
-            incubator2.setNumber(incubator.getNumber());
-            incubator2.setStatus(incubator.getStatus());
             incubator2.setDateObtained(incubator.getDateObtained());
-
+            incubator2.setStatus(incubator.getStatus());
+            incubator2.setNumber(incubator.getNumber());
+            incubator2.setType(incubator.getType());
             incubatorRepository.save(incubator2);
             redirectAttributes.addFlashAttribute("success", "The incubator has been updated successfully");
-            return "admin/pages/incubator/updateIncubator";
+            return "admin/pages/incubator/incubator-list";
         }
         else {
             redirectAttributes.addFlashAttribute("error","There are no incubator with Id :" +id);

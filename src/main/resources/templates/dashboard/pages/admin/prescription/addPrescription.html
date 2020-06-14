@@ -26,6 +26,7 @@
                     <textarea cols="30" rows="4" class="form-control" th:field="*{dosage}"></textarea>
                 </div>
                 <div class="m-t-20 text-center">
+                    <a th:href="@{/admin/prescription/consultation/}+${consultation.id}" class="btn btn-secondary submit-btn">Annuler</a>
                     <button class="btn btn-primary submit-btn">Create Prescription</button>
                 </div>
             </form>

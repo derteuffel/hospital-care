@@ -46,8 +46,19 @@
                 <table class="table table-border table-striped custom-table datatable mb-0">
                     <thead>
                     <tr>
-                        <th>#</th><th>Avatar</th><th>Nom</th><th>Code</th><th>Email</th><th>Birth Date</th><th>Sex</th><th>Weight</th>
-                        <th>Height</th><th>Blood Type</th><th>Rhesus</th><!-- <th>HereditaryDiseases</th> --><th>Description</th>
+                        <th>#</th>
+                        <th>Avatar</th>
+                        <th>Nom</th>
+                        <th>Code</th>
+                        <th>Email</th>
+                        <th>Birth Date</th>
+                        <th>Sex</th>
+                        <th>Weight</th>
+                        <th>Height</th>
+                        <th>Blood Type</th>
+                        <th>Rhesus</th>
+                        <!-- <th>HereditaryDiseases</th> -->
+                        <th>Description</th>
                         <th class="text-right">Action</th>
                     </tr>
                     </thead>
@@ -55,10 +66,17 @@
                     <tr th:each="dosMedical,i: ${dosMedicalFound}" >
                         <input type="hidden" name="id" th:value="${dosMedical.id}"/>
                         <td th:text="${i.count}"></td>
-                        <!--th:text="${dosMedical.compte.avatar}"--> <td><img width="28" height="28" src="/assets/img/user.jpg" class="rounded-circle m-r-5" alt=""></td>
-                        <td th:text="${dosMedical.name}"></td><td th:text="${dosMedical.code}"></td><td th:text="${dosMedical.compte.email}"></td>
-                        <td th:text="${dosMedical.birthDate}"></td><td th:text="${dosMedical.sex}"></td><td th:text="${dosMedical.weight}"></td>
-                        <td th:text="${dosMedical.height}"></td><td th:text="${dosMedical.bloodType}"></td><td th:text="${dosMedical.rhesus}"></td>
+                        <!--th:text="${dosMedical.compte.avatar}"-->
+                        <td><img width="28" height="28" src="/assets/img/user.jpg" class="rounded-circle m-r-5" alt=""></td>
+                        <td th:text="${dosMedical.name}"></td>
+                        <td th:text="${dosMedical.code}"></td>
+                        <td th:text="${dosMedical.compte.email}"></td>
+                        <td th:text="${dosMedical.birthDate}"></td>
+                        <td th:text="${dosMedical.sex}"></td>
+                        <td th:text="${dosMedical.weight}"></td>
+                        <td th:text="${dosMedical.height}"></td>
+                        <td th:text="${dosMedical.bloodType}"></td>
+                        <td th:text="${dosMedical.rhesus}"></td>
                         <!-- <td th:text="${dosMedical.hereditaryDiseases}"></td> --><td th:text="${dosMedical.description}"></td>
                         <td class="text-right">
                             <div class="dropdown dropdown-action">
