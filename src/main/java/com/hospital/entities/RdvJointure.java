@@ -14,6 +14,7 @@ public class RdvJointure {
     private Date date;
     private String motif;
     private String personnel;
+    private boolean status;
 
     public RdvJointure(Long id, String username, Long compte_id, Long personnel_id, Date date, String motif, String personnel) {
         this.id = id;

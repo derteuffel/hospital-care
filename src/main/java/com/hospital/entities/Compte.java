@@ -34,11 +34,15 @@ public class Compte implements Serializable {
 
 
     @JoinTable(
+
             name = "comptes_roles",
+
             joinColumns = @JoinColumn(
                     name = "compte_id", referencedColumnName = "id"),
+
             inverseJoinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"))
+                    name = "role_id", referencedColumnName = "id")
+    )
     private Collection<Role> roles;
 
    /* @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
