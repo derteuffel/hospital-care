@@ -28,7 +28,7 @@ public class RdvController {
     @Autowired
     RdvRepository rdvRepository;
 
-    @GetMapping("/create")
+    @GetMapping("/add")
     public ModelAndView showform(){
 
         ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/add-rdv");
@@ -48,7 +48,7 @@ public class RdvController {
         return modelAndView;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/add")
     public String storeRdv(@ModelAttribute @Valid Rdv rdv, Errors errors, RedirectAttributes redirAttrs){
         if(errors.hasErrors()){
             return "dashboard/pages/admin/add-rdv";
