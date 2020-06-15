@@ -9,7 +9,7 @@
 <div class="content" layout:fragment="content">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/admin/medical-record/all}">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Medical Records</li>
         </ol>
     </nav>
@@ -58,7 +58,7 @@
                         <td th:text="${consultation.temperature}"></td>
                         <td th:text="${consultation.age}"></td>
                         <td th:text="${consultation.sex}"></td>
-                        <td th:text="${consultation.personnel.lastName}"></td>
+                        <td th:text="${consultation.personnel.lastName+' '+consultation.personnel.firstName}"></td>
                         <td th:text="${consultation.personnel.phone}"></td>
                         <td th:text="${consultation.hospital.name}"></td>
                         <td class="text-right">

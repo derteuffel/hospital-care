@@ -26,8 +26,9 @@
                         <th>Date Of Testing</th>
                         <th>Deliver Date</th>
                         <th>Results</th>
-                        <th>Description</th>
+                        <th>Observations</th>
                         <th>Hospital</th>
+                        <th>Add results</th>
                         <th class="text-right">Action</th>
                     </tr>
                     </thead>
@@ -39,9 +40,18 @@
                         <td th:text="${exam.testType}"></td>
                         <td th:text="${exam.dateOfTesting}"></td>
                         <td th:text="${exam.deliverDate}"></td>
-                        <td th:text="${exam.results}"></td>
-                        <td th:text="${exam.description}"></td>
+                        <td >
+                            <span th:if="${exam.results} != null" th:text="${exam.results}"></span>
+                            <span th:unless="${exam.results} != null">Non disponible</span>
+                        </td>
+                        <td >
+                            <span th:if="${exam.description} != null" th:text="${exam.description}"></span>
+                            <span th:unless="${exam.description} != null">Non disponible</span>
+                        </td>
                         <td th:text="${exam.hospital.name}"></td>
+                        <td >
+                            <button type="button" class="btn"  data-toggle="modal" data-target="#add_result" th:attr="data-target='#add_result'+${exam.id}"><i class="fa fa-plus-square m-r-5"></i> Exam results</button>
+                        </td>
                         <td class="text-right">
                             <div class="dropdown dropdown-action">
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
@@ -51,6 +61,27 @@
                                 </div>
                             </div>
                         </td>
+                        <div class="modal  fade" th:id="add_result+${exam.id}" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center">
+                                        <form method="get" th:action="@{/admin/exam/add/results/}+${exam.id}">
+                                            <img src="/assets/img/password.png" alt="" width="50" height="46">
+                                            <div class="form-group my-2">
+                                                <label><b>Enter Result of this exam(Results)</b></label>
+                                                <textarea name="results" class="form-control" rows="5"></textarea>
+                                            </div>
+                                            <div class="form-group my-2">
+                                                <label><b>Enter Result of this exam(Observations)</b></label>
+                                                <textarea name="description" class="form-control" rows="5"></textarea>
+                                            </div>
+                                            <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                                            <button type="submit" class="btn btn-danger">Save</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </tr>
                     </tbody>
                 </table>
@@ -70,5 +101,6 @@
         <button type="submit" class="btn btn-danger">Delete</button>
     </form>
 </div>
+
 </body>
 </html>
