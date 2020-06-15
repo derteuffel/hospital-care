@@ -141,30 +141,32 @@ public class ConsultationController {
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         DosMedical dosMedical = dosMedicalRepository.findByCode(code);
-        if (compte.getPersonnel().getFunction().contains("DOCTOR") || compte.getPersonnel().getFunction().contains("SIMPLE")){
+        if (compte.getPersonnel() != null) {
 
-            Hospital hospital = compte.getPersonnel().getHospital();
-            List<Personnel> personnels = personnelRepository.findAllByHospital_Id(hospital.getId());
-            List<Personnel> lists = new ArrayList<>();
-            Long days = TimeUnit.DAYS.convert(new Date().getTime() - dosMedical.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
-            List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_DOCTOR.toString());
-            for (Compte compte1 : comptes){
-                for (Personnel personnel : personnels){
-                    if (compte1.getPersonnel() == personnel){
-                        lists.add(personnel);
+                Hospital hospital = compte.getPersonnel().getHospital();
+                List<Personnel> personnels = personnelRepository.findAllByHospital_Id(hospital.getId());
+                List<Personnel> lists = new ArrayList<>();
+                Long days = TimeUnit.DAYS.convert(new Date().getTime() - dosMedical.getBirthDate().getTime(), TimeUnit.MILLISECONDS);
+                List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_DOCTOR.toString());
+                for (Compte compte1 : comptes) {
+                    for (Personnel personnel : personnels) {
+                        if (compte1.getPersonnel() == personnel) {
+                            lists.add(personnel);
+                        }
                     }
                 }
-            }
-            model.addAttribute("age",Math.round(days/365));
-            model.addAttribute("doctors",lists);
-            model.addAttribute("patient",dosMedical);
-            model.addAttribute("code",code);
-            model.addAttribute("consultationHelper", new ConsultationHelper());
-            return "dashboard/pages/admin/consultation/addConsultation";
+                model.addAttribute("age", Math.round(days / 365));
+                model.addAttribute("doctors", lists);
+                model.addAttribute("patient", dosMedical);
+                model.addAttribute("code", code);
+                model.addAttribute("hospital",hospital);
+                model.addAttribute("consultationHelper", new ConsultationHelper());
+                return "dashboard/pages/admin/consultation/addConsultation";
 
-        }else {
-            redirectAttributes.addFlashAttribute("error","Your credentials are not authorized to access there");
-            return "redirect:/admin/consultation/medical-record/"+dosMedical.getCode();
+
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Your credentials are not authorized to access there");
+            return "redirect:/admin/consultation/medical-record/" + dosMedical.getCode();
         }
 
     }

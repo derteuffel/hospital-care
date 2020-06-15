@@ -8,6 +8,7 @@ import com.hospital.repository.CompteRepository;
 import com.hospital.repository.ConsultationRepository;
 import com.hospital.repository.ExamenRepository;
 import com.hospital.repository.HospitalRepository;
+import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -38,6 +40,9 @@ public class ExamenController {
 
     @Autowired
     private CompteRepository compteRepository;
+
+    @Autowired
+    private CompteService compteService;
 
 
 
@@ -71,17 +76,26 @@ public class ExamenController {
             examens.addAll(consultation.getExamens());
         }
         model.addAttribute("lists",examens);
+        model.addAttribute("hospital",hospital);
         return "dashboard/pages/admin/hospital/exams";
     }
 
     /** form for adding an exam */
     @GetMapping(value = "/create")
-    public String addExam(@RequestParam("idConsultation") int  idConsultation, Model model){
-        List<Hospital> hospitals = hospitalRepository.findAll();
-        model.addAttribute("idConsultation",idConsultation);
-        model.addAttribute("hospitalList",hospitals);
-        model.addAttribute(new ExamenHelper());
-        return "dashboard/pages/admin/examen/addExam";
+    public String addExam(@RequestParam("idConsultation") int  idConsultation, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Consultation consultation = consultationRepository.getOne(Long.parseLong(""+idConsultation));
+        if (compte.getPersonnel() != null) {
+            List<Hospital> hospitals = hospitalRepository.findAll();
+            model.addAttribute("idConsultation", idConsultation);
+            model.addAttribute("hospitalList", hospitals);
+            model.addAttribute("hospital",compte.getPersonnel().getHospital());
+            model.addAttribute(new ExamenHelper());
+            return "dashboard/pages/admin/examen/addExam";
+        }else {
+            return "redirect:/admin/consultation/medical-record/" + consultation.getDosMedical().getCode();
+        }
     }
 
     /** Add an exam */
@@ -135,13 +149,25 @@ public class ExamenController {
 
     /** form for updating an exam */
     @GetMapping(value = "/update/{idExam}")
-    public String updateExam(@PathVariable Long idExam, @RequestParam("idConsultation") Long idConsultation, Model model){
+    public String updateExam(@PathVariable Long idExam, @RequestParam("idConsultation") Long idConsultation, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         List<Hospital> hospitals = hospitalRepository.findAll();
         model.addAttribute("idConsultation",idConsultation);
         model.addAttribute("hospitalList",hospitals);
+        model.addAttribute("hospital",compte.getPersonnel().getHospital());
         model.addAttribute("examenHelper", ExamenHelper.getExamenHelperInstance(examenRepository.getOne(idExam)));
 
         return "dashboard/pages/admin/examen/updateExam";
+    }
+
+    @GetMapping("/add/results/{id}")
+    public String addResult(@PathVariable Long id, String description, String results){
+        Examen examen = examenRepository.getOne(id);
+        examen.setDescription(description);
+        examen.setResults(results);
+        examenRepository.save(examen);
+        return "redirect:/admin/exam/consultation/"+examen.getConsultation().getId();
     }
 
     /** Update an exam */
