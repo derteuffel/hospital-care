@@ -29,7 +29,7 @@ public class RdvController {
     @Autowired
     RdvRepository rdvRepository;
 
-    @GetMapping("/create")
+    @GetMapping("/add")
     public ModelAndView showform(){
 
         ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/add-rdv");
@@ -44,12 +44,13 @@ public class RdvController {
         Rdv rdv = new Rdv();
 
         modelAndView.addObject("rdv", rdv);
+//        modelAndView.addObject("appointments", rdvRepository.findAll());
         modelAndView.addObject("patients", patients);
         modelAndView.addObject("medecins", medecins);
         return modelAndView;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/add")
     public String storeRdv(@ModelAttribute @Valid Rdv rdv, Errors errors, RedirectAttributes redirAttrs){
         if(errors.hasErrors()){
             return "dashboard/pages/admin/appointment/add-rdv";
@@ -65,10 +66,10 @@ public class RdvController {
 
         ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/rdv-list");
         List<Irdvjointure> rdvs = rdvRepository.findAllWithJoin();
-        modelAndView.addObject("appointments",rdvs);
+        modelAndView.addObject("rdvs",rdvs);
         return modelAndView;
     }
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteHospital(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
         try {
             rdvRepository.deleteById(id);
@@ -83,7 +84,7 @@ public class RdvController {
     @GetMapping("/edit/{id}")
     public ModelAndView showEditForm(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
 
-        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/edit-rdv");
+        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/edit-rdv");
         List<Compte> comptes= compteRepository.findAll();
         List<Compte> patients = comptes.stream()
                 .filter(d -> d.getRoles().stream().findFirst().get().getId() == 2)
@@ -101,7 +102,7 @@ public class RdvController {
     @PostMapping("/edit/{id}")
     public String updateHospital(@PathVariable("id") Long id, @Valid Rdv rdv, Errors errors, RedirectAttributes redirAttrs){
         if (errors.hasErrors()) {
-            return "dashboard/pages/appointment/admin/edit-rdv";
+            return "dashboard/pages/admin/appointment/edit-rdv";
         }
         rdvRepository.save(rdv);
         redirAttrs.addFlashAttribute("message", "Successfully edited");

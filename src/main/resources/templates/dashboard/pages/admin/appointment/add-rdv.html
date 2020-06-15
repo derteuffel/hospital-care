@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Add RDV</title>
+
 </head>
 <body>
 <div class="content" layout:fragment="content">
@@ -40,9 +41,18 @@
                 </div>
                 <div class="form-group">
                     <label>Motif</label>
-                    <textarea class="form-control" th:field="*{motif}" rows="3" required autofocus></textarea>
+                    <textarea class="form-control" th:field="*{motif}" rows="4"
+                              placeholder="Veillez renseigner de quoi vous souffrez" autocomplete="off" id="motif" required autofocus></textarea>
                     <td th:if="${#fields.hasErrors('motif')}" th:errors="*{motif}">Type Error</td>
                 </div>
+              <!--  <div class="form-group">
+                    <label>Statut</label>
+                    <select th:field="*{status}" class="form-control" required autofocus>
+                        <option value="false">Active</option>
+                        <option value="true">Inactive</option>
+                    </select>
+                    <td th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Type Error</td>
+                </div>-->
                 <div class="m-t-20 text-center">
                     <a th:href="@{/admin/rdv/all}" class="btn btn-secondary submit-btn">Annuler</a>
                     <button class="btn btn-primary submit-btn" type="submit">Create RDV</button>
@@ -51,5 +61,7 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>tinymce.init({selector:'textarea'});</script>
 </body>
 </html>

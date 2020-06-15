@@ -17,8 +17,7 @@ public class PrescriptionHelper {
     @Temporal(TemporalType.DATE)
     @NotNull(message = "you must specify a date")
     private Date date;
-
-    @NotBlank(message = "dosage must not be blank")
+    
     private String dosage;
 
     @NotNull(message = "idConsultation field must not be null")

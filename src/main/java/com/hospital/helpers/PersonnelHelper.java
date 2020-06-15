@@ -19,7 +19,6 @@ public class PersonnelHelper {
     @NotNull(message = "name field must not be blank")
     private String firstName;
     @Email
-    @NotBlank
     private String email;
 
     @NotNull(message = "phone field must not be blank")
@@ -48,7 +47,7 @@ public class PersonnelHelper {
     // @NotBlank(message = "weight must not be null")
     private String weight;
 
-    @NotBlank(message = "height must not be null")
+
     private String height;
 
     @NotNull(message = "you must specify a date")

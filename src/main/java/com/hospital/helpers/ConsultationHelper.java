@@ -30,7 +30,6 @@ public class ConsultationHelper {
     @NotNull(message = "temperature field must not be null")
     private double temperature;
 
-    @NotBlank(message = "sex field must not be blank")
     private String sex;
 
     @NotNull(message = "age field must not be null")

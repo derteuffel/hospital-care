@@ -26,17 +26,17 @@ public class Hospital implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+
     private String name;
 
-    @NotNull
+
     private String city;
 
     private String pays;
 
     private String neighborhood;
 
-    @NotNull
+
     private ArrayList<String> types = new ArrayList<String>();
 
    @OneToMany(mappedBy = "hospital")
