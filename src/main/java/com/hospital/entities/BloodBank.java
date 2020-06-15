@@ -27,10 +27,14 @@ public class BloodBank implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
+    private Boolean status;
+
 
 
 
     @ManyToOne
     @JsonIgnoreProperties("bloodbanks")
     private Hospital hospital;
+
+
 }

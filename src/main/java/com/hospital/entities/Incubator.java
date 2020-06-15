@@ -31,6 +31,8 @@ public class Incubator implements Serializable {
 
     private String status;
 
+    private Boolean state;
+
     @ManyToOne
     @JsonIgnoreProperties("incubators")
     private Hospital hospital;

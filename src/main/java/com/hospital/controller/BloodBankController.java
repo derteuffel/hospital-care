@@ -73,8 +73,9 @@ public class BloodBankController {
         blood.setDate(bloodBankHelper.getDate());
         blood.setRhesus(bloodBankHelper.getRhesus());
         blood.setGroupeSanguin(bloodBankHelper.getGroupeSanguin());
+        blood.setStatus(true);
         bloodBankRepository.save(blood);
-        return "0dashboard/pages/admin/blood/blood";
+        return "redirect:/admin/blood/lists/bloods/"+hospital.getId();
     }
 
     @GetMapping("/update/{id}")
@@ -86,6 +87,7 @@ public class BloodBankController {
             return "dashboard/pages/admin/blood/update";
         }catch (Exception e){
             redirAttrs.addFlashAttribute("error", "This hospital seems to not exist");
+
             return "admin/pages/blood/blood";
         }
     }
@@ -100,14 +102,13 @@ public class BloodBankController {
             blood2.setGroupeSanguin(blood.getGroupeSanguin());
             blood2.setRhesus(blood.getRhesus());
             blood2.setDate(blood.getDate());
-
             bloodBankRepository.save(blood2);
             redirectAttributes.addFlashAttribute("success", "The blood has been updated successfully");
             return "admin/pages/blood/update";
         }
         else {
             redirectAttributes.addFlashAttribute("error","There are no blood with Id :" +id);
-            return "admin/pages/blood/blood";
+            return "redirect:/admin/blood/lists/bloods/"+blood.getId();
         }
     }
 
@@ -119,7 +120,7 @@ public class BloodBankController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid bloodBankRepository id:" +id));
         System.out.println("bloodBankRepository id: " + bloodBank.getId());
         bloodBankRepository.delete(bloodBank);
-        return "dashboard/pages/admin/blood/blood" ;
+        return "redirect:/admin/blood/lists/bloods/"+bloodBank.getId();
     }
 
     /** Get all bloods of a hospital */
@@ -130,6 +131,19 @@ public class BloodBankController {
         model.addAttribute("bloods",bloods);
         model.addAttribute("idHospital",id);
         return "dashboard/pages/admin/blood/blood";
+    }
+
+    @GetMapping("/active/{id}")
+    public String active(@PathVariable Long id, HttpSession session){
+        BloodBank blood = bloodBankRepository.getOne(id);
+        if (blood.getStatus()== true){
+            blood.setStatus(false);
+        }else {
+            blood.setStatus(true);
+        }
+
+        bloodBankRepository.save(blood);
+        return "redirect:/admin/blood/lists/bloods/"+blood.getId() ;
     }
 
 }

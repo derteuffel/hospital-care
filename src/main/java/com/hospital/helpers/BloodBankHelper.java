@@ -21,6 +21,10 @@ public class BloodBankHelper {
     @Temporal(TemporalType.DATE)
     private Date date;
 
+    private String status;
+
+
+
 
 
 

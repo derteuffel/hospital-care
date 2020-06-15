@@ -93,8 +93,9 @@ public class IncubatorController {
         incubator.setDateObtained(incubatorHelper.getDateObtained());
         incubator.setStatus(incubatorHelper.getStatus());
         incubator.setNumber(incubatorHelper.getNumber());
+        incubator.setState(true);
         incubatorRepository.save(incubator);
-        return "dashboard/pages/admin/incubator/incubator-list";
+        return "redirect:/admin/incubator/lists/incubators/"+hospital.getId() ;
     }
 
     @GetMapping("/update/{id}")
@@ -110,6 +111,17 @@ public class IncubatorController {
         }
     }
 
+
+/*    @PostMapping("/update/{id}")
+    public String updateIncubator(@PathVariable("id") Long id, @Valid Incubator incubator, BindingResult bindingResult, Errors errors, Model model, RedirectAttributes redirAttrs){
+        if (bindingResult.hasErrors()) {
+            return "dashboard/pages/admin/incubator/updateIncubator";
+        }
+        incubatorRepository.save(incubator);
+        redirAttrs.addFlashAttribute("message", "Successfully edited");
+        return "redirect:/admin/incubator/lists/incubators/"+incubator.getId();
+    }*/
+
     @PostMapping("/update/{id}")
     public String updateIncubator(Incubator incubator, @PathVariable Long id, RedirectAttributes redirectAttributes){
         Optional<Incubator> incubator1 = incubatorRepository.findById(id);
@@ -122,11 +134,11 @@ public class IncubatorController {
             incubator2.setType(incubator.getType());
             incubatorRepository.save(incubator2);
             redirectAttributes.addFlashAttribute("success", "The incubator has been updated successfully");
-            return "admin/pages/incubator/incubator-list";
+            return "redirect:/admin/incubator/lists/incubators/"+incubator.getId();
         }
         else {
             redirectAttributes.addFlashAttribute("error","There are no incubator with Id :" +id);
-            return "admin/pages/incubator/incubator-list";
+            return "redirect:/admin/incubator/lists/incubators/"+incubator.getId();
         }
     }
 
@@ -147,7 +159,20 @@ public class IncubatorController {
         Incubator incubator = incubatorRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid hospital id:" +id));
         incubatorRepository.delete(incubator);
-        return "dashboard/pages/admin/incubator/incubator-list" ;
+        return "redirect:/admin/incubator/lists/incubators/"+incubator.getId()  ;
     }
 
+
+    @GetMapping("/active/{id}")
+    public String active(@PathVariable Long id, HttpSession session){
+        Incubator incubator = incubatorRepository.getOne(id);
+        if (incubator.getState()== true){
+            incubator.setState(false);
+        }else {
+            incubator.setState(true);
+        }
+
+        incubatorRepository.save(incubator);
+        return "redirect:/admin/incubator/lists/incubators/"+incubator.getId() ;
     }
+}

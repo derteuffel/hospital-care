@@ -18,12 +18,15 @@ public class IncubatorHelper {
 
     private String number;
 
-    @NotNull(message = "you must specify a date of testing")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date dateObtained;
 
     @NotNull
     private String status;
+
+    private Boolean state;
+
+
 
 }
