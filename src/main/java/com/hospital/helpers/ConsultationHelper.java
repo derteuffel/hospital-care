@@ -36,10 +36,10 @@ public class ConsultationHelper {
     @NotNull(message = "age field must not be null")
     private int age;
 
-    @NotBlank(message = "name must not be null")
+    @NotNull(message = "name must not be null")
     private String DoctorName;
 
-    @NotBlank(message = "phone number field must not be null")
+    @NotNull(message = "phone number field must not be null")
     private String DoctorPhone;
 
     private String observations;

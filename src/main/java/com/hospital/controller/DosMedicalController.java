@@ -50,6 +50,9 @@ public class DosMedicalController {
     @Autowired
     private ExamenRepository examenRepository;
 
+    @Autowired
+    private DosMedicalRepository dosMedicalRepository;
+
     /** Retrieve all medical records */
     @GetMapping(value = "/all")
     public String getAllMedicalRecords(Model model, HttpServletRequest request){
@@ -206,6 +209,15 @@ public class DosMedicalController {
         }
 
         return "dashboard/pages/admin/patient/dosMedical";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteById(@PathVariable Long id, Model model) {
+        DosMedical dosMedical = dosMedicalRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid consultation id:" +id));
+        dosMedicalRepository.delete(dosMedical);
+        return "redirect:/admin/medical-record/all";
+
     }
 
 }

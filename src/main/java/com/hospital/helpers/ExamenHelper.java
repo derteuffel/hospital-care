@@ -15,10 +15,10 @@ import java.util.Date;
 @Data
 public class ExamenHelper {
 
-    @NotBlank(message = "name field must not be blank")
+    @NotNull(message = "name field must not be blank")
     private String name;
 
-    @NotBlank(message = "test type must not be blank")
+    @NotNull(message = "test type must not be blank")
     private String testType;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -37,7 +37,7 @@ public class ExamenHelper {
     @NotNull(message = "idConsultation field must not be null")
     private Long idConsultation;
 
-    @NotBlank(message = "hospital name must not be blank")
+    @NotNull(message = "hospital name must not be blank")
     private String hospitalName;
 
     public ExamenHelper(){

@@ -13,26 +13,26 @@ import java.util.Date;
 @Data
 public class PersonnelHelper {
 
-    @NotBlank(message = "name field must not be blank")
+    @NotNull(message = "name field must not be blank")
     private String lastName;
 
-    @NotBlank(message = "name field must not be blank")
+    @NotNull(message = "name field must not be blank")
     private String firstName;
     @Email
     @NotBlank
     private String email;
 
-    @NotBlank(message = "phone field must not be blank")
+    @NotNull(message = "phone field must not be blank")
     private String phone;
 
-    @NotBlank(message = "city field must not be blank")
+    @NotNull(message = "city field must not be blank")
     private String city;
 
     private String address;
     private String avatar;
     private String localisation;
     @Pattern(regexp = "^[0-9]{9}$", message = "code is a sequence of 9 digits")
-    @NotBlank(message = "code must not be blank")
+    @NotNull(message = "code must not be blank")
     private String code;
 
     @NotNull(message = "blood Type must not be null")
@@ -41,7 +41,7 @@ public class PersonnelHelper {
     @Size(min = 1, max = 1, message = "rhesus must only be one character")
     private String rhesus;
 
-    @NotBlank(message = "sex must not be null")
+    @NotNull(message = "sex must not be null")
     @Size(min = 1, max = 1, message = "sex one character")
     private String sex;
 

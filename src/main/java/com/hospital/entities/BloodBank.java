@@ -19,6 +19,7 @@ public class BloodBank implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String groupeSanguin;
 
     @Size(min = 1, max = 1)

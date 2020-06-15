@@ -313,4 +313,14 @@ public class ConsultationController {
         System.out.println(model.getAttribute("success"));
         return "redirect:/admin/consultation/medical-record/"+code;
     }
+
+    @GetMapping("/delete/{id}")
+    public String deleteById(@PathVariable Long id, Model model) {
+        Consultation consultation = consultationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid consultation id:" +id));
+                consultationRepository.delete(consultation);
+        model.addAttribute("hospitals", hospitalRepository.findAll());
+        return "redirect:/admin/medical-record/all";
+
+    }
 }

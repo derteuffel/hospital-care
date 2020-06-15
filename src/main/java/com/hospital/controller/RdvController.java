@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Collection;
@@ -105,5 +106,18 @@ public class RdvController {
         rdvRepository.save(rdv);
         redirAttrs.addFlashAttribute("message", "Successfully edited");
         return "redirect:/admin/rdv/all";
+    }
+
+    @GetMapping("/active/{id}")
+    public String active(@PathVariable Long id, HttpSession session){
+        Rdv rdv = rdvRepository.getOne(id);
+        if (rdv.getStatus()== true){
+            rdv.setStatus(false);
+        }else {
+            rdv.setStatus(true);
+        }
+
+        rdvRepository.save(rdv);
+        return "redirect:/admin/rdv/all" ;
     }
 }
