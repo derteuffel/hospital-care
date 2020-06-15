@@ -70,7 +70,7 @@ public class RdvController {
         return modelAndView;
     }
     @PostMapping("/delete/{id}")
-    public String deleteHospital(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
+    public String delete(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
         try {
             rdvRepository.deleteById(id);
             redirAttrs.addFlashAttribute("message", "Successfully deleted");
@@ -121,4 +121,5 @@ public class RdvController {
         rdvRepository.save(rdv);
         return "redirect:/admin/rdv/all" ;
     }
+
 }

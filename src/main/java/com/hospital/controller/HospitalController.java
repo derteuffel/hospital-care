@@ -133,4 +133,17 @@ public class HospitalController {
         return "redirect:/admin/hospital/all";
     }
 
+    @PostMapping("/delete/{id}")
+    public String deleteHospital(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
+        try {
+            hospitalRepository.deleteById(id);
+            redirAttrs.addFlashAttribute("message", "Successfully deleted");
+            return "redirect:/admin/hospital/all";
+        }catch (Exception e){
+            redirAttrs.addFlashAttribute("error", "Error deleting this hospital");
+            return "redirect:/admin/hospital/all";
+        }
+    }
+
+
 }
