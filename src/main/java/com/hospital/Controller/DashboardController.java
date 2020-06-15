@@ -2,6 +2,7 @@ package com.hospital.Controller;
 
 import com.hospital.entities.Compte;
 import com.hospital.entities.Irdvjointure;
+import com.hospital.enums.ERole;
 import com.hospital.repository.CompteRepository;
 import com.hospital.repository.DosMedicalRepository;
 import com.hospital.repository.RdvRepository;
@@ -33,10 +34,10 @@ public class DashboardController {
 
         List<Compte> comptes= compteRepository.findAll();
         List<Compte> patients = comptes.stream()
-                .filter(d -> d.getRoles().stream().findFirst().get().getId() == 2)
+                .filter(d -> d.checkRole(ERole.ROLE_PATIENT))
                 .collect(Collectors.toList());
         List<Compte> medecins = comptes.stream()
-                .filter(d -> d.getRoles().stream().findFirst().get().getId() == 1)
+                .filter(d -> d.checkRole(ERole.ROLE_DOCTOR))
                 .collect(Collectors.toList());
         List<Irdvjointure> rdvs = rdvRepository.findAllWithJoin();
         model.addAttribute("patients",patients);

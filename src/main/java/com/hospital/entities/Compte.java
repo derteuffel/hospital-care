@@ -67,13 +67,10 @@ public class Compte implements Serializable {
     }
 
     public boolean checkRole(ERole roleEnum){
-        boolean authorized = false;
-        for (Role role : this.getRoles()){
-            if(role.getName().equals(roleEnum.toString())){
-                authorized = true;
-            }
-        }
-        return authorized;
+       /* boolean authorized = false;
+        for (Role role : this.getRoles()){ if(role.getName().equals(roleEnum.toString())){ authorized = true; } }
+        return authorized;*/
+        return this.getRoles().stream().findFirst().get().getName().equals(roleEnum.toString());
     }
 
     public Compte(String username, String email, String avatar) {
