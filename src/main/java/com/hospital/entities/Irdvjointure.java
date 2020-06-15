@@ -3,6 +3,7 @@ package com.hospital.entities;
 import java.util.Date;
 
 public interface Irdvjointure {
+
     public Long getId();
 
     public String getUsername() ;
@@ -16,4 +17,5 @@ public interface Irdvjointure {
     public String getMotif();
 
     public String getPersonnel();
+    public Boolean getStatus();
 }

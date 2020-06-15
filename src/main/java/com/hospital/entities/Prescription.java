@@ -1,9 +1,6 @@
 package com.hospital.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -33,9 +30,9 @@ public class Prescription implements Serializable {
     }
 
     public Prescription(Date date, String dosage, Consultation consultation){
-     this.date = date;
-     this.dosage = dosage;
-     this.consultation = consultation;
+        this.date = date;
+        this.dosage = dosage;
+        this.consultation = consultation;
     }
 
     public Long getId() {

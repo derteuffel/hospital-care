@@ -23,14 +23,14 @@ public class DosMedical implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+
     @Size(min = 1, max = 1)
     private String rhesus;
 
-    @NotNull
+
     private double weight;
 
-    @NotNull(message = "you must specify a date")
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date birthDate;
@@ -39,7 +39,7 @@ public class DosMedical implements Serializable {
 
     private Integer height;
 
-    @NotNull
+
     private String description;
 
     private String code;

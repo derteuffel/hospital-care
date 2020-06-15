@@ -14,7 +14,6 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor //@NoArgsConstructor
 public class Compte implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

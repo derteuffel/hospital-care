@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
@@ -27,6 +28,9 @@ public class Rdv implements Serializable {
     @NotNull
     private Long personnelId;
 
+    private Boolean status;
+
+
     public Rdv() {
     }
 
@@ -36,6 +40,7 @@ public class Rdv implements Serializable {
         this.compteId = compteId;
         this.personnelId = personnelId;
     }
+
 
     public Long getCompteId() {
         return compteId;
@@ -55,5 +60,33 @@ public class Rdv implements Serializable {
 
     public String getMotif() {
         return motif;
+    }
+
+    public boolean getStatus(){
+        return status;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setMotif(String motif) {
+        this.motif = motif;
+    }
+
+    public void setCompteId(Long compteId) {
+        this.compteId = compteId;
+    }
+
+    public void setPersonnelId(Long personnelId) {
+        this.personnelId = personnelId;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }

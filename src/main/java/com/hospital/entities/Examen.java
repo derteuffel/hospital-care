@@ -34,6 +34,8 @@ public class Examen implements Serializable {
 
     private String description;
 
+    private String time;
+
     @ManyToOne
     @JsonIgnoreProperties("examens")
     private Consultation consultation;
