@@ -40,13 +40,13 @@ public class PersonnelHelper {
     @Size(min = 1, max = 1, message = "rhesus must only be one character")
     private String rhesus;
 
-    @NotNull(message = "sex must not be null")
-    @Size(min = 1, max = 1, message = "sex one character")
-    private String sex;
+    @NotNull(message = "gender must not be null")
+    private String gender;
 
     // @NotBlank(message = "weight must not be null")
     private String weight;
 
+    private String qualifier;
 
     private String height;
 
@@ -147,12 +147,12 @@ public class PersonnelHelper {
         this.rhesus = rhesus;
     }
 
-    public String getSex() {
-        return sex;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setGender(String sex) {
+        this.gender = gender;
     }
 
     public String getWeight() {

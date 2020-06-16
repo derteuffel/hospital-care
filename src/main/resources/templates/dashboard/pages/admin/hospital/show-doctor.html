@@ -34,7 +34,7 @@
                                                 <span th:text="${personnel.lastName}" ></span>
                                                 <span th:text="${personnel.firstName}"></span>
                                             </h3>
-                                            <small class="text-muted" th:text="${personnel.function}"></small>
+                                            <small class="text-muted" th:text="${personnel.qualifier}"></small>
                                             <!--<div class="staff-id">Employee ID : DR-0001</div>-->
                                             <div class="staff-msg"><a href="#" class="btn btn-primary">Send Message</a></div>
                                         </div>
@@ -51,7 +51,8 @@
                                             </li>
                                             <li>
                                                 <span class="title">Birthday:</span>
-                                                <span class="text">3rd March</span>
+                                                <span class="text">Ici date de naissance</span>
+                                                <!--<span class="text" th:text="${#dates.format(personnel.birthDate,'dd-MM')}"></span>-->
                                             </li>
                                             <li>
                                                 <span class="title">Address:</span>
@@ -59,7 +60,7 @@
                                             </li>
                                             <li>
                                                 <span class="title">Gender:</span>
-                                                <span class="text">MALE</span>
+                                                <span class="text" th:text="${personnel.gender}"></span>
                                             </li>
                                         </ul>
                                     </div>
@@ -89,7 +90,12 @@
                                                 </div>
                                                 <div class="experience-content">
                                                     <div class="timeline-content">
-                                                        <a href="#/" class="name"></a>
+
+                                                        <a href="#" class="name">
+                                                            <span>Vous avez </span>
+                                                            <span th:text="${personnel.getConsultations().size()}"></span>
+                                                            <span>consultation(s)</span>
+                                                        </a>
                                                         <div></div>
                                                         <span class="time"></span>
                                                     </div>
@@ -108,7 +114,7 @@
                                                 </div>
                                                 <div class="experience-content">
                                                     <div class="timeline-content">
-                                                        <a href="#/" class="name"></a>
+                                                        <a href="#/" class="name" ></a>
                                                         <span class="time"></span>
                                                     </div>
                                                 </div>

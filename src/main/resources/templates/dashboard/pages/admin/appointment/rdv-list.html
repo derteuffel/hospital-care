@@ -12,8 +12,8 @@
         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
             <div class="dash-widget">
                 <span class="dash-widget-bg2"><i class="fa fa-calendar"></i></span>
-                <div class="dash-widget-info text-right">
-                    <h3>rtyuiop</h3>
+                <div class="dash-widget-info text-right" id="active">
+                    <h3>Rdv actifs</h3>
                     <span class="widget-title2">Active RDV <i class="fa fa-check" aria-hidden="true"></i></span>
                 </div>
             </div>
@@ -22,8 +22,8 @@
         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
             <div class="dash-widget">
                 <span class="dash-widget-bg4"><i class="fa fa-calendar" aria-hidden="true"></i></span>
-                <div class="dash-widget-info text-right">
-                    <h3>mince</h3>
+                <div class="dash-widget-info text-right" id="inactive">
+                    <h3>Rdv inactifs</h3>
                     <span class="widget-title4">Inactive                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    RDV <i class="fa fa-check" aria-hidden="true"></i></span>
                 </div>
             </div>
@@ -137,25 +137,29 @@
             </div>
         </div>
     </div>
-    <div th:id="${'delete_department-'+ {rdv.getId()}}" class="modal fade delete-modal" role="dialog" th:each="rdv : ${rdvs}">
+    <div  th:id="${'delete_department-'+ {rdv.getId()}}" class="modal fade delete-modal" role="dialog" th:each="rdv : ${appointments}">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body text-center">
-                    <img src="assets/img/sent.png" alt="" width="50" height="46">
+                    <img th:src="@{/assets/img/sent.png}" alt="" width="50" height="46">
                     <div class="form-group">
-                        <label><b>Enter a doctor Username</b></label>
+                        <label><b>Enter Username</b></label>
                         <input class="form-control" type="password" name="username" required/>
                     </div>
-                    <h3>Are you sure want to delete this Department?</h3>
-                    <div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                    <h3>Are you sure want to delete this RDV?</h3>
+                    <div class="m-t-20">
+                        <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                    </div>
+                    <div  class="m-t-20">
                         <form th:action="@{|/admin/rdv/delete/${rdv.getId()}|}" th:object="${rdv}" method="post">
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-danger" >Delete</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 </body>
 </html>
