@@ -1,5 +1,6 @@
 package com.hospital.repository;
 
+import com.hospital.entities.Consultation;
 import com.hospital.entities.Personnel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,7 @@ public interface PersonnelRepository extends JpaRepository<Personnel, Long> {
     List<Personnel> findAllByFunctionAndHospital_Id(String function, Long id);
 
     List<Personnel> findAllByHospital_Id(Long id);
-    Personnel findByFunction(String function);
+
+
 }
 
