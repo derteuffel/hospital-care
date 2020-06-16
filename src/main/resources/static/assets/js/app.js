@@ -146,9 +146,15 @@ $(document).ready(function($) {
 	// Datatable
 	//$('.datatable').DataTable();
 	if($('.datatable').length > 0) {
-		$('.datatable').DataTable({
+		var table = $('.datatable').DataTable({
 			"bFilter": false,
 			"searching": true,
+		});
+		$("#active").click(function(){
+			table.columns().search('').column(5).search('^active$',true,false,true).draw();
+		});
+		$("#inactive").click(function(){
+			table.columns().search('').column(5).search("inactive",false,true,true).draw();
 		});
 	}
 
@@ -170,7 +176,7 @@ $(document).ready(function($) {
          type: 'GET', dataType: "text",  error: function (resultat, statut, erreur) { alert(erreur); },
          success: function (data, statut) {
            $('.dos-search').children('div').hide()
-           if(data == 1) window.location.href = `/admin/medical-record/search?search=${$('.dos-text').val()}`
+           if(data === 1) window.location.href = `/admin/medical-record/search?search=${$('.dos-text').val()}`
            else{
              $('.dos-search').hide()
              $('.fa-create-dos-icon').fadeIn(500)

@@ -12,7 +12,27 @@
             <h4 class="page-title">RDV</h4>
         </div>
         <div class="col-sm-7 col-7 text-right m-b-30">
-            <a th:href="@{/admin/rdv/create}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Add RDV</a>
+            <a th:href="@{/admin/rdv/create}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> RDV List</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+            <div class="dash-widget">
+                <span class="dash-widget-bg1"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                <div class="dash-widget-info text-right" id="active">
+                    <h3>Rdv actifs</h3>
+                    <span class="widget-title1" >Active<i class="fa fa-check" aria-hidden="true"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+            <div class="dash-widget">
+                <span class="dash-widget-bg4"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                <div class="dash-widget-info text-right" id="inactive">
+                    <h3>Rdv inactifs</h3>
+                    <span class="widget-title4" >Inactive<i class="fa fa-check" aria-hidden="true"></i></span>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row" th:if="${message}">
