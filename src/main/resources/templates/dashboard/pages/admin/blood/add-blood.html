@@ -19,9 +19,15 @@
 
                 <div class="form-group">
                     <label th:for="groupeSanguin">Groupe sanguin</label>
-                    <input class="form-control" type="text" th:field="*{groupeSanguin}" required/>
+                    <select th:field="*{groupeSanguin}" class="form-control">
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="AB">AB</option>
+                        <option value="O">O</option>
+                    </select>
                     <span class="error" th:errors="*{groupeSanguin}"></span>
                 </div>
+                
                 <div class="form-group">
                     <label class="display-block">Rhesus</label>
                     <div class="form-check form-check-inline">
