@@ -66,7 +66,7 @@ public class RdvController {
 
         ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/rdv-list");
         List<Irdvjointure> rdvs = rdvRepository.findAllWithJoin();
-        modelAndView.addObject("rdvs",rdvs);
+        modelAndView.addObject("appointments",rdvs);
         return modelAndView;
     }
     @PostMapping("/delete/{id}")
@@ -121,5 +121,6 @@ public class RdvController {
         rdvRepository.save(rdv);
         return "redirect:/admin/rdv/all" ;
     }
+
 
 }

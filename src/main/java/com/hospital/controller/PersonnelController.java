@@ -6,6 +6,7 @@ import com.hospital.helpers.PersonnelHelper;
 import com.hospital.repository.DosMedicalRepository;
 import com.hospital.repository.HospitalRepository;
 import com.hospital.repository.PersonnelRepository;
+import com.hospital.repository.RdvRepository;
 import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,6 +48,9 @@ public class PersonnelController {
 
     @Autowired
     private DosMedicalRepository dosMedicalRepository;
+
+    @Autowired
+    private RdvRepository rdv;
 
 
     /** Get all personnel in an application */
@@ -330,13 +334,14 @@ public class PersonnelController {
     }
 
 
-    @GetMapping("/doctors/{id}")
+    @GetMapping("/doctor/{id}")
     public String findDoctorById(@PathVariable Long id, Model model){
 
-        Personnel personnel = personnelRepository.findByFunction("DOCTOR");
+        //Personnel personnel = personnelRepository.findByFunction("DOCTOR");
+        Personnel personnel = personnelRepository.getOne(id);
         model.addAttribute("personnel", personnel);
-
-      return "dashboard/pages/admin/hospital/update-doctor";
+        model.addAttribute("appointments", rdv.findAll());
+      return "dashboard/pages/admin/hospital/show-doctor";
 
     }
 

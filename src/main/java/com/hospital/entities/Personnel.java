@@ -149,5 +149,11 @@ public class Personnel implements Serializable {
         this.neighborhood = neighborhood;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
 }
