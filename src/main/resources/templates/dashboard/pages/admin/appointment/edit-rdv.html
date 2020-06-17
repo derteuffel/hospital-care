@@ -44,15 +44,23 @@
                     <textarea class="form-control" th:field="*{motif}" rows="3" th:value="${rdv.motif}" required autofocus></textarea>
                     <td th:if="${#fields.hasErrors('motif')}" th:errors="*{motif}">Type Error</td>
                 </div>
+<<<<<<< HEAD:src/main/resources/templates/dashboard/pages/admin/appointment/edit-rdv.html
 
               <!--  <div class="form-group">
+=======
+                <div class="form-group">
+>>>>>>> eba968ae7d0e5e8d954466ddc48147f0cfba0efd:src/main/resources/templates/dashboard/pages/admin/edit-rdv.html
                     <label>Statut</label>
                     <select th:field="*{status}" class="form-control" required autofocus>
                         <option value="false">Active</option>
                         <option value="true">Inactive</option>
                     </select>
                     <td th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Type Error</td>
+<<<<<<< HEAD:src/main/resources/templates/dashboard/pages/admin/appointment/edit-rdv.html
                 </div>-->
+=======
+                </div>
+>>>>>>> eba968ae7d0e5e8d954466ddc48147f0cfba0efd:src/main/resources/templates/dashboard/pages/admin/edit-rdv.html
                 <div class="m-t-20 text-center">
                     <a th:href="@{/admin/rdv/all}" class="btn btn-secondary submit-btn">Annuler</a>
 

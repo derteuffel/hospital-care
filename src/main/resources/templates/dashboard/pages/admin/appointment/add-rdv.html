@@ -17,7 +17,7 @@
 
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form th:action="@{/admin/rdv/create}" method="post" th:object="${rdv}">
+            <form th:action="@{/admin/rdv/add}" method="post" th:object="${rdv}">
                 <div class="form-group">
                     <label>Patient</label>
                     <input id="patient" type="text" class="form-control" list="patients" th:field="*{compteId}" required autofocus/>
@@ -45,6 +45,7 @@
                               placeholder="Veillez renseigner de quoi vous souffrez" autocomplete="off" id="motif" required autofocus></textarea>
                     <td th:if="${#fields.hasErrors('motif')}" th:errors="*{motif}">Type Error</td>
                 </div>
+<<<<<<< HEAD:src/main/resources/templates/dashboard/pages/admin/appointment/add-rdv.html
               <!--  <div class="form-group">
                     <label>Statut</label>
                     <select th:field="*{status}" class="form-control" required autofocus>
@@ -53,6 +54,16 @@
                     </select>
                     <td th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Type Error</td>
                 </div>-->
+=======
+                <div class="form-group">
+                    <label>Statut</label>
+                  <select th:field="*{status}" class="form-control" required autofocus>
+                      <option value="false">Active</option>
+                      <option value="true">Inactive</option>
+                  </select>
+                    <td th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Type Error</td>
+                </div>
+>>>>>>> eba968ae7d0e5e8d954466ddc48147f0cfba0efd:src/main/resources/templates/dashboard/pages/admin/add-rdv.html
                 <div class="m-t-20 text-center">
                     <a th:href="@{/admin/rdv/all}" class="btn btn-secondary submit-btn">Annuler</a>
                     <button class="btn btn-primary submit-btn" type="submit">Create RDV</button>
