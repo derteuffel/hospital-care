@@ -21,6 +21,8 @@ public class Conversation implements Serializable {
 
     private Long senderId;
     private Long receiverId;
+    private String receiver;
+    private String sender;
 
     @JsonIgnoreProperties("conversation")
     @OneToMany(mappedBy = "conversation")
@@ -28,9 +30,11 @@ public class Conversation implements Serializable {
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<Message> messages;
 
-    public Conversation(Long senderId, Long receiverId) {
+    public Conversation(Long senderId, Long receiverId, String receiver, String sender) {
         this.senderId = senderId;
         this.receiverId = receiverId;
+        this.receiver = receiver;
+        this.sender = sender;
     }
 
     public Conversation() {
@@ -66,5 +70,21 @@ public class Conversation implements Serializable {
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 }
