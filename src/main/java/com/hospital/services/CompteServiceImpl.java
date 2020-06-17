@@ -118,23 +118,18 @@ public class CompteServiceImpl implements CompteService {
             Role role2 = new Role();
             role2.setName(ERole.ROLE_PATIENT.toString());
             roleRepository.save(role2);
-            compte.getRoles().add(role2);
-            compteRepository.save(compte);
+
+            if (!(role1.isPresent())){
+                Role role3 = new Role();
+                role3.setName(ERole.ROLE_DOCTOR.toString());
+                roleRepository.save(role3);
+                compte.setRoles(Arrays.asList(role3,role2));
+            }
         }else {
-            compte.getRoles().add(role.get());
-            compteRepository.save(compte);
+            compte.setRoles(Arrays.asList(role.get(),role1.get()));
         }
 
-        if (!(role1.isPresent())){
-            Role role2 = new Role();
-            role2.setName(ERole.ROLE_DOCTOR.toString());
-            roleRepository.save(role2);
-            compte.getRoles().add(role2);
-            compteRepository.save(compte);
-        }else {
-            compte.getRoles().add(role1.get());
-            compteRepository.save(compte);
-        }
+
 
 
 

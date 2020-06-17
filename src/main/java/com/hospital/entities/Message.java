@@ -18,15 +18,17 @@ public class Message implements Serializable {
     private String sender;
     private String body;
     private Boolean status;
+    private String time;
 
     @ManyToOne
     @JsonIgnoreProperties("messages")
     private Conversation conversation;
 
-    public Message(String sender, String body, Boolean status) {
+    public Message(String sender, String body, Boolean status, String time) {
         this.sender = sender;
         this.body = body;
         this.status = status;
+        this.time = time;
     }
 
     public Message() {
@@ -70,5 +72,13 @@ public class Message implements Serializable {
 
     public void setConversation(Conversation conversation) {
         this.conversation = conversation;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

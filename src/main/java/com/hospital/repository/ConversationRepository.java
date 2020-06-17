@@ -1,6 +1,7 @@
 package com.hospital.repository;
 
 import com.hospital.entities.Conversation;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +10,6 @@ import java.util.List;
 @Repository
 public interface ConversationRepository extends JpaRepository<Conversation,Long> {
 
-    List<Conversation> findAllBySenderIdAndReceiverId(Long senderId, Long receiverId);
+    Conversation findBySenderIdAndReceiverId(Long senderId, Long receiverId);
+    List<Conversation> findAllBySenderIdOrReceiverId(Long senderId,Long receiverId,  Sort sort);
 }
