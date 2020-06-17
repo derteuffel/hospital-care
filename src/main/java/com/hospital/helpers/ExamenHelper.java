@@ -15,10 +15,10 @@ import java.util.Date;
 @Data
 public class ExamenHelper {
 
-    @NotBlank(message = "name field must not be blank")
+    @NotNull(message = "name field must not be blank")
     private String name;
 
-    @NotBlank(message = "test type must not be blank")
+    @NotNull(message = "test type must not be blank")
     private String testType;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -34,17 +34,19 @@ public class ExamenHelper {
 
     private String description;
 
+    private String time;
+
     @NotNull(message = "idConsultation field must not be null")
     private Long idConsultation;
 
-    @NotBlank(message = "hospital name must not be blank")
+    @NotNull(message = "hospital name must not be blank")
     private String hospitalName;
 
     public ExamenHelper(){
 
     }
 
-    public ExamenHelper(String name, String testType, Date deliverDate, Date dateOfTesting, String results, String description, Long idConsultation,String hospitalName) {
+    public ExamenHelper(String name, String testType, Date deliverDate, Date dateOfTesting, String results, String description, Long idConsultation,String hospitalName, String time) {
         this.name = name;
         this.testType = testType;
         this.deliverDate = deliverDate;
@@ -53,6 +55,7 @@ public class ExamenHelper {
         this.description = description;
         this.idConsultation = idConsultation;
         this.hospitalName = hospitalName;
+        this.time = time;
     }
 
     public Examen getExamInstance(Hospital hospital, Consultation consultation){
@@ -63,6 +66,7 @@ public class ExamenHelper {
         examen.setResults(getResults());
         examen.setTestType(getTestType());
         examen.setDescription(getDescription());
+        examen.setTime(getTime());
         examen.setConsultation(consultation);
         examen.setHospital(hospital);
         return examen;
@@ -70,7 +74,7 @@ public class ExamenHelper {
 
     public static ExamenHelper getExamenHelperInstance(Examen exam){
         return new ExamenHelper(exam.getName(),exam.getTestType(),exam.getDeliverDate(),exam.getDateOfTesting(),exam.getResults(),
-                exam.getDescription(),exam.getConsultation().getId(),exam.getHospital().getName());
+                exam.getDescription(),exam.getConsultation().getId(),exam.getHospital().getName(), exam.getTime());
     }
 
     public String getResults() {
@@ -135,5 +139,13 @@ public class ExamenHelper {
 
     public void setHospitalName(String hospitalName) {
         this.hospitalName = hospitalName;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

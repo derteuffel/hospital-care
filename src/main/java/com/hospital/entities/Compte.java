@@ -14,7 +14,6 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor //@NoArgsConstructor
 public class Compte implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,35 +23,18 @@ public class Compte implements Serializable {
     private String avatar;
     private Boolean status;
 
-
     @OneToOne
     private Personnel personnel;
 
-    //@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-
-
     @JoinTable(
-
             name = "comptes_roles",
-
             joinColumns = @JoinColumn(
                     name = "compte_id", referencedColumnName = "id"),
-
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id")
     )
     private Collection<Role> roles;
-
-   /* @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "comptes_personnels",
-            joinColumns = @JoinColumn(
-                    name = "compte_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "personnel_id", referencedColumnName = "id"))*/
-
 
 
     public Compte(String username, String email, Boolean status, String password) {

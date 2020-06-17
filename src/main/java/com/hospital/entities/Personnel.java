@@ -7,6 +7,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -14,7 +17,6 @@ import java.util.Collection;
 @Table(name = "personnel")
 @Data
 public class Personnel implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +30,7 @@ public class Personnel implements Serializable {
     private String gender;
     private Integer age;
     private String address;
+    private String neighborhood;
     private String avatar;
 
     @OneToMany(mappedBy = "personnel")
@@ -138,4 +141,19 @@ public class Personnel implements Serializable {
         return hospital;
     }
 
+    public String getNeighborhood() {
+        return neighborhood;
+    }
+
+    public void setNeighborhood(String neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
 }

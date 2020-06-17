@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>update Medical Record</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h4 class="page-title">Update Medical Record</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <form method="post" th:action="@{'/admin/medical-record/update/'+${dosMedicalHelper.code}}" th:object="${dosMedicalHelper}">
+                <div th:if="${error}">
+                    <div class="alert alert-danger" th:text="${error}"></div>
+                </div>
+                <div class="form-group">
+                    <label th:for="name">Name <span style="font-size: 11px; font-style: italic">(complete name)</span></label>
+                    <input class="form-control" type="text" th:field="*{name}" required/>
+                    <span class="error" th:errors="*{name}"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="code">Code <span style="font-size: 11px; font-style: italic">(N° CNI)</span></label>
+                    <input class="form-control" type="text" th:field="*{code}" required/>
+                    <span class="error" th:errors="*{code}"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="email">Email</label>
+                    <input class="form-control" type="email" th:field="*{email}" required/>
+                    <span class="error" th:errors="*{email}"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="birthDate">Birth Date</label>
+                    <input class="form-control" type="date" th:field="*{birthDate}" required/>
+                    <span class="error" th:errors="*{birthDate}"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="weight">Weight <span style="font-size: 11px; font-style: italic">(kg)</span></label>
+                    <input class="form-control" type="text" th:field="*{weight}" />
+                    <span class="error" th:errors="*{weight}"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="height">Height <span style="font-size: 11px; font-style: italic">(cm)</span></label>
+                    <input class="form-control" type="number" th:field="*{height}" required/>
+                    <span class="error" th:errors="*{height}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Hereditary Disease</label>
+                    <input class="form-control" type="text" name="hereditaryDisease">
+                </div>
+                <div class="form-group">
+                    <label th:for="bloodType">Blood Type</label>
+                    <select th:field="*{bloodType}" class="form-control">
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="AB">AB</option>
+                        <option value="O">O</option>
+                    </select>
+                    <span class="error" th:errors="*{bloodType}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="display-block">Sex</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sex" id="M" value="M" checked>
+                        <label class="form-check-label" for="M">
+                            M
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sex" id="F" value="F">
+                        <label class="form-check-label" for="F">
+                            F
+                        </label>
+                    </div>
+                    <span class="error" th:errors="*{sex}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="display-block">Rhesus</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rhesus" id="rh+" value="+" checked>
+                        <label class="form-check-label" for="rh+">
+                            +
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rhesus" id="rh-" value="-">
+                        <label class="form-check-label" for="rh-">
+                            -
+                        </label>
+                    </div>
+                    <span class="error" th:errors="*{rhesus}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea cols="30" rows="4" class="form-control" th:field="*{description}" th:text="*{description}" ></textarea>
+                </div>
+                <div class="m-t-20 text-center">
+                    <a th:href="@{/admin/medical-record/all}" class="btn btn-secondary submit-btn">Annuler</a>
+                    <button class="btn btn-primary submit-btn">Update Medical Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

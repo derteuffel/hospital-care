@@ -30,21 +30,22 @@ public class ConsultationHelper {
     @NotNull(message = "temperature field must not be null")
     private double temperature;
 
-    @NotBlank(message = "sex field must not be blank")
     private String sex;
 
     @NotNull(message = "age field must not be null")
     private int age;
 
-    @NotBlank(message = "name must not be null")
+    @NotNull(message = "name must not be null")
     private String DoctorName;
 
-    @NotBlank(message = "phone number field must not be null")
+    @NotNull(message = "phone number field must not be null")
     private String DoctorPhone;
 
     private String observations;
 
     private String code;
+
+    private Double tension;
 
 //    @NotBlank(message = "hospitalName must not be blank")
     private String hospitalName;
@@ -67,12 +68,12 @@ public class ConsultationHelper {
     }
 
     public Consultation getConsultationInstance(Hospital hospital, DosMedical dosMedical, Personnel personnel){
-        return new Consultation(date,height,weight,temperature,sex,age,pressure,hospital,dosMedical,personnel,observations);
+        return new Consultation(date,height,weight,temperature,sex,age,pressure,tension,hospital,dosMedical,personnel,observations);
     }
 
     public static ConsultationHelper getConsultationHelperInstance(Consultation consultation){
             return new ConsultationHelper(consultation.getDate(),consultation.getHeight(),consultation.getPressure(),consultation.getWeight(),
-                    consultation.getTemperature(),consultation.getSex(),consultation.getAge(),consultation.getPersonnel().getLastName(),consultation.getPersonnel().getPhone(),
+                    consultation.getTemperature(),consultation.getSex(),consultation.getAge(), consultation.getPersonnel().getLastName(),consultation.getPersonnel().getPhone(),
                     consultation.getObservations(),consultation.getHospital().getName());
     }
 
@@ -170,5 +171,13 @@ public class ConsultationHelper {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Double getTension() {
+        return tension;
+    }
+
+    public void setTension(Double tension) {
+        this.tension = tension;
     }
 }

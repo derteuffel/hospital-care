@@ -19,17 +19,17 @@ public class DosMedicalHelper {
     @Size(min = 1, max = 1, message = "rhesus must only be one character")
     private String rhesus;
 
-    @NotBlank(message = "sex must not be null")
+    @NotNull(message = "sex must not be null")
     @Size(min = 1, max = 1, message = "sex one character")
     private String sex;
 
     // @NotBlank(message = "weight must not be null")
     private String weight;
 
-    @NotBlank(message = "height must not be null")
+    @NotNull(message = "height must not be null")
     private String height;
 
-    @NotBlank(message = "name must not be null")
+    @NotNull(message = "name must not be null")
     private String name;
 
     @NotNull(message = "you must specify a date")
@@ -42,10 +42,10 @@ public class DosMedicalHelper {
     private String description;
 
     @Pattern(regexp = "^[0-9]{9}$", message = "code is a sequence of 9 digits")
-    @NotBlank(message = "code must not be blank")
+    @NotNull(message = "code must not be blank")
     private String code;
 
-    @NotBlank(message = "email must not be blank")
+    @NotNull(message = "email must not be blank")
     @Email(message = "this is not a valid email address")
     private String email;
 

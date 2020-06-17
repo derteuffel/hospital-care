@@ -1,12 +1,11 @@
 package com.hospital.entities;
+
 import java.util.Date;
 
 public class RdvJointure {
     private Long id;
 
     private String username;
-
-
     private Long compte_id;
 
     private Long personnel_id;

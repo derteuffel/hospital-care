@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultations</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin/medical-record/all}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Medical Records</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-sm-4 col-3">
+            <h4 class="page-title">Consultations</h4>
+        </div>
+        <div class="col-sm-8 col-9 text-right m-b-20">
+            <a th:href="@{'/admin/consultation/create?code='+${code}}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add a consultation</a>
+        </div>
+    </div>
+    <div th:if="${success}">
+        <div class="alert alert-success" th:text="${success}"></div>
+    </div>
+    <div th:if="${error}">
+        <div class="alert alert-danger" th:text="${error}"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-border table-striped custom-table datatable mb-0">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>date</th>
+                        <th>height</th>
+                        <th>weight</th>
+                        <th>pressure</th>
+                        <th>temperature</th>
+                        <th>age</th>
+                        <th>sex</th>
+                        <th>Doctor's Name</th>
+                        <th>Doctor's Phone</th>
+                        <th>Hospital</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="consultation,i: ${consultationList}">
+                        <input type="hidden" name="id" th:value="${consultation.id}"/>
+                        <td th:text="${i.count}"></td>
+                        <td th:text="${consultation.date}"></td>
+                        <td th:text="${consultation.height}"></td>
+                        <td th:text="${consultation.weight}"></td>
+                        <td th:text="${consultation.pressure}"></td>
+                        <td th:text="${consultation.temperature}"></td>
+                        <td th:text="${consultation.age}"></td>
+                        <td th:text="${consultation.sex}"></td>
+                        <td th:text="${consultation.personnel.lastName+' '+consultation.personnel.firstName}"></td>
+                        <td th:text="${consultation.personnel.phone}"></td>
+                        <td th:text="${consultation.hospital.name}"></td>
+                        <td class="text-right">
+                            <div class="dropdown dropdown-action">
+                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right menu_">
+                                    <a class="dropdown-item" th:href="@{'/admin/exam/consultation/'+${consultation.id}}" th:text="@{'View Exams ('+${consultation.examens.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
+                                    <a class="dropdown-item" th:href="@{'/admin/prescription/consultation/'+${consultation.id}}" th:text="@{'View Prescriptions ('+${consultation.prescriptions.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
+                                    <a class="dropdown-item" th:href="@{'/admin/consultation/update/'+${consultation.id}+'?code='+${code}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" th:attr="data-target='#deleteModal'+${consultation.id}"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                </div>
+                            </div>
+                            <div class="modal fade" th:id="deleteModal+${consultation.id}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel">Suppression d'une couveuse </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="text-center">Etes vous sure de vouloir supprimer cette element???</p>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                            <a th:href="@{/admin/consultation/delete/}+${consultation.id}" class="btn btn-primary">Oui</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

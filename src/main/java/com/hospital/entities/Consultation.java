@@ -33,6 +33,7 @@ public class Consultation implements Serializable {
     private double temperature;
     private String sex;
     private int age;
+    private Double tension;
     private String observations;
 
     @OneToMany(mappedBy = "consultation")
@@ -58,7 +59,7 @@ public class Consultation implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Prescription>prescriptions;
 
-    public Consultation(Date date, int height, double weight, double temperature, String sex, int age, double pressure, Hospital hospital, DosMedical dosMedical, Personnel personnel, String observations){
+    public Consultation(Date date, int height, double weight, double temperature, String sex, int age, double pressure,Double tension, Hospital hospital, DosMedical dosMedical, Personnel personnel, String observations){
         this.date = date;
         this.height = height;
         this.weight = weight;
@@ -70,6 +71,15 @@ public class Consultation implements Serializable {
         this.temperature = temperature;
         this.observations = observations;
         this.personnel = personnel;
+        this.tension=tension;
+    }
+
+    public Double getTension() {
+        return tension;
+    }
+
+    public void setTension(Double tension) {
+        this.tension = tension;
     }
 
     public Consultation(){}
