@@ -146,11 +146,46 @@ $(document).ready(function($) {
 	// Datatable
 	//$('.datatable').DataTable();
 	if($('.datatable').length > 0) {
-		$('.datatable').DataTable({
+		var table = $('.datatable').DataTable({
 			"bFilter": false,
 			"searching": true,
 		});
+		$("#active").click(function(){
+			table.columns().search('').column(5).search('^active$',true,false,true).draw();
+		});
+		$("#inactive").click(function(){
+			table.columns().search('').column(5).search("inactive",false,true,true).draw();
+		});
 	}
+
+	/* Research on medical-record */
+     $('.fa-create-dos-icon').on('click', () => window.location.href= `/admin/medical-record/create?code=${$('.dos-text').val()}`)
+     $(".fa-create-dos-icon").tooltip()
+
+     $('.dos-text').on('input',function(){
+       if($('.fa-create-dos-icon').is(":visible")){
+         $(".fa-create-dos-icon").hide()
+         $('.dos-search').show()
+       }
+     })
+
+	$('.dos-search').on('click',function(){
+	  if($('.dos-text').val() != ""){
+	    $('.dos-search').children('div').show()
+	    $.ajax({ url: `/admin/medical-record/exists/${$('.dos-text').val()}`,
+         type: 'GET', dataType: "text",  error: function (resultat, statut, erreur) { alert(erreur); },
+         success: function (data, statut) {
+           $('.dos-search').children('div').hide()
+           if(data === 1) window.location.href = `/admin/medical-record/search?search=${$('.dos-text').val()}`
+           else{
+             $('.dos-search').hide()
+             $('.fa-create-dos-icon').fadeIn(500)
+           }
+         }
+        });
+	  }
+      else alert('The search field must not be empty')
+    })
 
 	$('.date').attr("value",new Date().toISOString().substr(0,10))
 
@@ -163,7 +198,7 @@ $(document).ready(function($) {
     $('select[name="name"]').on('change',function(){
       $('#testType').val($(this).children("option:selected").attr('test-type'))
     })
-	
+
 	// Bootstrap Tooltip
 	if($('[data-toggle="tooltip"]').length > 0) {
 		$('[data-toggle="tooltip"]').tooltip();
@@ -176,13 +211,13 @@ $(document).ready(function($) {
 	   if(hidden.length != 0) hidden.replaceWith(field);
 	   else form.append(field)
 	})
-	
+
 	// Mobile Menu
 	$(document).on('click', '#open_msg_box', function() {
 		$wrapper.toggleClass('open-msg-box');
 		return false;
 	});
-	
+
 	// Lightgallery
 	if($('#lightgallery').length > 0) {
 		$('#lightgallery').lightGallery({
@@ -190,12 +225,12 @@ $(document).ready(function($) {
 			selector: 'a'
 		});
 	}
-	
+
 	// Incoming call popup
 	if($('#incoming_call').length > 0) {
 		$('#incoming_call').modal('show');
 	}
-	
+
 	// Summernote
 	if($('.summernote').length > 0) {
 		$('.summernote').summernote({
@@ -205,7 +240,7 @@ $(document).ready(function($) {
 			focus: false
 		});
 	}
-	
+
 	// Check all email
 	$(document).on('click', '#check_all', function() {
 		$('.checkmail').click();
@@ -222,12 +257,12 @@ $(document).ready(function($) {
 			});
 		});
 	}
-	
+
 	// Mail important
 		$(document).on('click', '.mail-important', function() {
 		$(this).find('i.fa').toggleClass('fa-star').toggleClass('fa-star-o');
 	});
-	
+
 	// Dropfiles
 	if($('#drop-zone').length > 0) {
 		var dropZone = document.getElementById('drop-zone');
@@ -254,7 +289,7 @@ $(document).ready(function($) {
 			return false;
 		};
 	}
-	
+
 	// Small Sidebar
 	if(screen.width >= 992) {
 		$(document).on('click', '#toggle_btn', function() {

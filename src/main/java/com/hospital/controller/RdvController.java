@@ -55,6 +55,7 @@ public class RdvController {
         if(errors.hasErrors()){
             return "dashboard/pages/admin/appointment/add-rdv";
         }
+        rdv.setStatus(false);
         rdvRepository.save(rdv);
         redirAttrs.addFlashAttribute("message", "Rdv added Successfully");
         return "redirect:/admin/rdv/all";

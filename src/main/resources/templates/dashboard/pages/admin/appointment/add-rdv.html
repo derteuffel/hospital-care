@@ -17,7 +17,7 @@
 
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form th:action="@{/admin/rdv/create}" method="post" th:object="${rdv}">
+            <form th:action="@{/admin/rdv/add}" method="post" th:object="${rdv}">
                 <div class="form-group">
                     <label>Patient</label>
                     <input id="patient" type="text" class="form-control" list="patients" th:field="*{compteId}" required autofocus/>

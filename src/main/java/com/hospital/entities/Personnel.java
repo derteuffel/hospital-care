@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(name = "personnel")
@@ -27,11 +29,16 @@ public class Personnel implements Serializable {
     private String phone;
     private String city;
     private String function;
+    private String qualifier;
     private String gender;
     private Integer age;
     private String address;
     private String neighborhood;
     private String avatar;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date birthDate;
 
     @OneToMany(mappedBy = "personnel")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
@@ -151,6 +158,23 @@ public class Personnel implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getQualifier() {
+        return qualifier;
+    }
+
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void setQualifier(String qualifier) {
+        this.qualifier = qualifier;
     }
 
     public void setHospital(Hospital hospital) {

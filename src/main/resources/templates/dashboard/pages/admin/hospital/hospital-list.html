@@ -96,25 +96,29 @@
             </div>
         </div>
     </div>
-    <div th:id="${'delete_department-'+ {hospital.getId()}}" class="modal fade delete-modal" role="dialog" th:each="hospital : ${hospitals}">
+    <div  th:id="${'delete_department-'+ {hospital.getId()}}" class="modal fade delete-modal" role="dialog" th:each="hospital : ${hospitals}">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body text-center">
-                    <img src="assets/img/sent.png" alt="" width="50" height="46">
+                    <img th:src="@{/assets/img/sent.png}" alt="" width="50" height="46">
                     <div class="form-group">
                         <label><b>Enter a doctor Username</b></label>
                         <input class="form-control" type="password" name="username" required/>
                     </div>
-                    <h3>Are you sure want to delete this Department?</h3>
-                    <div class="m-t-20"> <a href="#" class="btn btn-white submit-btn" data-dismiss="modal">Close</a>
+                    <h3>Are you sure want to delete this Hospital?</h3>
+                    <div class="m-t-20">
+                        <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                    </div>
+                    <div  class="m-t-20">
                         <form th:action="@{|/admin/hospital/delete/${hospital.getId()}|}" th:object="${hospital}" method="post">
-                            <button type="submit" class="btn btn-danger submit-btn" >Delete</button>
+                            <button type="submit" class="btn btn-danger" >Delete</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

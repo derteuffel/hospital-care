@@ -3,10 +3,7 @@ package com.hospital.controller;
 
 import com.hospital.entities.*;
 import com.hospital.helpers.PersonnelHelper;
-import com.hospital.repository.DosMedicalRepository;
-import com.hospital.repository.HospitalRepository;
-import com.hospital.repository.PersonnelRepository;
-import com.hospital.repository.RdvRepository;
+import com.hospital.repository.*;
 import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,6 +48,9 @@ public class PersonnelController {
 
     @Autowired
     private RdvRepository rdv;
+
+    @Autowired
+    private ConsultationRepository consultationRepository;
 
 
     /** Get all personnel in an application */
@@ -123,11 +123,12 @@ public class PersonnelController {
             personnel.setAge(Math.round(days/365));
             personnel.setCity(form.getCity());
             personnel.setFunction("DOCTOR");
+            personnel.setQualifier(form.getQualifier());
             personnel.setPhone(form.getPhone());
-            personnel.setGender(form.getSex());
+            personnel.setGender(form.getGender());
             //personnel.setLocalisation(form.getLocalisation());
             personnelRepository.save(personnel);
-            dosMedical.setSex(form.getSex());
+            dosMedical.setSex(form.getGender());
             dosMedical.setName(personnel.getLastName()+" "+personnel.getFirstName());
             dosMedical.setBloodType(form.getBloodType());
             dosMedical.setHeight(Integer.parseInt(form.getHeight()));
@@ -216,11 +217,12 @@ public class PersonnelController {
             personnel.setAge(Math.round(days/365));
             personnel.setCity(form.getCity());
             personnel.setFunction("SIMPLE");
+            personnel.setQualifier(form.getQualifier());
             personnel.setPhone(form.getPhone());
-            personnel.setGender(form.getSex());
+            personnel.setGender(form.getGender());
             //personnel.setLocalisation(form.getLocalisation());
             personnelRepository.save(personnel);
-            dosMedical.setSex(form.getSex());
+            dosMedical.setSex(form.getGender());
             dosMedical.setName(personnel.getLastName()+" "+personnel.getFirstName());
             dosMedical.setBloodType(form.getBloodType());
             dosMedical.setHeight(Integer.parseInt(form.getHeight()));
@@ -336,12 +338,25 @@ public class PersonnelController {
 
     @GetMapping("/doctor/{id}")
     public String findDoctorById(@PathVariable Long id, Model model){
-
+        Optional<Hospital> hospital =  hospitalRepository.findById(id);
         //Personnel personnel = personnelRepository.findByFunction("DOCTOR");
         Personnel personnel = personnelRepository.getOne(id);
         model.addAttribute("personnel", personnel);
+        model.addAttribute("consultation", consultationRepository.findByHospital(hospital));
         model.addAttribute("appointments", rdv.findAll());
       return "dashboard/pages/admin/hospital/show-doctor";
+
+    }
+
+    @GetMapping("/simple/{id}")
+    public String findSimpleById(@PathVariable Long id, Model model){
+        Optional<Hospital> hospital =  hospitalRepository.findById(id);
+        //Personnel personnel = personnelRepository.findByFunction("DOCTOR");
+        Personnel personnel = personnelRepository.getOne(id);
+        model.addAttribute("personnel", personnel);
+        model.addAttribute("consultation", consultationRepository.findByHospital(hospital));
+        model.addAttribute("appointments", rdv.findAll());
+        return "dashboard/pages/admin/hospital/show-simple";
 
     }
 
