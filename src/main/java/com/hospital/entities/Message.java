@@ -19,16 +19,18 @@ public class Message implements Serializable {
     private String body;
     private Boolean status;
     private String time;
+    private String fichier;
 
     @ManyToOne
     @JsonIgnoreProperties("messages")
     private Conversation conversation;
 
-    public Message(String sender, String body, Boolean status, String time) {
+    public Message(String sender, String body, Boolean status, String time, String fichier) {
         this.sender = sender;
         this.body = body;
         this.status = status;
         this.time = time;
+        this.fichier = fichier;
     }
 
     public Message() {
@@ -80,5 +82,13 @@ public class Message implements Serializable {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getFichier() {
+        return fichier;
+    }
+
+    public void setFichier(String fichier) {
+        this.fichier = fichier;
     }
 }

@@ -9,16 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -44,46 +47,41 @@ public class ConversationController {
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         List<Compte> comptes = new ArrayList<>();
+        List<Conversation> lists = conversationRepository.findAllByComptes_Id(compte.getId(),Sort.by(Sort.Direction.DESC,"id"));
         if (compte.getPersonnel() != null){
             Hospital hospital = compte.getPersonnel().getHospital();
             for (Personnel personnel : hospital.getPersonnels()){
                 comptes.add(compteRepository.findByEmail(personnel.getEmail()));
             }
         }
-        List<Conversation> lists = conversationRepository.findAllBySenderIdOrReceiverId(compte.getId(),compte.getId(),Sort.by(Sort.Direction.DESC,"id"));
+
         model.addAttribute("lists", lists);
         model.addAttribute("compte",compte);
         model.addAttribute("comptes",comptes);
         return "dashboard/pages/admin/chat/chats";
     }
 
-    @GetMapping("/detail/{id}")
-    public String detail(@PathVariable Long id, HttpServletRequest request, Model model){
+    @GetMapping("/detail/{receiver}")
+    public String detail(@PathVariable String receiver, HttpServletRequest request, Model model){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
-        Conversation conversation = conversationRepository.findBySenderIdAndReceiverId(compte.getId(),id);
-        Conversation conversation2 = conversationRepository.findBySenderIdAndReceiverId(id,compte.getId());
-        List<Conversation> lists = conversationRepository.findAllBySenderIdOrReceiverId(compte.getId(),compte.getId(),Sort.by(Sort.Direction.DESC,"id"));
+        Compte compte1 = compteRepository.getOne(compteService.findByUsername(receiver).getId());
+        Conversation conversation = conversationRepository.findBySenderOrReceiver(compte.getUsername(),compte1.getUsername());
+        List<Conversation> lists = conversationRepository.findAllByComptes_Id(compte.getId(),Sort.by(Sort.Direction.DESC,"id"));
         List<Message> messages = new ArrayList<>();
         if (conversation != null){
             model.addAttribute("conversation",conversation);
             messages.addAll(conversation.getMessages());
-            System.out.println("c'est moi");
-
-        }else if (conversation2 != null){
-            model.addAttribute("conversation",conversation2);
-            messages.addAll(conversation2.getMessages());
-            System.out.println("c'est moi");
-        }else  {
+        }else {
             Conversation conversation1 = new Conversation();
-            conversation1.setReceiver(compteRepository.getOne(id).getUsername());
-            conversation1.setReceiverId(id);
-            conversation1.setSenderId(compte.getId());
             conversation1.setSender(compte.getUsername());
+            conversation1.setReceiver(receiver);
+            conversation1.setComptes(Arrays.asList(compte,compte1));
             conversationRepository.save(conversation1);
-            model.addAttribute("conversation", conversation1);
+            model.addAttribute("conversation",conversation1);
         }
-
+        model.addAttribute("conversation",conversation);
+        System.out.println("c'est moi");
         model.addAttribute("compte",compte);
         model.addAttribute("message",new Message());
         model.addAttribute("messages", messages);
@@ -92,17 +90,35 @@ public class ConversationController {
     }
 
     @PostMapping("/new/message/{id}")
-    public String newMessage(Message message, @PathVariable Long id, HttpServletRequest request){
+    public String newMessage(Message message, @PathVariable Long id, HttpServletRequest request, @RequestParam("file") MultipartFile file){
         Date date = new Date();
         DateFormat format = new SimpleDateFormat("hh:mm");
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         Conversation conversation = conversationRepository.getOne(id);
+        if (!(file.isEmpty())){
+
+            try {
+
+                if (!(file.isEmpty())) {
+                    // Get the file and save it somewhere
+                    byte[] bytes = file.getBytes();
+                    Path path = Paths.get( file + file.getOriginalFilename());
+                    Files.write(path, bytes);
+                    message.setFichier("/downloadFile/"+file.getOriginalFilename());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else {
+
+
         message.setSender(compte.getUsername());
+        }
         message.setStatus(false);
         message.setTime(format.format(date));
         message.setConversation(conversation);
         messageRepository.save(message);
-        return "redirect:/admin/conversation/detail/"+conversation.getReceiverId();
+        return "redirect:/admin/conversation/detail/"+conversation.getReceiver();
     }
 }

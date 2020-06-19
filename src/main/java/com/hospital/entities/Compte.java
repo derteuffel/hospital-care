@@ -12,6 +12,7 @@ import org.hibernate.annotations.Cache;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "compte")
@@ -46,13 +47,8 @@ public class Compte implements Serializable {
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
-   /* @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "comptes_personnels",
-            joinColumns = @JoinColumn(
-                    name = "compte_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "personnel_id", referencedColumnName = "id"))*/
+    @ManyToMany(mappedBy = "comptes")
+    private List<Conversation> conversations;
 
 
 
