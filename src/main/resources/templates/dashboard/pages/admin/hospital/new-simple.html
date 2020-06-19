@@ -201,6 +201,11 @@
                     <span class="error" th:errors="*{birthDate}"></span>
                 </div>
                 <div class="form-group">
+                    <label th:for="name">Qualificatif <span style="font-size: 11px; font-style: italic">(Qualificatif)</span></label>
+                    <input class="form-control" type="text" th:field="*{qualifier}" required/>
+                    <span class="error" th:errors="*{qualifier}"></span>
+                </div>
+                <div class="form-group">
                     <label th:for="weight">Weight <span style="font-size: 11px; font-style: italic">(kg)</span></label>
                     <input class="form-control" type="text" th:field="*{weight}" />
                     <span class="error" th:errors="*{weight}"></span>
@@ -259,7 +264,7 @@
                     <input type="file" name="file" class="form-control-file">
                 </div>
                 <div class="m-t-20 text-center">
-                    <a th:href="@{/admin/staff/lists/doctors/}+${hospital.id}" class="btn btn-secondary submit-btn">Annuler</a>
+                    <a th:href="@{/admin/staff/lists/simples/}+${hospital.id}" class="btn btn-secondary submit-btn">Annuler</a>
 
                     <button class="btn btn-primary submit-btn">Create other staff</button>
                 </div>
