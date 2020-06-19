@@ -40,7 +40,6 @@ public class PersonnelHelper {
     @Size(min = 1, max = 1, message = "rhesus must only be one character")
     private String rhesus;
 
-    @NotNull(message = "gender must not be null")
     private String gender;
 
     // @NotBlank(message = "weight must not be null")

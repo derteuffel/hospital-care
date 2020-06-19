@@ -56,56 +56,6 @@ public class ConsultationController {
     @Autowired
     private CompteService compteService;
 
-/*  @GetMapping("/lists")
-    public String findAll(Model model){
-        model.addAttribute("consultations", consultationRepository.findAll());
-        return "consultation/consultations";
-    }
-    @GetMapping("/form")
-    public String form(Model model, Long id){
-        List<DosMedical> dosMedicals = dosMedicalRepository.findAll();
-        model.addAttribute("consultation", new Consultation());
-        model.addAttribute("dos", dosMedicals);
-        return  "consultation/form";
-    }
-    @PostMapping("/save")
-    public String saveConsultation(@Valid Consultation consultation, Long id, HttpSession httpSession){
-        DosMedical dos = dosMedicalRepository.findById(id).get();
-        consultation.setDosMedical(dos);
-        httpSession.setAttribute("id", id);
-        consultationRepository.save(consultation);
-        return "redirect:/hospital-care/dossier-medical/"+httpSession.getAttribute("id");
-    }
-    @GetMapping("/update/{id}")
-    public String updateConsultation(Model model, @PathVariable Long id){
-        Consultation consultation = consultationRepository.getOne(id);
-        model.addAttribute("consultation", consultation);
-        return "consultation/edit";
-    }
-    @PostMapping("/update/{id}")
-    public String update(@Valid Consultation consultation, @PathVariable("id") Long id,
-                         BindingResult bindingResult, HttpSession session, Model model){
-        DosMedical dos = dosMedicalRepository.getOne((Long)session.getAttribute("id"));
-        consultationRepository.save(consultation);
-        model.addAttribute("consultations", consultationRepository.findAll());
-        return "redirect: /hospital-care/dossier-medical/"+consultation.getId();
-    }
-    @GetMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Long id){
-        Consultation consultation = consultationRepository.findById(id).get();
-        model.addAttribute("consultation", consultation);
-        return  "consultation/detail";
-    }
-    @GetMapping("/delete/{id}")
-    public String deleteConsultation(Model model, @PathVariable("id") Long id, HttpSession session){
-        Consultation consultation = consultationRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("Invalid consultation id :" +id));
-        System.out.println("consultation id"+consultation.getId());
-        DosMedical dos = dosMedicalRepository.getOne((Long)session.getAttribute("id"));
-        consultationRepository.delete(consultation);
-        model.addAttribute("consultations", consultationRepository.findAll());
-        return "redirect: /hospital-care/dossier-medical/"+dos.getId();
-    }*/
 
 
     /** owner-developer branch code **/
@@ -269,13 +219,6 @@ public class ConsultationController {
         return  "redirect:/admin/consultation/medical-record/"+consultationHelper.getCode();
     }
 
-
-    /** Research a consultation */
-   /* @GetMapping(value = "research/")
-    public Optional<Consultation> getMedicalRecord(@PathVariable Long id){
-        return consultationRepository.findById(id);
-    }
-    }*/
 
 
     /** cancel a consultation */

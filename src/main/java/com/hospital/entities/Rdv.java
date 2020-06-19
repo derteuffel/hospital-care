@@ -1,5 +1,6 @@
 package com.hospital.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,6 +28,14 @@ public class Rdv implements Serializable {
     private Long compteId;
     @NotNull
     private Long personnelId;
+
+//    @ManyToOne
+//    @JsonIgnoreProperties("rdvs")
+//    private DosMedical dosMedical;
+//
+//    @ManyToOne
+//    @JsonIgnoreProperties("rdvs")
+//    private Personnel personnel;
 
     private Boolean status;
 

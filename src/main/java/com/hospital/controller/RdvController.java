@@ -2,6 +2,7 @@ package com.hospital.controller;
 
 import com.hospital.entities.*;
 import com.hospital.repository.CompteRepository;
+import com.hospital.repository.DosMedicalRepository;
 import com.hospital.repository.PersonnelRepository;
 import com.hospital.repository.RdvRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -32,7 +34,11 @@ public class RdvController {
     RdvRepository rdvRepository;
 
     @Autowired
+    private DosMedicalRepository dosMedical;
+
+    @Autowired
     private PersonnelRepository per;
+
 
     @GetMapping("/add")
     public ModelAndView showform(){
@@ -66,100 +72,125 @@ public class RdvController {
         return "redirect:/admin/rdv/all";
     }
 
-    @ResponseBody
-    @GetMapping("/all")
-    public ModelAndView getAllRdv(){
+/*
+      @GetMapping("/add")
+      public String form(Model model){
+          List<Personnel> personnels = per.findAllByFunction("DOCTOR");
+          List<DosMedical>dos = dosMedical.findAll();
+          model.addAttribute("dos", dos);
+          model.addAttribute("staffs", personnels);
+          model.addAttribute("rdv", new Rdv());
+          return "dashboard/pages/admin/appointment/add-rdv";
+      }
 
-        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/rdv-list");
-        List<Irdvjointure> rdvs = rdvRepository.findAllWithJoin();
-        modelAndView.addObject("appointments",rdvs);
-        return modelAndView;
-    }
-    @PostMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
-        try {
-            rdvRepository.deleteById(id);
-            redirAttrs.addFlashAttribute("message", "Successfully deleted");
-            return "redirect:/admin/rdv/all";
-        }catch (Exception e){
-            redirAttrs.addFlashAttribute("error", "Error deleting this hospital");
-            return "redirect:/admin/rdv/all";
-        }
-    }
+        @PostMapping("/add")
+        public String save(@Valid Rdv rdv, String code, Long id){
 
-    @GetMapping("/edit/{id}")
-    public ModelAndView showEditForm(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
-
-        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/edit-rdv");
-        List<Compte> comptes= compteRepository.findAll();
-        List<Compte> patients = comptes.stream()
-                .filter(d -> d.getRoles().stream().findFirst().get().getId() == 2)
-                .collect(Collectors.toList());
-        List<Compte> medecins = comptes.stream()
-                .filter(d -> d.getRoles().stream().findFirst().get().getId() == 1)
-                .collect(Collectors.toList());
-        Rdv rdv = rdvRepository.findById(id).get();
-        modelAndView.addObject("rdv",rdv);
-        modelAndView.addObject("patients", patients);
-        modelAndView.addObject("medecins", medecins);
-        return modelAndView;
-    }
-
-    @PostMapping("/edit/{id}")
-    public String updateHospital(@PathVariable("id") Long id, @Valid Rdv rdv, Errors errors, RedirectAttributes redirAttrs){
-        if (errors.hasErrors()) {
-            return "dashboard/pages/admin/appointment/edit-rdv";
-        }
-        rdvRepository.save(rdv);
-        redirAttrs.addFlashAttribute("message", "Successfully edited");
-        return "redirect:/admin/rdv/all";
-    }
-
-    @GetMapping("/active/{id}")
-    public String active(@PathVariable Long id, HttpSession session){
-        List<Rdv>rdvs = rdvRepository.findByStatus(true);
-        Rdv rdv = rdvRepository.getOne(id);
-        if (rdv.getStatus()== true){
+            Personnel personnel = per.getOne(id);
+            DosMedical dos = dosMedical.findByCode(code);
             rdv.setStatus(false);
-        }else {
-            rdv.setStatus(true);
+            rdv.setDosMedical(dos);
+            rdv.setPersonnel(personnel);
+            rdvRepository.save(rdv);
+            return "redirect:/admin/rdv/all";
         }
+*/
 
-        rdvRepository.save(rdv);
-        return "redirect:/admin/rdv/all" ;
-    }
 
-    @GetMapping("/active")
-    public String findAllStatusActive(Model model){
-        List<Rdv>rdvs = rdvRepository.findByStatus(true);
-        List<Rdv>rdvs2 = rdvRepository.findAll();
-        List<Rdv>rdvs1 = new ArrayList<>();
-        for(Rdv rdv : rdvs){
-            for (int i=0; i<rdvs2.size(); i++ ){
-                if (rdv.getId().equals(rdvs2.get(i).getId())){
-                    rdvs1.add(rdv);
-                }
+        @ResponseBody
+        @GetMapping("/all")
+        public ModelAndView getAllRdv(){
+
+            ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/rdv-list");
+            List<Irdvjointure> rdvs = rdvRepository.findAllWithJoin();
+            modelAndView.addObject("appointments",rdvs);
+            return modelAndView;
+        }
+        @PostMapping("/delete/{id}")
+        public String delete(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
+            try {
+                rdvRepository.deleteById(id);
+                redirAttrs.addFlashAttribute("message", "Successfully deleted");
+                return "redirect:/admin/rdv/all";
+            }catch (Exception e){
+                redirAttrs.addFlashAttribute("error", "Error deleting this hospital");
+                return "redirect:/admin/rdv/all";
             }
         }
-        model.addAttribute("appointments", rdvs1);
-        return "dashboard/pages/admin/appointment/rdv-actif";
-    }
 
-    @GetMapping("/inactive")
-    public String findAllStatusInacctive(Model model){
+        @GetMapping("/edit/{id}")
+        public ModelAndView showEditForm(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
 
-        List<Rdv>rdvs = rdvRepository.findByStatus(false);
-        List<Rdv>rdvs2 = rdvRepository.findAll();
-        List<Rdv>rdvs1 = new ArrayList<>();
-        for(Rdv rdv : rdvs){
-            for (int i=0; i<rdvs2.size(); i++ ){
-                if (rdv.getId().equals(rdvs2.get(i).getId())){
-                    rdvs1.add(rdv);
+            ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/edit-rdv");
+            List<Compte> comptes= compteRepository.findAll();
+            List<Compte> patients = comptes.stream()
+                    .filter(d -> d.getRoles().stream().findFirst().get().getId() == 2)
+                    .collect(Collectors.toList());
+            List<Compte> medecins = comptes.stream()
+                    .filter(d -> d.getRoles().stream().findFirst().get().getId() == 1)
+                    .collect(Collectors.toList());
+            Rdv rdv = rdvRepository.findById(id).get();
+            modelAndView.addObject("rdv",rdv);
+            modelAndView.addObject("patients", patients);
+            modelAndView.addObject("medecins", medecins);
+            return modelAndView;
+        }
+
+        @PostMapping("/edit/{id}")
+        public String updateHospital(@PathVariable("id") Long id, @Valid Rdv rdv, Errors errors, RedirectAttributes redirAttrs){
+            if (errors.hasErrors()) {
+                return "dashboard/pages/admin/appointment/edit-rdv";
+            }
+            rdvRepository.save(rdv);
+            redirAttrs.addFlashAttribute("message", "Successfully edited");
+            return "redirect:/admin/rdv/all";
+        }
+
+        @GetMapping("/active/{id}")
+        public String active(@PathVariable Long id, HttpSession session){
+            List<Rdv>rdvs = rdvRepository.findByStatus(true);
+            Rdv rdv = rdvRepository.getOne(id);
+            if (rdv.getStatus()== true){
+                rdv.setStatus(false);
+            }else {
+                rdv.setStatus(true);
+            }
+
+            rdvRepository.save(rdv);
+            return "redirect:/admin/rdv/all" ;
+        }
+
+        @GetMapping("/active")
+        public String findAllStatusActive(Model model){
+            List<Rdv>rdvs = rdvRepository.findByStatus(true);
+            List<Rdv>rdvs2 = rdvRepository.findAll();
+            List<Rdv>rdvs1 = new ArrayList<>();
+            for(Rdv rdv : rdvs){
+                for (int i=0; i<rdvs2.size(); i++ ){
+                    if (rdv.getId().equals(rdvs2.get(i).getId())){
+                        rdvs1.add(rdv);
+                    }
                 }
             }
+            model.addAttribute("appointments", rdvs1);
+            return "dashboard/pages/admin/appointment/rdv-actif";
         }
-        model.addAttribute("appointments", rdvs1);
-        return "dashboard/pages/admin/appointment/rdv-inactif";
-    }
+
+        @GetMapping("/inactive")
+        public String findAllStatusInacctive(Model model){
+
+            List<Rdv>rdvs = rdvRepository.findByStatus(false);
+            List<Rdv>rdvs2 = rdvRepository.findAll();
+            List<Rdv>rdvs1 = new ArrayList<>();
+            for(Rdv rdv : rdvs){
+                for (int i=0; i<rdvs2.size(); i++ ){
+                    if (rdv.getId().equals(rdvs2.get(i).getId())){
+                        rdvs1.add(rdv);
+                    }
+                }
+            }
+            model.addAttribute("appointments", rdvs1);
+            return "dashboard/pages/admin/appointment/rdv-inactif";
+        }
 
 }

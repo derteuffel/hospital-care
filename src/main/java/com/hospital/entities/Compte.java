@@ -3,7 +3,11 @@ package com.hospital.entities;
 import com.hospital.enums.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,6 +30,8 @@ public class Compte implements Serializable {
 
     @OneToOne
     private Personnel personnel;
+
+
 
     //@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 
@@ -136,4 +142,5 @@ public class Compte implements Serializable {
     public void setPersonnel(Personnel personnel) {
         this.personnel = personnel;
     }
+
 }

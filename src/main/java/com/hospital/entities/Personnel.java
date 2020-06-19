@@ -2,15 +2,14 @@ package com.hospital.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Cache;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -42,12 +41,17 @@ public class Personnel implements Serializable {
 
     @OneToMany(mappedBy = "personnel")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Consultation> consultations;
 
     @ManyToOne
     @JsonIgnoreProperties("personnels")
     private Hospital hospital;
+
+    @OneToMany(mappedBy = "personnel")
+    @OnDelete(action= OnDeleteAction.NO_ACTION)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<Rdv> rdvs;
 
     public Personnel() {
     }
@@ -179,5 +183,13 @@ public class Personnel implements Serializable {
 
     public void setHospital(Hospital hospital) {
         this.hospital = hospital;
+    }
+
+    public Collection<Rdv> getRdvs() {
+        return rdvs;
+    }
+
+    public void setRdvs(Collection<Rdv> rdvs) {
+        this.rdvs = rdvs;
     }
 }

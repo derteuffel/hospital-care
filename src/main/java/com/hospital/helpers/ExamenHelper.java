@@ -46,7 +46,10 @@ public class ExamenHelper {
 
     }
 
-    public ExamenHelper(String name, String testType, Date deliverDate, Date dateOfTesting, String results, String description, Long idConsultation,String hospitalName, String time) {
+    public ExamenHelper(String name, String testType,
+                        Date deliverDate, Date dateOfTesting, String results,
+                        String description, Long idConsultation,
+                        String hospitalName, String time) {
         this.name = name;
         this.testType = testType;
         this.deliverDate = deliverDate;
@@ -56,6 +59,13 @@ public class ExamenHelper {
         this.idConsultation = idConsultation;
         this.hospitalName = hospitalName;
         this.time = time;
+    }
+
+    public static ExamenHelper getExamenHelperInstance(Examen exam){
+        return new ExamenHelper(exam.getName(),exam.getTestType(),
+                exam.getDeliverDate(),exam.getDateOfTesting(),exam.getResults(),
+                exam.getDescription(),exam.getConsultation().getId(),
+                exam.getHospital().getName(), exam.getTime());
     }
 
     public Examen getExamInstance(Hospital hospital, Consultation consultation){
@@ -72,10 +82,7 @@ public class ExamenHelper {
         return examen;
     }
 
-    public static ExamenHelper getExamenHelperInstance(Examen exam){
-        return new ExamenHelper(exam.getName(),exam.getTestType(),exam.getDeliverDate(),exam.getDateOfTesting(),exam.getResults(),
-                exam.getDescription(),exam.getConsultation().getId(),exam.getHospital().getName(), exam.getTime());
-    }
+
 
     public String getResults() {
         return results;
