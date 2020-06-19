@@ -2,6 +2,7 @@ package com.hospital.controller;
 
 import com.hospital.entities.*;
 import com.hospital.repository.CompteRepository;
+import com.hospital.repository.PersonnelRepository;
 import com.hospital.repository.RdvRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -28,6 +30,9 @@ public class RdvController {
 
     @Autowired
     RdvRepository rdvRepository;
+
+    @Autowired
+    private PersonnelRepository per;
 
     @GetMapping("/add")
     public ModelAndView showform(){
@@ -112,6 +117,7 @@ public class RdvController {
 
     @GetMapping("/active/{id}")
     public String active(@PathVariable Long id, HttpSession session){
+        List<Rdv>rdvs = rdvRepository.findByStatus(true);
         Rdv rdv = rdvRepository.getOne(id);
         if (rdv.getStatus()== true){
             rdv.setStatus(false);
@@ -123,5 +129,37 @@ public class RdvController {
         return "redirect:/admin/rdv/all" ;
     }
 
+    @GetMapping("/active")
+    public String findAllStatusActive(Model model){
+        List<Rdv>rdvs = rdvRepository.findByStatus(true);
+        List<Rdv>rdvs2 = rdvRepository.findAll();
+        List<Rdv>rdvs1 = new ArrayList<>();
+        for(Rdv rdv : rdvs){
+            for (int i=0; i<rdvs2.size(); i++ ){
+                if (rdv.getId().equals(rdvs2.get(i).getId())){
+                    rdvs1.add(rdv);
+                }
+            }
+        }
+        model.addAttribute("appointments", rdvs1);
+        return "dashboard/pages/admin/appointment/rdv-actif";
+    }
+
+    @GetMapping("/inactive")
+    public String findAllStatusInacctive(Model model){
+
+        List<Rdv>rdvs = rdvRepository.findByStatus(false);
+        List<Rdv>rdvs2 = rdvRepository.findAll();
+        List<Rdv>rdvs1 = new ArrayList<>();
+        for(Rdv rdv : rdvs){
+            for (int i=0; i<rdvs2.size(); i++ ){
+                if (rdv.getId().equals(rdvs2.get(i).getId())){
+                    rdvs1.add(rdv);
+                }
+            }
+        }
+        model.addAttribute("appointments", rdvs1);
+        return "dashboard/pages/admin/appointment/rdv-inactif";
+    }
 
 }
