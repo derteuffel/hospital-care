@@ -18,11 +18,18 @@ public class Conversation implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-
-    private Long senderId;
-    private Long receiverId;
-    private String receiver;
     private String sender;
+    private String receiver;
+
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "conversations_comptes",
+            joinColumns = @JoinColumn(
+                    name = "compte_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "conversation_id", referencedColumnName = "id"))
+    private List<Compte> comptes;
 
     @JsonIgnoreProperties("conversation")
     @OneToMany(mappedBy = "conversation")
@@ -30,14 +37,12 @@ public class Conversation implements Serializable {
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<Message> messages;
 
-    public Conversation(Long senderId, Long receiverId, String receiver, String sender) {
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.receiver = receiver;
-        this.sender = sender;
-    }
 
     public Conversation() {
+    }
+
+    public Conversation(String sender) {
+        this.sender = sender;
     }
 
     public Long getId() {
@@ -48,20 +53,20 @@ public class Conversation implements Serializable {
         this.id = id;
     }
 
-    public Long getSenderId() {
-        return senderId;
+    public String getSender() {
+        return sender;
     }
 
-    public void setSenderId(Long senderId) {
-        this.senderId = senderId;
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
-    public Long getReceiverId() {
-        return receiverId;
+    public List<Compte> getComptes() {
+        return comptes;
     }
 
-    public void setReceiverId(Long receiverId) {
-        this.receiverId = receiverId;
+    public void setComptes(List<Compte> comptes) {
+        this.comptes = comptes;
     }
 
     public List<Message> getMessages() {
@@ -70,21 +75,5 @@ public class Conversation implements Serializable {
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
-    }
-
-    public String getSender() {
-        return sender;
-    }
-
-    public void setSender(String sender) {
-        this.sender = sender;
     }
 }

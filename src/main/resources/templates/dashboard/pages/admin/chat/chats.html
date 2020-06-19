@@ -22,7 +22,7 @@
     <div class="col-xl-12 col-md-12 col-sm-12">
         <ul th:each="item : ${lists}">
             <li>
-                <a th:href="@{/admin/conversation/detail/}+${item.receiverId}"><span class="chat-avatar-sm user-img"><img th:src="@{/assets/img/user.jpg}" alt="" class="rounded-circle"></span> <span th:if="${compte.id} == ${item.senderId}" th:text="${item.receiver}"></span><span th:unless="${compte.id} == ${item.senderId}" th:text="${item.sender}"></span><span class="badge badge-pill bg-danger float-right">1</span></a>
+                <a th:href="@{/admin/conversation/detail/}+${item.receiver}"><span class="chat-avatar-sm user-img"><img th:src="@{/assets/img/user.jpg}" alt="" class="rounded-circle"></span> <span th:if="${compte.username} == ${item.sender}" th:text="${item.receiver}"></span><span th:unless="${compte.username} == ${item.sender}" th:text="${item.sender}"></span><span class="badge badge-pill bg-danger float-right">1</span></a>
             </li>
             <hr>
         </ul>
@@ -33,7 +33,7 @@
                 <div class="modal-body text-center">
                     <ul th:each="item : ${comptes}">
                         <li>
-                            <a th:href="@{/admin/conversation/detail/}+${item.id}" ><span class="chat-avatar-sm user-img"><img th:src="${item.avatar}" alt="" class="rounded-circle"></span><span th:text="${item.personnel.firstName+' '+item.personnel.lastName}"></span></a>
+                            <a th:href="@{/admin/conversation/detail/}+${item.username}" ><span class="chat-avatar-sm user-img"><img th:src="${item.avatar}" alt="" class="rounded-circle"></span><span th:text="${item.personnel.firstName+' '+item.personnel.lastName}"></span></a>
                         </li>
                         <hr>
                     </ul>
