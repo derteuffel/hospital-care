@@ -59,11 +59,6 @@ public class DosMedical implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Consultation>consultations;
 
-    @OneToMany(mappedBy = "dosMedical")
-    @OnDelete(action= OnDeleteAction.NO_ACTION)
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JsonIgnoreProperties("dosMedical")
-    private Collection<Rdv> rdvs;
 
 
 
@@ -192,11 +187,5 @@ public class DosMedical implements Serializable {
         this.sex = sex;
     }
 
-    public Collection<Rdv> getRdvs() {
-        return rdvs;
-    }
 
-    public void setRdvs(Collection<Rdv> rdvs) {
-        this.rdvs = rdvs;
-    }
 }

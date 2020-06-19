@@ -48,10 +48,6 @@ public class Personnel implements Serializable {
     @JsonIgnoreProperties("personnels")
     private Hospital hospital;
 
-    @OneToMany(mappedBy = "personnel")
-    @OnDelete(action= OnDeleteAction.NO_ACTION)
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Collection<Rdv> rdvs;
 
     public Personnel() {
     }
@@ -185,11 +181,5 @@ public class Personnel implements Serializable {
         this.hospital = hospital;
     }
 
-    public Collection<Rdv> getRdvs() {
-        return rdvs;
-    }
 
-    public void setRdvs(Collection<Rdv> rdvs) {
-        this.rdvs = rdvs;
-    }
 }
