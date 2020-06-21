@@ -7,20 +7,23 @@
 </head>
 <body>
 <div class="content" layout:fragment="content">
-
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin/rdv/account}">Rendez-vous</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Rendez-vous actifs</li>
+        </ol>
+    </nav>
     <div class="row">
         <div class="col-12 col-md-6 col-lg-8 col-xl-12">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title d-inline-block">Rdv Actifs</h4>
-                </div>
+
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table mb-0">
+                        <table class="table table-border table-striped custom-table datatable mb-0">
                             <thead class="d-none">
                             <tr>
-                               <!-- <th>Identifiant du patient</th>
-                                <th>Nom du docteur</th>-->
+                                <th>Nom du patient</th>
+                                <th>Nom du docteur</th>
                                 <th>Heure</th>
                                 <th>Motif</th>
                                 <th>Status</th>
@@ -28,14 +31,12 @@
                             </thead>
                             <tbody>
                             <tr th:each="rdv : ${appointments}">
-                               <!-- <td style="min-width: 200px;" >
-                                    <a class="avatar" href="profile.html">B</a>
-                                    <h2><a href="profile.html" th:text="${{rdv.getUsername()}}"></a></h2>
+                                <td style="min-width: 200px;" >
+                                    <p><a href="#" th:text="${rdv.patient}"></a></p>
                                 </td>
                                 <td>
-                                    <h5 class="time-title p-0">rdv avec</h5>
-                                    <p th:text="${{rdv.getPersonnel()}}"></p>
-                                </td>-->
+                                    <p th:text="${rdv.doctor}"></p>
+                                </td>
                                 <td>
                                     <h5 class="time-title p-0">Heure</h5>
                                     <p th:text="${{rdv.getDate()}}"></p>

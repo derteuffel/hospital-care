@@ -30,6 +30,8 @@
                                 <div class="row">
                                     <div class="col-md-5">
                                         <div class="profile-info-left">
+                                            <h3 class="user-name m-t-0 mb-0"><span th:text="${personnel.hospital.name}"></span></h3>
+                                            <hr>
                                             <h3 class="user-name m-t-0 mb-0">
                                                 <span th:text="${personnel.lastName}" ></span>
                                                 <span th:text="${personnel.firstName}"></span>
@@ -51,8 +53,16 @@
                                             </li>
                                             <li>
                                                 <span class="title">Birthday:</span>
-                                                <span class="text">Ici date de naissance</span>
-                                                <!--<span class="text" th:text="${#dates.format(personnel.birthDate,'dd-MM')}"></span>-->
+                                                <span th:if="${personnel.birthDate}!= null" class="text" th:text="${personnel.birthDate}">Ici date de naissance</span>
+                                                <span th:unless="${personnel.birthDate}!= null" class="text" >Non definie</span>
+                                            </li>
+                                            <li>
+                                                <span class="title">Age:</span>
+                                                <span class="text"th:text="${personnel.age}"></span>
+                                            </li>
+                                            <li>
+                                                <span class="title">Ville:</span>
+                                                <span class="text"th:text="${personnel.city}"></span>
                                             </li>
                                             <li>
                                                 <span class="title">Address:</span>
@@ -60,7 +70,8 @@
                                             </li>
                                             <li>
                                                 <span class="title">Gender:</span>
-                                                <span class="text" th:text="${personnel.gender}"></span>
+                                                <span th:if="${personnel.gender}=='M'" class="text" >MASCULIN</span>
+                                                <span th:unless="${personnel.gender}=='M'" class="text" >FEMININ</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -91,7 +102,7 @@
                                                 <div class="experience-content">
                                                     <div class="timeline-content">
 
-                                                        <a href="#" class="name">
+                                                        <a th:href="@{/admin/consultation/doctor/}+${personnel.id}" class="name">
                                                             <span>Vous avez </span>
                                                             <span th:text="${personnel.getConsultations().size()}"></span>
                                                             <span>consultation(s)</span>
@@ -104,24 +115,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="card-box mb-0">
-                                    <h3 class="card-title">Examens</h3>
-                                    <div class="experience-box">
-                                        <ul class="experience-list">
-                                            <li>
-                                                <div class="experience-user">
-                                                    <div class="before-circle"></div>
-                                                </div>
-                                                <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <a href="#/" class="name" ></a>
-                                                        <span class="time"></span>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+
 
                                 <div class="card-box mb-0">
                                     <h3 class="card-title">Appointments</h3>
@@ -131,35 +125,19 @@
                                                 <div class="experience-user">
                                                     <div class="before-circle"></div>
                                                 </div>
-                                                <div class="experience-content" th:each="rdv: ${personnel.appointments}">
+                                                <div class="experience-content">
                                                     <div class="timeline-content">
-                                                        <a href="#/" class="name" th:text="${rdv.patient}"></a>
-                                                        <span class="time" th:text="${rdv.date}"></span>
+
+                                                        <a th:href="@{/admin/rdv/account}" class="name">
+                                                            <span>Vous avez </span>
+                                                            <span th:text="${#lists.size(appointments)}"></span>
+                                                            <span>Rendez-vous(s)</span>
+                                                        </a>
+                                                        <div></div>
+                                                        <span class="time"></span>
                                                     </div>
                                                 </div>
                                             </li>
-                                         <!--   <li>
-                                                <div class="experience-user">
-                                                    <div class="before-circle"></div>
-                                                </div>
-                                                <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <a href="#/" class="name">Consultant Gynecologist</a>
-                                                        <span class="time">Jan 2009 - Present (6 years 1 month)</span>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="experience-user">
-                                                    <div class="before-circle"></div>
-                                                </div>
-                                                <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <a href="#/" class="name">Consultant Gynecologist</a>
-                                                        <span class="time">Jan 2004 - Present (5 years 2 months)</span>
-                                                    </div>
-                                                </div>
-                                            </li>-->
                                         </ul>
                                     </div>
                                 </div>

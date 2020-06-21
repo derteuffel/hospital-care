@@ -50,6 +50,8 @@ public class Compte implements Serializable {
 
     @ManyToMany(mappedBy = "comptes")
     private List<Conversation> conversations;
+    @ManyToMany(mappedBy = "comptes")
+    private List<Rdv> rdvs;
 
 
 

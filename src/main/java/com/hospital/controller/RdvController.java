@@ -5,7 +5,9 @@ import com.hospital.repository.CompteRepository;
 import com.hospital.repository.DosMedicalRepository;
 import com.hospital.repository.PersonnelRepository;
 import com.hospital.repository.RdvRepository;
+import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,6 +35,9 @@ public class RdvController {
 
     @Autowired
     RdvRepository rdvRepository;
+
+    @Autowired
+    private CompteService compteService;
 
     @Autowired
     private DosMedicalRepository dosMedical;
@@ -98,14 +104,30 @@ public class RdvController {
 
 
         @ResponseBody
-        @GetMapping("/all")
-        public ModelAndView getAllRdv(){
+        @GetMapping("/account")
+        public ModelAndView getAllRdv(HttpServletRequest request){
 
-            ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/rdv-list");
-            List<Irdvjointure> rdvs = rdvRepository.findAllWithJoin();
+            Principal principal =  request.getUserPrincipal();
+            Compte compte = compteService.findByUsername(principal.getName());
+
+            ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/rdv-list");
+            List<Rdv> rdvs = rdvRepository.findAllByComptes_Id(compte.getId(),Sort.by(Sort.Direction.DESC, "id"));
             modelAndView.addObject("appointments",rdvs);
             return modelAndView;
         }
+
+    @ResponseBody
+    @GetMapping("/all")
+    public ModelAndView getAllRdvs(HttpServletRequest request){
+
+        Principal principal =  request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+
+        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/rdv-list");
+        List<Rdv> rdvs = rdvRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        modelAndView.addObject("appointments",rdvs);
+        return modelAndView;
+    }
         @PostMapping("/delete/{id}")
         public String delete(@PathVariable("id") Long id,RedirectAttributes redirAttrs){
             try {
@@ -148,7 +170,6 @@ public class RdvController {
 
         @GetMapping("/active/{id}")
         public String active(@PathVariable Long id, HttpSession session){
-            List<Rdv>rdvs = rdvRepository.findByStatus(true);
             Rdv rdv = rdvRepository.getOne(id);
             if (rdv.getStatus()== true){
                 rdv.setStatus(false);
@@ -161,35 +182,21 @@ public class RdvController {
         }
 
         @GetMapping("/active")
-        public String findAllStatusActive(Model model){
-            List<Rdv>rdvs = rdvRepository.findByStatus(true);
-            List<Rdv>rdvs2 = rdvRepository.findAll();
-            List<Rdv>rdvs1 = new ArrayList<>();
-            for(Rdv rdv : rdvs){
-                for (int i=0; i<rdvs2.size(); i++ ){
-                    if (rdv.getId().equals(rdvs2.get(i).getId())){
-                        rdvs1.add(rdv);
-                    }
-                }
-            }
-            model.addAttribute("appointments", rdvs1);
+        public String findAllStatusActive(Model model,HttpServletRequest request){
+            Principal principal =  request.getUserPrincipal();
+            Compte compte = compteService.findByUsername(principal.getName());
+            List<Rdv> lists = rdvRepository.findAllByStatusAndComptes_Id(true,compte.getId(),Sort.by(Sort.Direction.DESC,"id"));
+            model.addAttribute("appointments", lists);
             return "dashboard/pages/admin/appointment/rdv-actif";
         }
 
         @GetMapping("/inactive")
-        public String findAllStatusInacctive(Model model){
+        public String findAllStatusInacctive(Model model,HttpServletRequest request){
 
-            List<Rdv>rdvs = rdvRepository.findByStatus(false);
-            List<Rdv>rdvs2 = rdvRepository.findAll();
-            List<Rdv>rdvs1 = new ArrayList<>();
-            for(Rdv rdv : rdvs){
-                for (int i=0; i<rdvs2.size(); i++ ){
-                    if (rdv.getId().equals(rdvs2.get(i).getId())){
-                        rdvs1.add(rdv);
-                    }
-                }
-            }
-            model.addAttribute("appointments", rdvs1);
+            Principal principal =  request.getUserPrincipal();
+            Compte compte = compteService.findByUsername(principal.getName());
+            List<Rdv> lists = rdvRepository.findAllByStatusAndComptes_Id(false,compte.getId(),Sort.by(Sort.Direction.DESC,"id"));
+            model.addAttribute("appointments", lists);
             return "dashboard/pages/admin/appointment/rdv-inactif";
         }
 

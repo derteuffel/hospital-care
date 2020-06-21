@@ -7,6 +7,7 @@ import com.hospital.repository.*;
 import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,8 +22,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +46,9 @@ public class PersonnelController {
 
     @Autowired
     private CompteService compteService;
+
+    @Autowired
+    private CompteRepository compteRepository;
 
     @Autowired
     private DosMedicalRepository dosMedicalRepository;
@@ -81,7 +88,7 @@ public class PersonnelController {
     @PostMapping("/create/doctor/{id}")
     public String saveDoctor( @Valid PersonnelHelper form, Model model,
                        BindingResult bindingResult,
-                       @RequestParam("file") MultipartFile file, @PathVariable Long id, HttpSession session){
+                       @RequestParam("file") MultipartFile file, @PathVariable Long id, HttpSession session) throws ParseException {
 
         Hospital hospital = hospitalRepository.getOne(id);
         Personnel persExists = personnelRepository.findByLastNameOrEmailOrPhone(form.getLastName(),
@@ -114,7 +121,11 @@ public class PersonnelController {
             }else {
                 personnel.setAvatar("/img/default.jpeg");
             }
-            Long days = TimeUnit.DAYS.convert(new Date().getTime() - form.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy",Locale.ENGLISH);
+            Date now = sdf.parse(sdf.format(new Date()));
+            Date secondDate = sdf.parse(sdf.format(form.getBirthDate()));
+            long difference = Math.abs(now.getTime()-secondDate.getTime());
+            long days = TimeUnit.DAYS.convert(difference,TimeUnit.MILLISECONDS);
             personnel.setHospital(hospital);
             personnel.setAddress(form.getAddress());
             personnel.setEmail(form.getEmail());
@@ -175,7 +186,7 @@ public class PersonnelController {
     @PostMapping("/create/simple/{id}")
     public String saveSimple( @Valid PersonnelHelper form, Model model,
                               BindingResult bindingResult,
-                              @RequestParam("file") MultipartFile file, @PathVariable Long id, HttpSession session){
+                              @RequestParam("file") MultipartFile file, @PathVariable Long id, HttpSession session) throws ParseException {
 
         Hospital hospital = hospitalRepository.getOne(id);
         Personnel persExists = personnelRepository.findByLastNameOrEmailOrPhone(form.getLastName(),
@@ -208,7 +219,12 @@ public class PersonnelController {
             }else {
                 personnel.setAvatar("/img/default.jpeg");
             }
-            Long days = TimeUnit.DAYS.convert(new Date().getTime() - form.getBirthDate().getTime(),TimeUnit.MILLISECONDS);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy",Locale.ENGLISH);
+            Date now = sdf.parse(sdf.format(new Date()));
+            Date secondDate = sdf.parse(sdf.format(form.getBirthDate()));
+            long difference = Math.abs(now.getTime()-secondDate.getTime());
+            long days = TimeUnit.DAYS.convert(difference,TimeUnit.MILLISECONDS);
             personnel.setHospital(hospital);
             personnel.setAddress(form.getAddress());
             personnel.setEmail(form.getEmail());
@@ -341,9 +357,10 @@ public class PersonnelController {
         Optional<Hospital> hospital =  hospitalRepository.findById(id);
         //Personnel personnel = personnelRepository.findByFunction("DOCTOR");
         Personnel personnel = personnelRepository.getOne(id);
+        Compte compte = compteRepository.findByPersonnel_Id(personnel.getId());
         model.addAttribute("personnel", personnel);
-        model.addAttribute("consultation", consultationRepository.findByHospital(hospital));
-        model.addAttribute("appointments", rdv.findAll());
+        model.addAttribute("consultation", personnel.getConsultations());
+        model.addAttribute("appointments", rdv.findAllByComptes_Id(compte.getId(),Sort.by(Sort.Direction.DESC,"id")));
       return "dashboard/pages/admin/hospital/show-doctor";
 
     }

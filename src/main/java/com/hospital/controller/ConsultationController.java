@@ -7,6 +7,7 @@ import com.hospital.helpers.ConsultationHelper;
 import com.hospital.repository.*;
 import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 
 
@@ -80,6 +81,19 @@ public class ConsultationController {
         model.addAttribute("hospital",hospital.get());
 
         return "dashboard/pages/admin/hospital/consultations";
+    }
+
+    /** Get all consultations in an hospital */
+    @GetMapping(value = "/doctor/{id}")
+    public String getAllConsultationsForDoctor(@PathVariable Long id,Model model){
+        Personnel personnel = personnelRepository.getOne(id);
+        Compte compte = compteRepository.findByPersonnel_Id(personnel.getId());
+        List<Consultation> consultations = consultationRepository.findAllByPersonnel_Id(personnel.getId(),Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("lists", consultations);
+        model.addAttribute("code",compte.getUsername());
+        model.addAttribute("personnel",personnel);
+
+        return "dashboard/pages/admin/personnel/consultations";
     }
 
 

@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "rdv")
@@ -24,10 +25,18 @@ public class Rdv implements Serializable {
     private Date date;
     @NotNull
     private String motif;
-    @NotNull
-    private Long compteId;
-    @NotNull
-    private Long personnelId;
+
+    private String doctor;
+    private String patient;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "rdvs_comptes",
+            joinColumns = @JoinColumn(
+                    name = "compte_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "rdv_id", referencedColumnName = "id"))
+    private List<Compte> comptes;
 
 //    @ManyToOne
 //    @JsonIgnoreProperties("rdvs")
@@ -43,25 +52,18 @@ public class Rdv implements Serializable {
     public Rdv() {
     }
 
-    public Rdv(Date date, String motif, Long compteId, Long personnelId) {
+    public Rdv(Date date, @NotNull String motif, String doctor, String patient, Boolean status) {
         this.date = date;
         this.motif = motif;
-        this.compteId = compteId;
-        this.personnelId = personnelId;
-    }
-
-
-    public Long getCompteId() {
-        return compteId;
+        this.doctor = doctor;
+        this.patient = patient;
+        this.status = status;
     }
 
     public Date getDate() {
         return date;
     }
 
-    public Long getPersonnelId() {
-        return personnelId;
-    }
 
     public Long getId() {
         return id;
@@ -87,15 +89,32 @@ public class Rdv implements Serializable {
         this.motif = motif;
     }
 
-    public void setCompteId(Long compteId) {
-        this.compteId = compteId;
-    }
-
-    public void setPersonnelId(Long personnelId) {
-        this.personnelId = personnelId;
-    }
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public List<Compte> getComptes() {
+        return comptes;
+    }
+
+    public void setComptes(List<Compte> comptes) {
+        this.comptes = comptes;
+    }
+
+    public String getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(String doctor) {
+        this.doctor = doctor;
+    }
+
+    public String getPatient() {
+        return patient;
+    }
+
+    public void setPatient(String patient) {
+        this.patient = patient;
     }
 }
