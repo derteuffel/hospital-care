@@ -20,10 +20,7 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin/conversation")
@@ -66,12 +63,22 @@ public class ConversationController {
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         Compte compte1 = compteRepository.getOne(compteService.findByUsername(receiver).getId());
+        Timer timer = new Timer();
+        int begin = 0;
+        int timeInterval = 2000;
+
         Conversation conversation = conversationRepository.findBySenderOrReceiver(compte.getUsername(),compte1.getUsername());
         List<Conversation> lists = conversationRepository.findAllByComptes_Id(compte.getId(),Sort.by(Sort.Direction.DESC,"id"));
         List<Message> messages = new ArrayList<>();
         if (conversation != null){
             model.addAttribute("conversation",conversation);
-            messages.addAll(conversation.getMessages());
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    messages.addAll(conversation.getMessages());
+                }
+            }, begin,timeInterval);
+
         }else {
             Conversation conversation1 = new Conversation();
             conversation1.setSender(compte.getUsername());

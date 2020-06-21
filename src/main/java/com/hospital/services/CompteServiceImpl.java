@@ -102,6 +102,7 @@ public class CompteServiceImpl implements CompteService {
         compte.setPassword(passwordEncoder.encode(compteRegistrationDto.getPassword()));
         compte.setUsername(compteRegistrationDto.getUsername());
         compte.setStatus(true);
+        compte.setName(dosMedical.getName());
         compteRepository.save(compte);
         dosMedical.setCompte(compte);
         dosMedicalRepository.save(dosMedical);
@@ -138,6 +139,7 @@ public class CompteServiceImpl implements CompteService {
         compte.setPassword(passwordEncoder.encode(personnelHelper.getCode()));
         compte.setUsername(personnelHelper.getCode());
         compte.setStatus(true);
+        compte.setName(personnel.getFirstName());
         compte.setPersonnel(personnel);
         compteRepository.save(compte);
         dosMedical.setCompte(compte);
@@ -157,6 +159,7 @@ public class CompteServiceImpl implements CompteService {
         compte.setPassword(passwordEncoder.encode(personnelHelper.getCode()));
         compte.setUsername(personnelHelper.getCode());
         compte.setStatus(true);
+        compte.setName(personnel.getFirstName());
         compte.setPersonnel(personnel);
         compteRepository.save(compte);
         dosMedical.setCompte(compte);

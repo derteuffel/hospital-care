@@ -27,6 +27,7 @@ public class Compte implements Serializable {
     private String email;
     private String avatar;
     private Boolean status;
+    private String name;
 
 
     @OneToOne
