@@ -92,11 +92,11 @@
                             <p th:text="${{rdv.getDate()}}"></p>
                         </td>
                         <td th:text="${{rdv.getMotif()}}"></td>
-                        <td th:if="${rdv.getStatus()}==true">
+                        <td th:if="${rdv.status}==true">
                             <span class="custom-badge status-green">Active</span>
                             <a th:href="@{/admin/rdv/active/{id}(id=${rdv.id})}"> <i class="fa fa-check-circle"></i></a>
                         </td>
-                        <td th:unless="${rdv.getStatus()}==true">
+                        <td th:unless="${rdv.status}==true">
                             <span class="custom-badge status-red">Inactive</span>
                             <a th:href="@{/admin/rdv/active/{id}(id=${rdv.id})}"><i class="fa fa-check-circle-o"></i></a>
                         </td>

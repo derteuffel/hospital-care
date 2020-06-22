@@ -38,14 +38,6 @@ public class Rdv implements Serializable {
                     name = "rdv_id", referencedColumnName = "id"))
     private List<Compte> comptes;
 
-//    @ManyToOne
-//    @JsonIgnoreProperties("rdvs")
-//    private DosMedical dosMedical;
-//
-//    @ManyToOne
-//    @JsonIgnoreProperties("rdvs")
-//    private Personnel personnel;
-
     private Boolean status;
 
 
@@ -73,9 +65,7 @@ public class Rdv implements Serializable {
         return motif;
     }
 
-    public boolean getStatus(){
-        return status;
-    }
+
 
     public void setId(Long id) {
         this.id = id;
@@ -90,9 +80,6 @@ public class Rdv implements Serializable {
     }
 
 
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
 
     public List<Compte> getComptes() {
         return comptes;
@@ -116,5 +103,13 @@ public class Rdv implements Serializable {
 
     public void setPatient(String patient) {
         this.patient = patient;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }

@@ -171,13 +171,20 @@ public class RdvController {
         @GetMapping("/active/{id}")
         public String active(@PathVariable Long id, HttpSession session){
             Rdv rdv = rdvRepository.getOne(id);
-            if (rdv.getStatus()== true){
-                rdv.setStatus(false);
+            if (rdv.getStatus() != null) {
+                if (rdv.getStatus() == true) {
+                    rdv.setStatus(false);
+                } else {
+                    rdv.setStatus(true);
+                }
+                rdvRepository.save(rdv);
             }else {
-                rdv.setStatus(true);
+                rdv.setStatus(false);
+                rdvRepository.save(rdv);
+                return "redirect:/admin/rdv/active/"+rdv.getId();
             }
 
-            rdvRepository.save(rdv);
+
             return "redirect:/admin/rdv/all" ;
         }
 

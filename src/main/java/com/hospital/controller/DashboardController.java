@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,8 @@ public class DashboardController {
         List<Compte> medecins = comptes.stream()
                 .filter(d -> d.getRoles().stream().findFirst().get().getId() == 1)
                 .collect(Collectors.toList());
-        List<Irdvjointure> rdvs = rdvRepository.findAllWithJoin();
+        List<Irdvjointure> rdvs = new ArrayList<>();
+        //List<Irdvjointure> rdvs = rdvRepository.findAllWithJoin();
         model.addAttribute("patients",patients);
         model.addAttribute("medecins",medecins);
         model.addAttribute("rdvs",rdvs);
