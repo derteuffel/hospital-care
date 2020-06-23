@@ -21,13 +21,7 @@ public class Pharmacy implements Serializable {
 
     private String name;
 
-    private String drug;
-    private Integer quantity;
-    private Double grammage;
-    private String drugType;
-    private Integer stockQuantity;
-    private Double pricingUnit;
-    private Boolean status;
+
 
     @OneToMany(mappedBy = "pharmacy")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
@@ -41,4 +35,9 @@ public class Pharmacy implements Serializable {
 
     @OneToOne
     private Hospital hospital;
+
+    @OneToMany(mappedBy = "pharmacy")
+    @OnDelete(action= OnDeleteAction.NO_ACTION)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<Medicament>medicaments;
 }

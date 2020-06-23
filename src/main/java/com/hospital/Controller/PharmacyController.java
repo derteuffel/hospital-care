@@ -48,14 +48,8 @@ public class PharmacyController {
         Hospital hospital = hospitalRepository.getOne(id);
         Pharmacy pharmacy = new Pharmacy();
         pharmacy.setHospital(hospital);
-        pharmacy.setDrug(pharmacyHelper.getDrug());
-        pharmacy.setStatus(true);
-        pharmacy.setDrugType(pharmacyHelper.getDrugType());
-        pharmacy.setGrammage(pharmacyHelper.getGrammage());
         pharmacy.setName(pharmacyHelper.getName());
-        pharmacy.setQuantity(pharmacyHelper.getQuantity());
-        pharmacy.setPricingUnit(pharmacyHelper.getPricingUnit());
-        pharmacy.setStockQuantity(pharmacyHelper.getStockQuantity());
+
         pharmacyRepository.save(pharmacy);
         return "redirect:/admin/pharmacy/lists/pharmacies/"+hospital.getId() ;
     }
