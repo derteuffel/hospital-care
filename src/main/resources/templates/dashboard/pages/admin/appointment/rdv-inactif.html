@@ -7,6 +7,12 @@
 </head>
 <body>
 <div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin/rdv/account}">Rendez-vous</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Rendez-vous inactifs</li>
+        </ol>
+    </nav>
 
     <div class="row">
         <div class="col-12 col-md-6 col-lg-8 col-xl-12">
