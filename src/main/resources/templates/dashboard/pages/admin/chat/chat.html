@@ -144,7 +144,7 @@
                     </ul>
                     <ul th:each="item : ${lists}">
                         <li>
-                            <a th:href="@{/admin/conversation/detail/}+${item.receiver}"><span class="chat-avatar-sm user-img"><img th:src="@{/assets/img/user.jpg}" alt="" class="rounded-circle"></span> <span th:text="${item.receiver}"></span><span class="badge badge-pill bg-danger float-right">1</span></a>
+                            <a th:href="@{/admin/conversation/detail/}+${item.id}"><span class="chat-avatar-sm user-img"><img th:src="@{/assets/img/user.jpg}" alt="" class="rounded-circle"></span> <span th:text="${item.receiver}"></span><span class="badge badge-pill bg-danger float-right">1</span></a>
                         </li>
                     </ul>
                 </div>
@@ -202,12 +202,13 @@
                                     <div class="chat-wrap-inner">
                                         <div class="chat-box">
                                             <div class="chats" th:each="item : ${messages}">
-                                                <div th:if="${compte.username} != ${item.sender}" class="chat chat-right">
+                                                <div th:if="${compte.username} == ${item.sender}" class="chat chat-right">
                                                     <div class="chat-body">
                                                         <div class="chat-bubble">
                                                             <div class="chat-content">
                                                                 <p th:text="${item.body}"></p>
                                                                 <span class="chat-time" th:text="${item.time}">8:30 am</span>
+                                                                <span th:if="${item.status}==true" class="text-success"><i class="fas fa-check"></i></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -215,7 +216,7 @@
                                                 <div class="chat-line">
                                                     <span class="chat-date">October 8th, 2015</span>
                                                 </div>
-                                                <div th:unless="${compte.username} != ${item.sender}" class="chat chat-left">
+                                                <div th:unless="${compte.username} == ${item.sender}" class="chat chat-left">
                                                     <div class="chat-avatar">
                                                         <a href="profile.html" class="avatar">
                                                             <img alt="Jennifer Robinson" th:src="@{/assets/img/patient-thumb-02.jpg}" class="img-fluid rounded-circle">
@@ -239,9 +240,10 @@
                                 <div class="message-bar">
                                     <div class="message-inner">
                                          <a class="link attach-icon" href="#" data-toggle="modal" data-target="#drag_files"><img th:src="@{/assets/img/attachment.png}" alt=""></a>
-                                        <form th:action="@{/admin/conversation/new/message/}+${conversation.id}" th:object="${message}" method="post" class="message-area" >
+                                        <form th:action="@{/admin/conversation/new/message/}+${conversation.id}" th:object="${message}" method="post" class="message-area" enctype="multipart/form-data" >
                                                 <div class="input-group">
                                                     <textarea class="form-control" th:field="*{body}" rows="3" placeholder="Type message..."></textarea>
+                                                    <input type="file" name="file" style="display: none">
                                                     <span class="input-group-append">
                                                         <button class="btn btn-primary" type="submit"><i class="fa fa-send"></i></button>
                                                     </span>
