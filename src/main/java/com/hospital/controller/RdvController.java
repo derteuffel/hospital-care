@@ -1,4 +1,4 @@
-package com.hospital.controller;
+package com.hospital.Controller;
 
 import com.hospital.entities.*;
 import com.hospital.repository.*;
@@ -45,6 +45,8 @@ public class RdvController {
 
     @Autowired
     private MessageRepository messageRepository;
+    @Autowired
+    private PersonnelRepository personnelRepository;
 
 
     @GetMapping("/add/{id}")
@@ -55,14 +57,6 @@ public class RdvController {
         Personnel personnel = per.getOne(id);
         Compte personnelAccount = compteRepository.findByPersonnel_Id(personnel.getId());
         ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/add-rdv");
-        /*List<Compte> comptes= compteRepository.findAll();
-        List<Compte> patients = comptes.stream()
-                .filter(d -> d.getRoles().stream().findFirst().get().getId() == 2)
-                .collect(Collectors.toList());
-        List<Compte> medecins = comptes.stream()
-                .filter(d -> d.getRoles().stream().findFirst().get().getId() == 1)
-                .collect(Collectors.toList());
-*/
         Rdv rdv = new Rdv();
 
         modelAndView.addObject("rdv", rdv);
@@ -152,13 +146,16 @@ public class RdvController {
 
     @ResponseBody
     @GetMapping("/all")
-    public ModelAndView getAllRdvs(HttpServletRequest request){
+    public ModelAndView getAllRdvs(HttpServletRequest request,Long id){
 
         Principal principal =  request.getUserPrincipal();
+        Personnel personnel = per.getOne(id);
+        Compte personnelAccount = compteRepository.findByPersonnel_Id(personnel.getId());
         Compte compte = compteService.findByUsername(principal.getName());
-
         ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/rdv-list");
         List<Rdv> rdvs = rdvRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        modelAndView.addObject("compte",compte);
+        modelAndView.addObject("personnelAccount",personnelAccount);
         modelAndView.addObject("appointments",rdvs);
         return modelAndView;
     }

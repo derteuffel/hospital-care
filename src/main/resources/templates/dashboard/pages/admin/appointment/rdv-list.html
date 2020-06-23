@@ -40,7 +40,7 @@
             <h4 class="page-title"> Add Appointment</h4>
         </div>
         <div class="col-sm-8 col-9 text-right m-b-20">
-            <a  th:href="@{/admin/rdv/add}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add a Appointement</a>
+            <!--<a  th:href="@{/admin/rdv/add/}+${personnel.id}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add a Appointment</a>-->
         </div>
     </div>
     <div th:if="${success}">
@@ -82,10 +82,10 @@
                     <tbody>
                     <tr th:each="rdv : ${appointments}">
                         <td style="min-width: 200px;" >
-                            <p><a href="#" th:text="${rdv.patient}"></a></p>
+                            <p><a href="#" th:text="${rdv.compte}"></a></p>
                         </td>
                         <td>
-                            <p th:text="${rdv.doctor}"></p>
+                            <p th:text="${rdv.personnelAccount}"></p>
                         </td>
                         <td>
                             <h5 class="time-title p-0">Heure</h5>
