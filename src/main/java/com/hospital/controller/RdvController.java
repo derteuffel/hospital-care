@@ -1,10 +1,7 @@
 package com.hospital.controller;
 
 import com.hospital.entities.*;
-import com.hospital.repository.CompteRepository;
-import com.hospital.repository.DosMedicalRepository;
-import com.hospital.repository.PersonnelRepository;
-import com.hospital.repository.RdvRepository;
+import com.hospital.repository.*;
 import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -20,10 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -45,37 +40,76 @@ public class RdvController {
     @Autowired
     private PersonnelRepository per;
 
+    @Autowired
+    private ConversationRepository conversationRepository;
 
-    @GetMapping("/add")
-    public ModelAndView showform(){
+    @Autowired
+    private MessageRepository messageRepository;
 
+
+    @GetMapping("/add/{id}")
+    public ModelAndView showform(@PathVariable Long id, HttpServletRequest request){
+
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Personnel personnel = per.getOne(id);
+        Compte personnelAccount = compteRepository.findByPersonnel_Id(personnel.getId());
         ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/appointment/add-rdv");
-        List<Compte> comptes= compteRepository.findAll();
+        /*List<Compte> comptes= compteRepository.findAll();
         List<Compte> patients = comptes.stream()
                 .filter(d -> d.getRoles().stream().findFirst().get().getId() == 2)
                 .collect(Collectors.toList());
         List<Compte> medecins = comptes.stream()
                 .filter(d -> d.getRoles().stream().findFirst().get().getId() == 1)
                 .collect(Collectors.toList());
-
+*/
         Rdv rdv = new Rdv();
 
         modelAndView.addObject("rdv", rdv);
+        modelAndView.addObject("compte",compte);
+        modelAndView.addObject("personnelAccount",personnelAccount);
 //        modelAndView.addObject("appointments", rdvRepository.findAll());
-        modelAndView.addObject("patients", patients);
-        modelAndView.addObject("medecins", medecins);
         return modelAndView;
     }
 
-    @PostMapping("/add")
-    public String storeRdv(@ModelAttribute @Valid Rdv rdv, Errors errors, RedirectAttributes redirAttrs){
+    @PostMapping("/add/{compteId}/{personnelAccountId}")
+    public String storeRdv(@ModelAttribute @Valid Rdv rdv, Errors errors,@PathVariable Long compteId,@PathVariable Long personnelAccountId, RedirectAttributes redirAttrs){
         if(errors.hasErrors()){
             return "dashboard/pages/admin/appointment/add-rdv";
         }
-        rdv.setStatus(false);
-        rdvRepository.save(rdv);
-        redirAttrs.addFlashAttribute("message", "Rdv added Successfully");
-        return "redirect:/admin/rdv/all";
+        Compte compte = compteRepository.getOne(compteId);
+        Compte personnelAccount = compteRepository.getOne(personnelAccountId);
+
+        if (compteId != personnelAccountId) {
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+
+            rdv.setComptes(Arrays.asList(compte, personnelAccount));
+            rdv.setStatus(false);
+            rdvRepository.save(rdv);
+            Message message = new Message();
+            message.setTime(sdf.format(new Date()));
+            message.setStatus(false);
+            message.setSender(compte.getUsername());
+            message.setBody(rdv.getMotif());
+            Conversation conversation = conversationRepository.findBySenderOrReceiver(compte.getUsername(), personnelAccount.getUsername());
+            if (conversation != null) {
+                message.setConversation(conversation);
+
+            } else {
+                Conversation conversation1 = new Conversation();
+                conversation1.setComptes(Arrays.asList(compte, personnelAccount));
+                conversation1.setReceiver(personnelAccount.getUsername());
+                conversation1.setSender(compte.getUsername());
+                conversationRepository.save(conversation1);
+                message.setConversation(conversation1);
+            }
+            messageRepository.save(message);
+
+            redirAttrs.addFlashAttribute("message", "Rdv added Successfully");
+        }else {
+            redirAttrs.addFlashAttribute("error", "Error you can not make an appointment with yourself");
+        }
+        return "redirect:/admin/staff/doctor/"+personnelAccount.getPersonnel().getId();
     }
 
 /*

@@ -10,7 +10,11 @@
     <div class="content" layout:fragment="content">
         <div class="row">
             <div class="col-sm-7 col-6">
-                <h4 class="page-title">My Profile</h4>
+                <h4 class="page-title">Detail profile</h4>
+                <h4 class="page-title">
+                    <span class="text-success" th:text="${message}"></span>
+                    <span class="text-danger" th:text="${error}"></span>
+                </h4>
             </div>
 
                 <div class="col-sm-5 col-6 text-right m-b-30">
@@ -39,6 +43,7 @@
                                             <small class="text-muted" th:text="${personnel.qualifier}"></small>
                                             <div class="staff-id" th:text="@{'Employee ID: '+ *{id}}"></div>
                                             <div class="staff-msg"><a href="#" class="btn btn-primary">Send Message</a></div>
+                                            <div class="staff-msg"><a th:href="@{/admin/rdv/add/}+${personnel.id}" class="btn btn-outline-success">Make an appointment</a></div>
                                         </div>
                                     </div>
                                     <div class="col-md-7">

@@ -4,21 +4,21 @@
       layout:decorate="~{../templates/dashboard/index}">
 <head>
     <meta charset="UTF-8">
-    <title>Add RDV</title>
+    <title>New Appointment</title>
 
 </head>
 <body>
 <div class="content" layout:fragment="content">
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <h4 class="page-title">Add Rdv</h4>
+            <h4 class="page-title">Make an appointment</h4>
         </div>
     </div>
 
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form th:action="@{/admin/rdv/add}" method="post" th:object="${rdv}">
-                <div class="form-group">
+            <form th:action="@{/admin/rdv/add/}+${compte.id}+'/'+${personnelAccount.id}" method="post" th:object="${rdv}">
+                <!--<div class="form-group">
                     <label>Patient</label>
                     <input id="patient" type="text" class="form-control" list="patients" th:field="*{compteId}" required autofocus/>
                     <datalist id="patients">
@@ -33,7 +33,7 @@
                         <option th:each="medecin : ${medecins}" th:text="${{medecin.username}}" th:value="${{medecin.id}}">
                     </datalist>
                     <p th:if="${#fields.hasErrors('personnelId')}" th:errors="*{personnelId}">Name Error</p>
-                </div>
+                </div>-->
                <!-- <div class="form-group">
                     <label>Patient</label>
                     <select th:field="*{dosMedical}">
@@ -49,12 +49,12 @@
                     <td th:if="${#fields.hasErrors('personnel')}" th:errors="*{personnel}">Type Error</td>
                 </div>-->
                 <div class="form-group">
-                    <label>Date</label>
+                    <label>Appointment date</label>
                     <input class="form-control" type="datetime-local" th:field="*{date}" required autofocus>
                     <td th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Type Error</td>
                 </div>
                 <div class="form-group">
-                    <label>Motif</label>
+                    <label>Justification</label>
                     <textarea class="form-control" th:field="*{motif}" rows="4"
                               placeholder="Veillez renseigner de quoi vous souffrez" autocomplete="off" id="motif" required autofocus></textarea>
                     <td th:if="${#fields.hasErrors('motif')}" th:errors="*{motif}">Type Error</td>
@@ -68,8 +68,8 @@
                     <td th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Type Error</td>
                 </div>-->
                 <div class="m-t-20 text-center">
-                    <a th:href="@{/admin/rdv/all}" class="btn btn-secondary submit-btn">Annuler</a>
-                    <button class="btn btn-primary submit-btn" type="submit">Create RDV</button>
+                    <a th:href="@{/admin/rdv/account}" class="btn btn-secondary submit-btn">Cancel</a>
+                    <button class="btn btn-primary submit-btn" type="submit">Send request</button>
                 </div>
             </form>
         </div>
