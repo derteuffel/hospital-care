@@ -58,34 +58,31 @@ public class ConversationController {
         return "dashboard/pages/admin/chat/chats";
     }
 
-    @GetMapping("/detail/{receiver}")
-    public String detail(@PathVariable String receiver, HttpServletRequest request, Model model){
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable Long id, HttpServletRequest request, Model model){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
-        Compte compte1 = compteRepository.getOne(compteService.findByUsername(receiver).getId());
         Timer timer = new Timer();
         int begin = 0;
         int timeInterval = 2000;
 
-        Conversation conversation = conversationRepository.findBySenderOrReceiver(compte.getUsername(),compte1.getUsername());
+        Conversation conversation = conversationRepository.getOne(id);
         List<Conversation> lists = conversationRepository.findAllByComptes_Id(compte.getId(),Sort.by(Sort.Direction.DESC,"id"));
         List<Message> messages = new ArrayList<>();
-        if (conversation != null){
             model.addAttribute("conversation",conversation);
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     messages.addAll(conversation.getMessages());
+                    System.out.println("je fonctionne bien");
                 }
             }, begin,timeInterval);
 
-        }else {
-            Conversation conversation1 = new Conversation();
-            conversation1.setSender(compte.getUsername());
-            conversation1.setReceiver(receiver);
-            conversation1.setComptes(Arrays.asList(compte,compte1));
-            conversationRepository.save(conversation1);
-            model.addAttribute("conversation",conversation1);
+        for (Message message : messages){
+            if (!(compte.getUsername().equals(message.getSender()))){
+                message.setStatus(true);
+                messageRepository.save(message);
+            }
         }
         model.addAttribute("conversation",conversation);
         System.out.println("c'est moi");
@@ -94,6 +91,27 @@ public class ConversationController {
         model.addAttribute("messages", messages);
         model.addAttribute("lists",lists);
         return "dashboard/pages/admin/chat/chat";
+    }
+
+    @GetMapping("/add/{id}")
+    public String newConversation(@PathVariable Long id, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Compte compte1 = compteRepository.getOne(id);
+        Conversation senderTest = conversationRepository.findBySenderAndReceiver(compte.getUsername(),compte1.getUsername());
+        Conversation receiverTest = conversationRepository.findBySenderAndReceiver(compte1.getUsername(),compte.getUsername());
+        if (senderTest != null){
+            return "redirect:/admin/conversation/detail/"+senderTest.getId();
+        }else if (receiverTest != null){
+            return "redirect:/admin/conversation/detail/"+receiverTest.getId();
+        }else {
+            Conversation conversation = new Conversation();
+            conversation.setSender(compte.getUsername());
+            conversation.setReceiver(compte1.getUsername());
+            conversation.setComptes(Arrays.asList(compte, compte1));
+            conversationRepository.save(conversation);
+            return "redirect:/admin/conversation/detail/" + conversation.getId();
+        }
     }
 
     @PostMapping("/new/message/{id}")
@@ -126,6 +144,6 @@ public class ConversationController {
         message.setTime(format.format(date));
         message.setConversation(conversation);
         messageRepository.save(message);
-        return "redirect:/admin/conversation/detail/"+conversation.getReceiver();
+        return "redirect:/admin/conversation/detail/"+conversation.getId();
     }
 }

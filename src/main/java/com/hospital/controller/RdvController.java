@@ -85,16 +85,21 @@ public class RdvController {
 
             rdv.setComptes(Arrays.asList(compte, personnelAccount));
             rdv.setStatus(false);
+            rdv.setPatient(compte.getName());
+            rdv.setDoctor(personnelAccount.getName());
             rdvRepository.save(rdv);
             Message message = new Message();
             message.setTime(sdf.format(new Date()));
             message.setStatus(false);
             message.setSender(compte.getUsername());
             message.setBody(rdv.getMotif());
-            Conversation conversation = conversationRepository.findBySenderOrReceiver(compte.getUsername(), personnelAccount.getUsername());
+            Conversation conversation = conversationRepository.findBySenderAndReceiver(compte.getUsername(), personnelAccount.getUsername());
+            Conversation conversation2 = conversationRepository.findBySenderAndReceiver(personnelAccount.getUsername(), compte.getUsername());
             if (conversation != null) {
                 message.setConversation(conversation);
 
+            }else if (conversation2 != null){
+                message.setConversation(conversation2);
             } else {
                 Conversation conversation1 = new Conversation();
                 conversation1.setComptes(Arrays.asList(compte, personnelAccount));

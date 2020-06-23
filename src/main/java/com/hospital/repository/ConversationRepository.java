@@ -11,5 +11,5 @@ import java.util.List;
 public interface ConversationRepository extends JpaRepository<Conversation,Long> {
 
     List<Conversation> findAllByComptes_Id(Long id, Sort sort);
-    Conversation findBySenderOrReceiver(String sender, String receiver);
+    Conversation findBySenderAndReceiver(String sender, String receiver);
 }
