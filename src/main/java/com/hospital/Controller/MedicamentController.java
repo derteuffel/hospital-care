@@ -92,11 +92,12 @@ public class MedicamentController {
         medicament.setStatus(true);
         medicament.setStockQuantity(medicamentHelper.getStockQuantity());
         medicament.setQuantity(medicamentHelper.getQuantity());
+        medicament.setName(medicamentHelper.getName());
         medicament.setPricingUnit(medicamentHelper.getPricingUnit());
         medicament.setGrammage(medicamentHelper.getGrammage());
         medicament.setDrugType(medicamentHelper.getDrugType());
         medicamentRepository.save(medicament);
-        return "" ;
+        return "redirect:/admin/medicament/lists/drugs/"+pharmacy.getId();
     }
 
     @GetMapping("/update/{id}")
@@ -124,6 +125,7 @@ public class MedicamentController {
             drug2.setPricingUnit(medicament.getPricingUnit());
             drug2.setQuantity(medicament.getQuantity());
             drug2.setStatus(medicament.getStatus());
+            drug2.setName(medicament.getName());
             drug2.setStockQuantity(medicament.getStockQuantity());
             medicamentRepository.save(drug2);
             redirectAttributes.addFlashAttribute("success", "The drug has been updated successfully");

@@ -1,10 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Update  Drug</title>
 </head>
 <body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h4 class="page-title">Update Drug</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <form method="post" th:action="@{/admin/medicament/update/{id}(id = ${drug.id})}" th:object="${drug}">
+                <div class="form-group">
+                    <label th:for="quantity">Quantity</label>
+                    <input class="form-control" type="number" th:field="*{quantity}" required/>
+                    <span class="error" th:errors="*{quantity}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Grammage(g)</label>
+                    <input class="form-control" type="number" th:field="*{grammage}" required/>
+                    <span class="error" th:errors="*{grammage}"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="stockQuantity">Quantity in stock</label>
+                    <input class="form-control date" type="number" th:field="*{stockQuantity}" required/>
+                    <span class="error" th:errors="*{stockQuantity}"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="drugType">Drug type</label>
+                    <input class="form-control date" type="text" th:field="*{drugType}" required/>
+                    <span class="error" th:errors="*{drugType}"></span>
+                </div>
 
+                <div class="form-group">
+                    <label th:for="name">Drug Name</label>
+                    <input class="form-control date" type="text" th:field="*{name}" required/>
+                    <span class="error" th:errors="*{name}"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="pricingUnit">Prix Unitaire</label>
+                    <input class="form-control date" type="number" th:field="*{pricingUnit}" required/>
+                    <span class="error" th:errors="*{pricingUnit}"></span>
+                </div>
+
+                <div class="m-t-20 text-center">
+                    <a th:href="@{/admin/medicament/lists/drugs/}+${drugs.id}" class="btn btn-secondary submit-btn">Annuler</a>
+                    <button class="btn btn-primary submit-btn">Update Drug</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>

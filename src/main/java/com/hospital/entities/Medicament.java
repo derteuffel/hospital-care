@@ -20,6 +20,7 @@ public class Medicament implements Serializable {
     private Integer quantity;
     private Double grammage;
     private String drugType;
+    private String name;
     private Integer stockQuantity;
     private Double pricingUnit;
     private Boolean status;
