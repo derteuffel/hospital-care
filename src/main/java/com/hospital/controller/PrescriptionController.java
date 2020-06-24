@@ -1,4 +1,4 @@
-package com.hospital.controller;
+package com.hospital.Controller;
 
 import com.hospital.entities.Compte;
 import com.hospital.entities.Consultation;

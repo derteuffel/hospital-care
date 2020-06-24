@@ -1,5 +1,4 @@
-package com.hospital.controller;
-
+package com.hospital.Controller;
 import com.hospital.entities.*;
 import com.hospital.enums.ERole;
 import com.hospital.helpers.ConsultationHelper;

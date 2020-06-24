@@ -47,6 +47,7 @@ public class Hospital implements Serializable {
     @OneToMany(mappedBy = "hospital")
     private Collection<Incubator>incubators;
 
+
     public String getName() {
         return name;
     }

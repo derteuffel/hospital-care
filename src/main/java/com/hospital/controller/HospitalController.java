@@ -1,4 +1,4 @@
-package com.hospital.controller;
+package com.hospital.Controller;
 
 import com.hospital.entities.Hospital;
 import com.hospital.entities.HospitalSearch;
