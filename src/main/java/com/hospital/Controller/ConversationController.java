@@ -68,29 +68,30 @@ public class ConversationController {
 
         Conversation conversation = conversationRepository.getOne(id);
         List<Conversation> lists = conversationRepository.findAllByComptes_Id(compte.getId(),Sort.by(Sort.Direction.DESC,"id"));
-        List<Message> messages = new ArrayList<>();
+        List<Message> messages = messageRepository.findAllByConversation_Id(conversation.getId(), Sort.by(Sort.Direction.DESC,"id"));
             model.addAttribute("conversation",conversation);
-            timer.schedule(new TimerTask() {
+            /*timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    messages.addAll(conversation.getMessages());
-                    System.out.println("je fonctionne bien");
+                    detail(conversation.getId(),request,model);
                 }
-            }, begin,timeInterval);
-
+            }, begin,timeInterval);*/
+        System.out.println("je fonctionne bien");
         for (Message message : messages){
-            if (!(compte.getUsername().equals(message.getSender()))){
+            if (compte.getUsername().equals(message.getSender())){
                 message.setStatus(true);
                 messageRepository.save(message);
             }
         }
         model.addAttribute("conversation",conversation);
-        System.out.println("c'est moi");
+
+        model.addAttribute("messages", messages);
         model.addAttribute("compte",compte);
         model.addAttribute("message",new Message());
-        model.addAttribute("messages", messages);
         model.addAttribute("lists",lists);
+
         return "dashboard/pages/admin/chat/chat";
+
     }
 
     @GetMapping("/add/{id}")

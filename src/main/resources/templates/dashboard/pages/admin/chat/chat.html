@@ -138,7 +138,7 @@
                 <div class="sidebar-menu">
                     <ul>
                         <li>
-                            <a href="index-2.html"><i class="fa fa-home back-icon"></i> <span>Back to Home</span></a>
+                            <a th:href="@{admin/dashboard}"><i class="fa fa-home back-icon"></i> <span>Back to Home</span></a>
                         </li>
                         <li class="menu-title">Chat Groups <a href="#" class="add-user-icon" data-toggle="modal" data-target="#add_group"><i class="fa fa-plus"></i></a></li>
                     </ul>
@@ -213,9 +213,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="chat-line">
-                                                    <span class="chat-date">October 8th, 2015</span>
-                                                </div>
+
                                                 <div th:unless="${compte.username} == ${item.sender}" class="chat chat-left">
                                                     <div class="chat-avatar">
                                                         <a href="profile.html" class="avatar">
@@ -346,34 +344,36 @@
                                                 <div class="table-content">
                                                     <div class="chat-profile-img">
                                                         <div class="edit-profile-img">
-                                                            <img src="assets/img/doctor-03.jpg" alt="">
+                                                            <img th:src="${compte.avatar}" alt="">
                                                             <span class="change-img">Change Image</span>
                                                         </div>
-                                                        <h3 class="user-name m-t-10 mb-0">Cristina Groves</h3>
-                                                        <small class="text-muted">Gynecologist</small>
+                                                        <h3 class="user-name m-t-10 mb-0"><span th:text="${compte.name}"></span></h3>
+                                                        <small class="text-muted" th:if="${compte.personnel} != null"><span th:text="${compte.personnel.function}"></span></small>
+                                                        <small class="text-muted" th:unless="${compte.personnel} != null"><span>Vous etes un patient</span></small>
                                                         <a href="edit-profile.html" class="btn btn-primary edit-btn"><i class="fa fa-pencil"></i></a>
                                                     </div>
                                                     <div class="chat-profile-info">
                                                         <ul class="user-det-list">
                                                             <li>
                                                                 <span>Username:</span>
-                                                                <span class="float-right text-muted">@cristina_groves</span>
+                                                                <span class="float-right text-muted" th:text="${compte.username}">@cristina_groves</span>
                                                             </li>
                                                             <li>
                                                                 <span>DOB:</span>
-                                                                <span class="float-right text-muted">3rd March</span>
+                                                                <span class="float-right text-muted" th:if="${compte.personnel} != null" th:text="${compte.personnel.birthDate}">3rd March</span>
+                                                                <span class="float-right text-muted" th:unless="${compte.personnel} != null">Non definie</span>
                                                             </li>
                                                             <li>
                                                                 <span>Email:</span>
-                                                                <span class="float-right text-muted">cristinagroves@example.com</span>
+                                                                <span class="float-right text-muted" th:text="${compte.email}">cristinagroves@example.com</span>
                                                             </li>
                                                             <li>
                                                                 <span>Phone:</span>
-                                                                <span class="float-right text-muted"> 770-889-6484</span>
+                                                                <span class="float-right text-muted" th:if="${compte.personnel} != null" th:text="${compte.personnel.phone}"> 770-889-6484</span>
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div class="transfer-files">
+                                                    <!--<div class="transfer-files">
                                                         <ul class="nav nav-tabs nav-tabs-solid nav-justified mb-0">
                                                             <li class="nav-item"><a class="nav-link active" href="#all_files" data-toggle="tab">All Files</a></li>
                                                             <li class="nav-item"><a class="nav-link" href="#my_files" data-toggle="tab">My Files</a></li>
@@ -428,7 +428,7 @@
                                                                 </ul>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div>-->
                                                 </div>
                                             </div>
                                         </div>
