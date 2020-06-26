@@ -23,30 +23,5 @@ import java.util.List;
 @RequestMapping("/admin/doctors")
 public class DoctorController {
 
-    @Autowired
-    private CompteRepository compteRepository;
-    @Autowired
-    private PersonnelRepository personnelRepository;
-    @Autowired
-    private HospitalRepository hospitalRepository;
 
-    /** Get all doctors */
-    @GetMapping("/all")
-    public String getAllDoctors(Model model){
-        List<Compte> doctors = compteRepository.findByRolesName(ERole.ROLE_DOCTOR.toString());
-        model.addAttribute("doctors",doctors);
-        return "dashboard/pages/admin/doctors";
-    }
-
-    /** Get all doctors in an hospital */
-    @GetMapping("/{hospitalName}/all")
-    public List<Personnel> getAllDoctorsInHospital(@PathVariable String hospitalName, Model model){
-        List<Compte> comptes = compteRepository.findByRolesName(ERole.ROLE_DOCTOR.toString());
-        Hospital myHospital = hospitalRepository.findByName(hospitalName);
-        List<Personnel> doctors = new ArrayList<Personnel>();
-
-        List<Personnel> personnels = personnelRepository.findAllByHospital_Id(myHospital.getId());
-        for (Compte compte1 : comptes){ for (Personnel personnel : personnels){ if (compte1.getPersonnel() == personnel) doctors.add(personnel); } }
-        return doctors;
-    }
 }

@@ -12,6 +12,7 @@ public class MedicamentHelper {
     private Integer quantity;
     private Double grammage;
     private String drugType;
+    private String name;
     private Integer stockQuantity;
     private Double pricingUnit;
     private Boolean status;
