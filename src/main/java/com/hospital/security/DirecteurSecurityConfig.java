@@ -14,8 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
-@Order(2)
-public class PatientSecurityConfig extends WebSecurityConfigurerAdapter {
+@Order(6)
+public class DirecteurSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CompteService compteService;
@@ -24,23 +24,23 @@ public class PatientSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-                .antMatcher("/patient/**").authorizeRequests()
+                .antMatcher("/directeur/**").authorizeRequests()
                 .antMatchers("/downloadFile/**","/static/**").permitAll()
-                .antMatchers("/patient/**").access("hasAnyRole('ROLE_PATIENT','ROLE_ROOT')")
+                .antMatchers("/directeur/**").access("hasAnyRole('ROLE_DIRECTEUR','ROLE_ROOT')")
                 .and()
                 .formLogin()
-                .loginPage("/patient/login")
-                .loginProcessingUrl("/patient/login")
-                .defaultSuccessUrl("/patient/home")
+                .loginPage("/directeur/login")
+                .loginProcessingUrl("/directeur/login")
+                .defaultSuccessUrl("/directeur/home")
                 .permitAll()
                 .and()
                 .logout()
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/patient/logout"))
-                .logoutSuccessUrl("/patient/login?logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/directeur/logout"))
+                .logoutSuccessUrl("/directeur/login?logout")
                 .and()
-                .exceptionHandling().accessDeniedPage("/patient/access-denied");
+                .exceptionHandling().accessDeniedPage("/directeur/access-denied");
 
     }
 

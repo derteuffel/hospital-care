@@ -1,6 +1,5 @@
 package com.hospital.security;
 
-
 import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
-@Order(1)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@Order(3)
+public class InfirmierSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CompteService compteService;
@@ -24,17 +23,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.
-                authorizeRequests()
-                .antMatchers("/login","/registration", "/").permitAll()
-                .antMatchers("/admin/**","/hospital-care/**").access("hasAnyRole('ROLE_ADMIN','ROLE_ROOT','ROLE_DOCTOR','ROLE_PERSONNEL','ROLE_PATIEN')")
-                .anyRequest()
-                .authenticated().and().csrf().disable().formLogin()
-                .loginPage("/login").failureUrl("/login?error=true")
-                .defaultSuccessUrl("/admin/dashboard")
-                .and().logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout");
+        http
+                .antMatcher("/infirmier/**").authorizeRequests()
+                .antMatchers("/downloadFile/**","/static/**").permitAll()
+                .antMatchers("/infirmier/**").access("hasAnyRole('ROLE_INFIRMIER','ROLE_ROOT')")
+                .and()
+                .formLogin()
+                .loginPage("/infirmier/login")
+                .loginProcessingUrl("/infirmier/login")
+                .defaultSuccessUrl("/infirmier/home")
+                .permitAll()
+                .and()
+                .logout()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/infirmier/logout"))
+                .logoutSuccessUrl("/infirmier/login?logout")
+                .and()
+                .exceptionHandling().accessDeniedPage("/infirmier/access-denied");
 
     }
 

@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface PharmacyRepository extends JpaRepository<Pharmacy,Long> {
     List<Pharmacy> findByHospital(Optional<Hospital> hospital);
+
+    Pharmacy findByHospital_Id(Long id);
 }
