@@ -54,7 +54,7 @@ public class InfirmierController {
         model.addAttribute("hospital", hospital);
         model.addAttribute("compte",compte);
         model.addAttribute("lists", bloodBankRepository.findAllByHospital(hospital));
-        return "dashboard/pages/infirmier/hospital/blood/lists";
+        return "dashboard/pages/admin/infirmier/hospital/blood/lists";
     }
 
     @GetMapping("/bloods/add/{id}")
@@ -65,7 +65,7 @@ public class InfirmierController {
         model.addAttribute("hospital",hospital);
         model.addAttribute("compte",compte);
         model.addAttribute("blood",new BloodBankHelper());
-        return  "dashboard/pages/infirmier/hospital/blood/add";
+        return  "dashboard/pages/admin/infirmier/hospital/blood/add";
     }
 
     @PostMapping("/bloods/add/{id}")
@@ -96,7 +96,7 @@ public class InfirmierController {
 
             BloodBank blood = bloodBankRepository.getOne(id);
             model.addAttribute("blood",blood);
-            return "dashboard/pages/infirmier/hospital/blood/update";
+            return "dashboard/pages/admin/infirmier/hospital/blood/update";
     }
 
     @PostMapping("/update/{id}")
