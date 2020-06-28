@@ -12,7 +12,8 @@ import java.util.List;
 
 @Repository
 public interface BloodBankRepository extends JpaRepository<BloodBank, Long> {
-    List<BloodBank> findByHospital(Hospital hospital);
+    List<BloodBank> findAllByHospital(Hospital hospital);
     Page<BloodBank> findAll(Pageable pageable);
     List<BloodBank> findByGroupeSanguinLike(String reference);
+    BloodBank findByGroupeSanguinAndRhesus(String groupe, String rhesus);
 }

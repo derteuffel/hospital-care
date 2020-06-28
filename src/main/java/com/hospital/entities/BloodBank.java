@@ -28,6 +28,7 @@ public class BloodBank implements Serializable {
     private Date date;
 
     private Boolean status;
+    private int quantity;
 
 
 

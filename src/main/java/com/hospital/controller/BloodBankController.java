@@ -124,7 +124,7 @@ public class BloodBankController {
     }
 
     /** Get all bloods of a hospital */
-    @GetMapping(value = "/get/hospital/{id}")
+    /*@GetMapping(value = "/get/hospital/{id}")
     public String getAllBloodOfHospital(@PathVariable Long id, Model model){
         Hospital hospital =  hospitalRepository.getOne(id);
         List<BloodBank> bloods = bloodBankRepository.findByHospital(hospital);
@@ -144,6 +144,6 @@ public class BloodBankController {
 
         bloodBankRepository.save(blood);
         return "redirect:/admin/blood/lists/bloods/"+blood.getId() ;
-    }
+    }*/
 
 }
