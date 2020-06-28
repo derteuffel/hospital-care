@@ -3,14 +3,18 @@ package com.hospital.Controller;
 
 
 import com.hospital.entities.Hospital;
+import com.hospital.entities.Medicament;
 import com.hospital.entities.Pharmacy;
+import com.hospital.helpers.MedicamentHelper;
 import com.hospital.helpers.PharmacyHelper;
 import com.hospital.repository.FactureRepository;
 import com.hospital.repository.HospitalRepository;
+import com.hospital.repository.MedicamentRepository;
 import com.hospital.repository.PharmacyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Controller
-@RequestMapping("/admin/pharmacy")
+@RequestMapping("/pharmacie")
 public class PharmacyController {
 
 
@@ -39,6 +43,15 @@ public class PharmacyController {
     @Autowired
     private HospitalRepository hospitalRepository;
 
+    @Autowired
+    private MedicamentRepository medicamentRepository;
+
+    @GetMapping("/login")
+    public String login(Model model){
+        return "dashboard/pages/admin/pharmacy/login";
+    }
+
+
     @GetMapping("/hospital/{id}")
     public String getPharmacyOfHospital(@PathVariable Long id, Model model){
         Optional<Hospital> hospital =  hospitalRepository.findById(id);
@@ -48,70 +61,102 @@ public class PharmacyController {
 
         return "dashboard/pages/admin/pharmacy/list-pharmacy";
     }
-    @GetMapping("/add/{id}")
-    public String savePharmacy(Model model, @PathVariable Long id){
-        Hospital hospital = hospitalRepository.getOne(id);
+
+    @GetMapping("/detail/{id}")
+    public String detailPharmacy(@PathVariable Long id, Model model){
+        Pharmacy pharmacy = pharmacyRepository.getOne(id);
+        Hospital hospital = pharmacy.getHospital();
+        model.addAttribute("pharmacy", pharmacy);
         model.addAttribute("hospital",hospital);
-        model.addAttribute("pharmacy",new Pharmacy());
-        return  "dashboard/pages/admin/pharmacy/add-pharmacy";
+        return "dashboard/pages/admin/pharmacy/detail";
     }
 
-    @PostMapping("/add/{id}")
-    public String addPharmacy(Model model, @PathVariable Long id, @Valid PharmacyHelper pharmacyHelper) {
-        Hospital hospital = hospitalRepository.getOne(id);
-        Pharmacy pharmacy = new Pharmacy();
-        pharmacy.setHospital(hospital);
-        pharmacy.setName(pharmacyHelper.getName());
+    @GetMapping("/medicament/lists/{id}")
+    public String findAllByPharmacy(Model model, @PathVariable Long id){
+        Pharmacy pharmacy = pharmacyRepository.getOne(id);
 
-        pharmacyRepository.save(pharmacy);
-        return "redirect:/admin/pharmacy/lists/pharmacies/"+hospital.getId() ;
+        List<Medicament> medicaments = medicamentRepository.findAllByPharmacy_Id(pharmacy.getId(), Sort.by(Sort.Direction.DESC,"id"));
+        for (Medicament medicament : medicaments){
+            if (medicament.getStockQuantity() == 0){
+                medicament.setStatus(false);
+                medicamentRepository.save(medicament);
+            }
+        }
+        model.addAttribute("pharmacy", pharmacy);
+        model.addAttribute("lists", medicaments);
+        return "dashboard/pages/admin/pharmacy/medicament/lists";
+    }
+
+    @GetMapping("/medicament/add/{id}")
+    public String addMedicament(@PathVariable Long id, Model model){
+        Pharmacy pharmacy = pharmacyRepository.getOne(id);
+        model.addAttribute("pharmacy",pharmacy);
+        model.addAttribute("medicament",new MedicamentHelper());
+        return "dashboard/pages/admin/pharmacy/medicament/add-medicament";
+    }
+
+    @PostMapping("/medicament/add/{id}")
+    public String saveMedicament(@PathVariable Long id, @Valid MedicamentHelper medicamentHelper,RedirectAttributes redirectAttributes){
+        Pharmacy pharmacy = pharmacyRepository.getOne(id);
+        Medicament medicament = new Medicament();
+        medicament.setPharmacy(pharmacy);
+        medicament.setStatus(true);
+        medicament.setStockQuantity(medicamentHelper.getStockQuantity());
+        medicament.setQuantity(medicamentHelper.getQuantity());
+        medicament.setName(medicamentHelper.getName());
+        medicament.setPricingUnit(medicamentHelper.getPricingUnit());
+        medicament.setGrammage(medicamentHelper.getGrammage());
+        medicament.setDrugType(medicamentHelper.getDrugType());
+        medicamentRepository.save(medicament);
+        redirectAttributes.addAttribute("success","You saved successfully your drugs");
+        return "redirect:/pharmacy/medicament/lists/"+pharmacy.getId();
+    }
+
+    @GetMapping("/medicament/update/{id}")
+    public String editMedicament(@PathVariable Long id,Model model,RedirectAttributes redirAttrs){
+            Medicament medicament = medicamentRepository.getOne(id);
+            Pharmacy pharmacy = medicament.getPharmacy();
+            model.addAttribute("medicament",medicament);
+            model.addAttribute("pharmacy",pharmacy);
+
+            return "dashboard/pages/admin/pharmacy/medicament/update";
+
+    }
+
+
+    @PostMapping("/medicament/update/{id}")
+    public String updateDrug(Medicament medicament, @PathVariable Long id, RedirectAttributes redirectAttributes, Long pharmacyId){
+
+        Pharmacy pharmacy = pharmacyRepository.getOne(pharmacyId);
+        Optional<Medicament> drug = medicamentRepository.findById(id);
+
+        if (drug.isPresent()) {
+            Medicament drug2 = drug.get();
+            drug2.setDrugType(medicament.getDrugType());
+            drug2.setGrammage(medicament.getGrammage());
+            drug2.setPricingUnit(medicament.getPricingUnit());
+            drug2.setQuantity(medicament.getQuantity());
+            drug2.setStatus(medicament.getStatus());
+            drug2.setName(medicament.getName());
+            drug2.setStockQuantity(medicament.getStockQuantity());
+            drug2.setPharmacy(pharmacy);
+            medicamentRepository.save(drug2);
+            redirectAttributes.addFlashAttribute("success", "The drug has been updated successfully");
+            return "redirect:/pharmacy/medicament/lists/"+pharmacy.getId();
+        }
+        else {
+            redirectAttributes.addFlashAttribute("error","There are no drug with Id :" +id);
+            return "redirect:/pharmacy/medicament/lists/"+pharmacy.getId();
+        }
     }
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable Long id, Model model, HttpSession session) {
-        Pharmacy pharmacy = pharmacyRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid pharmacy id:" +id));
-        pharmacyRepository.delete(pharmacy);
-        return "redirect:/admin/pharmacy/lists/pharmacies/"+pharmacy.getId()  ;
-    }
-
-    @GetMapping(value = "/all")
-
-    public ModelAndView getPharmacies(Model model, @RequestParam(name = "page") Optional<Integer> page) {
-
-        int currentPage = page.orElse(1);
-
-        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/pharmacy/list-pharmacy");
-
-        PageRequest pageable = PageRequest.of(currentPage - 1, 10);
-
-        Page<Pharmacy> pharmacies = pharmacyRepository.findAll(pageable);
-
-        modelAndView.addObject("currentEntries",pharmacies.getContent().size());
-
-        int totalPages = pharmacies.getTotalPages();
-
-        if(totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1,totalPages).boxed().collect(Collectors.toList());
-            modelAndView.addObject("pageNumbers", pageNumbers);
-            modelAndView.addObject("entries",pageNumbers.size());
-        }
-
-        Pharmacy pharmacy = new Pharmacy();
-        modelAndView.addObject("pharmacy",pharmacy);
-        //modelAndView.addObject("activeArticleList", true);
-        modelAndView.addObject("pharmacies", pharmacies.getContent());
-        modelAndView.addObject("currentPage",currentPage);
-
-        return modelAndView;
-    }
-
-    @GetMapping("/lists/pharmacies/{id}")
-    public String findAllByHospital(Model model, @PathVariable Long id){
-        Hospital hospital = hospitalRepository.getOne(id);
-        model.addAttribute("hospital", hospital);
-        model.addAttribute("pharmacies", pharmacyRepository.findAll());
-        return "dashboard/pages/admin/pharmacy/list-pharmacy";
+        Medicament medicament = medicamentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid drug id:" +id));
+        Pharmacy pharmacy = medicament.getPharmacy();
+        medicamentRepository.delete(medicament);
+        return "redirect:/pharmacy/medicament/lists/"+pharmacy.getId()  ;
     }
 
     @GetMapping("/update/{id}")
@@ -123,7 +168,7 @@ public class PharmacyController {
             return "dashboard/pages/admin/pharmacy/updatePharmacy";
         }catch (Exception e){
             redirAttrs.addFlashAttribute("error", "This pharmacy seems to not exist");
-            return "admin/pages/pharmacy/list-pharmacy";
+            return "redirect:/pharmacie/home";
         }
     }
 
@@ -136,11 +181,11 @@ public class PharmacyController {
             pharmacy2.setName(pharmacy.getName());
             pharmacyRepository.save(pharmacy2);
             redirectAttributes.addFlashAttribute("success", "The pharmacy has been updated successfully");
-            return "redirect:/admin/pharmacy/lists/pharmacies/"+pharmacy.getId();
+            return "redirect:/pharmacie/detail/"+pharmacy.getId();
         }
         else {
             redirectAttributes.addFlashAttribute("error","There are no pharmacy with Id :" +id);
-            return "redirect:/admin/pharmacy/lists/pharmacies/"+pharmacy.getId();
+            return "redirect:/pharmacie/home";
         }
     }
 

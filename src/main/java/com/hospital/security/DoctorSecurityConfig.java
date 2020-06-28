@@ -1,6 +1,5 @@
 package com.hospital.security;
 
-
 import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
-@Order(1)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@Order(4)
+public class DoctorSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CompteService compteService;
@@ -24,17 +23,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.
-                authorizeRequests()
-                .antMatchers("/login","/registration", "/","/admin/**").permitAll()
-                .antMatchers("/hospital-care/**").access("hasAnyRole('ROLE_ADMIN','ROLE_ROOT','ROLE_DOCTOR','ROLE_PERSONNEL','ROLE_PATIEN')")
-                .anyRequest()
-                .authenticated().and().csrf().disable().formLogin()
-                .loginPage("/login").failureUrl("/login?error=true")
-                .defaultSuccessUrl("/admin/dashboard")
-                .and().logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout");
+        http
+                .antMatcher("/doctor/**").authorizeRequests()
+                .antMatchers("/downloadFile/**","/static/**").permitAll()
+                .antMatchers("/doctor/**").access("hasAnyRole('ROLE_DOCTOR','ROLE_ROOT')")
+                .and()
+                .formLogin()
+                .loginPage("/doctor/login")
+                .loginProcessingUrl("/doctor/login")
+                .defaultSuccessUrl("/doctor/home")
+                .permitAll()
+                .and()
+                .logout()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/doctor/logout"))
+                .logoutSuccessUrl("/doctor/login?logout")
+                .and()
+                .exceptionHandling().accessDeniedPage("/doctor/access-denied");
 
     }
 
@@ -53,21 +59,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 );
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private DaoAuthenticationProvider authenticationProvider;
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-        auth.setUserDetailsService(compteService);
-        auth.setPasswordEncoder(passwordEncoder());
-        return auth;
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider);
     }
 }

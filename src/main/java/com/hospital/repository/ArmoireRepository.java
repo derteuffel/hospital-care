@@ -1,6 +1,6 @@
 package com.hospital.repository;
 
-import com.hospital.entities.Medicament;
+import com.hospital.entities.Armoire;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MedicamentRepository extends JpaRepository<Medicament,Long> {
+public interface ArmoireRepository extends JpaRepository<Armoire,Long> {
 
-    List<Medicament> findAllByPharmacy_Id(Long id, Sort sort);
+    List<Armoire> findAllByCompte_Id(Long id, Sort sort);
 }

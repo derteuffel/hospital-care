@@ -41,6 +41,14 @@ public class Conversation implements Serializable {
     public Conversation() {
     }
 
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
     public Conversation(String sender) {
         this.sender = sender;
     }

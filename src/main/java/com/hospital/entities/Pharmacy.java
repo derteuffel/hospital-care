@@ -40,4 +40,59 @@ public class Pharmacy implements Serializable {
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Medicament>medicaments;
+
+    public Pharmacy() {
+    }
+
+    public Pharmacy(String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Collection<Facture> getFactures() {
+        return factures;
+    }
+
+    public void setFactures(Collection<Facture> factures) {
+        this.factures = factures;
+    }
+
+    public Collection<Others> getOthers() {
+        return others;
+    }
+
+    public void setOthers(Collection<Others> others) {
+        this.others = others;
+    }
+
+    public Hospital getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
+
+    public Collection<Medicament> getMedicaments() {
+        return medicaments;
+    }
+
+    public void setMedicaments(Collection<Medicament> medicaments) {
+        this.medicaments = medicaments;
+    }
 }
