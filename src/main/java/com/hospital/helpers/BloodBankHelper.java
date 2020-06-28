@@ -23,6 +23,8 @@ public class BloodBankHelper {
 
     private String status;
 
+    private int quantity;
+
 
 
 
