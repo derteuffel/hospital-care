@@ -76,6 +76,12 @@ public class PharmacyController {
         Pharmacy pharmacy = pharmacyRepository.getOne(id);
 
         List<Medicament> medicaments = medicamentRepository.findAllByPharmacy_Id(pharmacy.getId(), Sort.by(Sort.Direction.DESC,"id"));
+        for (Medicament medicament : medicaments){
+            if (medicament.getStockQuantity() == 0){
+                medicament.setStatus(false);
+                medicamentRepository.save(medicament);
+            }
+        }
         model.addAttribute("pharmacy", pharmacy);
         model.addAttribute("lists", medicaments);
         return "dashboard/pages/admin/pharmacy/medicament/lists";
@@ -118,7 +124,7 @@ public class PharmacyController {
     }
 
 
-    @PostMapping("/update/{id}")
+    @PostMapping("/medicament/update/{id}")
     public String updateDrug(Medicament medicament, @PathVariable Long id, RedirectAttributes redirectAttributes, Long pharmacyId){
 
         Pharmacy pharmacy = pharmacyRepository.getOne(pharmacyId);
@@ -148,21 +154,9 @@ public class PharmacyController {
     public String deleteById(@PathVariable Long id, Model model, HttpSession session) {
         Medicament medicament = medicamentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid drug id:" +id));
+        Pharmacy pharmacy = medicament.getPharmacy();
         medicamentRepository.delete(medicament);
-        return "redirect:/admin/medicament/lists/drugs/"+medicament.getId()  ;
-    }
-
-    @GetMapping("/active/{id}")
-    public String active(@PathVariable Long id, HttpSession session){
-        Medicament medicament = medicamentRepository.getOne(id);
-        if (medicament.getStatus()== true){
-            medicament.setStatus(false);
-        }else {
-            medicament.setStatus(true);
-        }
-
-        medicamentRepository.save(medicament);
-        return "redirect:/admin/medicament/lists/drugs/"+medicament.getId() ;
+        return "redirect:/pharmacy/medicament/lists/"+pharmacy.getId()  ;
     }
 
     @GetMapping("/update/{id}")
@@ -174,7 +168,7 @@ public class PharmacyController {
             return "dashboard/pages/admin/pharmacy/updatePharmacy";
         }catch (Exception e){
             redirAttrs.addFlashAttribute("error", "This pharmacy seems to not exist");
-            return "admin/pages/pharmacy/list-pharmacy";
+            return "redirect:/pharmacie/home";
         }
     }
 
@@ -187,11 +181,11 @@ public class PharmacyController {
             pharmacy2.setName(pharmacy.getName());
             pharmacyRepository.save(pharmacy2);
             redirectAttributes.addFlashAttribute("success", "The pharmacy has been updated successfully");
-            return "redirect:/admin/pharmacy/lists/pharmacies/"+pharmacy.getId();
+            return "redirect:/pharmacie/detail/"+pharmacy.getId();
         }
         else {
             redirectAttributes.addFlashAttribute("error","There are no pharmacy with Id :" +id);
-            return "redirect:/admin/pharmacy/lists/pharmacies/"+pharmacy.getId();
+            return "redirect:/pharmacie/home";
         }
     }
 

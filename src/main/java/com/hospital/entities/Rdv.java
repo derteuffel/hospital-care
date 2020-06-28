@@ -28,6 +28,7 @@ public class Rdv implements Serializable {
 
     private String doctor;
     private String patient;
+    private String heure;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -37,6 +38,10 @@ public class Rdv implements Serializable {
             inverseJoinColumns = @JoinColumn(
                     name = "rdv_id", referencedColumnName = "id"))
     private List<Compte> comptes;
+
+    @ManyToOne
+    @JsonIgnoreProperties("rdvs")
+    private Hospital hospital;
 
     private Boolean status;
 
@@ -49,6 +54,15 @@ public class Rdv implements Serializable {
         this.motif = motif;
         this.doctor = doctor;
         this.patient = patient;
+        this.status = status;
+    }
+
+    public Rdv(Date date, @NotNull String motif, String doctor, String patient, String heure, Boolean status) {
+        this.date = date;
+        this.motif = motif;
+        this.doctor = doctor;
+        this.patient = patient;
+        this.heure = heure;
         this.status = status;
     }
 
@@ -65,7 +79,13 @@ public class Rdv implements Serializable {
         return motif;
     }
 
+    public Hospital getHospital() {
+        return hospital;
+    }
 
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -111,5 +131,13 @@ public class Rdv implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getHeure() {
+        return heure;
+    }
+
+    public void setHeure(String heure) {
+        this.heure = heure;
     }
 }

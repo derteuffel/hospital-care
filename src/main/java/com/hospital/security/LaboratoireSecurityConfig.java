@@ -59,21 +59,11 @@ public class LaboratoireSecurityConfig extends WebSecurityConfigurerAdapter {
                 );
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private DaoAuthenticationProvider authenticationProvider;
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-        auth.setUserDetailsService(compteService);
-        auth.setPasswordEncoder(passwordEncoder());
-        return auth;
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider);
     }
 }

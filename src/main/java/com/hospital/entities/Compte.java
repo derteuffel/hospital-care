@@ -52,6 +52,10 @@ public class Compte implements Serializable {
     private List<Conversation> conversations;
     @ManyToMany(mappedBy = "comptes")
     private List<Rdv> rdvs;
+    @OneToMany(mappedBy = "compte")
+    @OnDelete(action= OnDeleteAction.NO_ACTION)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private List<Armoire> armoires;
 
 
 
@@ -142,4 +146,39 @@ public class Compte implements Serializable {
         this.personnel = personnel;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(List<Conversation> conversations) {
+        this.conversations = conversations;
+    }
+
+    public List<Rdv> getRdvs() {
+        return rdvs;
+    }
+
+    public void setRdvs(List<Rdv> rdvs) {
+        this.rdvs = rdvs;
+    }
+
+    public List<Armoire> getArmoires() {
+        return armoires;
+    }
+
+    public void setArmoires(List<Armoire> armoires) {
+        this.armoires = armoires;
+    }
 }
