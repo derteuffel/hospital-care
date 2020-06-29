@@ -25,8 +25,8 @@ public class PatientSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .antMatcher("/patient/**").authorizeRequests()
-                .antMatchers("/downloadFile/**","/static/**").permitAll()
-                .antMatchers("/patient/**").access("hasAnyRole('ROLE_PATIENT','ROLE_ROOT')")
+                .antMatchers("/downloadFile/**","/static/**","/patient/**").permitAll()
+//                .antMatchers("/patient/**").access("hasAnyRole('ROLE_PATIENT','ROLE_ROOT')")
                 .and()
                 .formLogin()
                 .loginPage("/patient/login")

@@ -25,8 +25,8 @@ public class PharmacieSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .antMatcher("/pharmacie/**").authorizeRequests()
-                .antMatchers("/downloadFile/**","/static/**").permitAll()
-                .antMatchers("/pharmacie/**").access("hasAnyRole('ROLE_PHARNACIE','ROLE_ROOT')")
+                .antMatchers("/downloadFile/**","/static/**","/pharmacie/**").permitAll()
+//                .antMatchers("/pharmacie/**").access("hasAnyRole('ROLE_PHARNACIE','ROLE_ROOT')")
                 .and()
                 .formLogin()
                 .loginPage("/pharmacie/login")

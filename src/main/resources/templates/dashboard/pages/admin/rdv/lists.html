@@ -1,10 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Appointments</title>
 </head>
 <body>
-$END$
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-striped datatable custom-table mb-0">
+                    <thead>
+                    <tr>
+                        <th>Patient username</th>
+                        <!--<th>Medecin</th>-->
+                        <th>Date</th>
+                        <th>Motif</th>
+                        <!--<th>status</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="rdv : ${lists}">
+                        <td style="min-width: 200px;" >
+                            <p><a href="#" th:text="${rdv.compte}"></a></p>
+                        </td>
+                      <!--  <td>
+                            <p th:text="${rdv.personnelAccount}"></p>
+                        </td>-->
+                        <td>
+                            <h5 class="time-title p-0">Heure</h5>
+                            <p th:text="${{rdv.getDate()}}"></p>
+                        </td>
+                        <td th:text="${{rdv.getMotif()}}"></td>
+                       <!-- <td th:if="${rdv.status}==true">
+                            <span class="custom-badge status-green">Active</span>
+                            <a th:href="@{/admin/rdv/active/{id}(id=${rdv.id})}"> <i class="fa fa-check-circle"></i></a>
+                        </td>
+                        <td th:unless="${rdv.status}==true">
+                            <span class="custom-badge status-red">Inactive</span>
+                            <a th:href="@{/admin/rdv/active/{id}(id=${rdv.id})}"><i class="fa fa-check-circle-o"></i></a>
+                        </td>-->
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

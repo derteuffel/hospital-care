@@ -173,7 +173,7 @@ public class PharmacyController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateIncubator(Pharmacy pharmacy, @PathVariable Long id, RedirectAttributes redirectAttributes){
+    public String updatePharmacy(Pharmacy pharmacy, @PathVariable Long id, RedirectAttributes redirectAttributes){
         Optional<Pharmacy> pharmacy1 = pharmacyRepository.findById(id);
 
         if (pharmacy1.isPresent()) {
@@ -189,5 +189,16 @@ public class PharmacyController {
         }
     }
 
+    @GetMapping("/medicament/active/{id}")
+    public String active(@PathVariable Long id, HttpSession session){
+        Medicament medicament = medicamentRepository.getOne(id);
+        if (medicament.getStatus()== true){
+            medicament.setStatus(false);
+        }else {
+            medicament.setStatus(true);
+        }
 
+        medicamentRepository.save(medicament);
+        return "redirect:/pharmacie/medicament/lists/"+medicament.getId() ;
+    }
 }

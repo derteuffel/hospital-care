@@ -25,8 +25,8 @@ public class InfirmierSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .antMatcher("/infirmier/**").authorizeRequests()
-                .antMatchers("/downloadFile/**","/static/**").permitAll()
-                .antMatchers("/infirmier/**").access("hasAnyRole('ROLE_INFIRMIER','ROLE_ROOT')")
+                .antMatchers("/downloadFile/**","/static/**","/infirmier/**").permitAll()
+//                .antMatchers("/infirmier/**").access("hasAnyRole('ROLE_INFIRMIER','ROLE_ROOT')")
                 .and()
                 .formLogin()
                 .loginPage("/infirmier/login")

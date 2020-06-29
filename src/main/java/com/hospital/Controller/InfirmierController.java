@@ -46,7 +46,7 @@ public class InfirmierController {
     private CompteService compteService;
 
 
-    @GetMapping("/bloods/lists/{id}")
+    @GetMapping("/hospital/blood/lists/{id}")
     public String findAllByHospital(Model model, HttpServletRequest request, @PathVariable Long id){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
@@ -99,7 +99,7 @@ public class InfirmierController {
             return "dashboard/pages/admin/infirmier/hospital/blood/update";
     }
 
-    @PostMapping("/update/{id}")
+    @PostMapping("/bloods/update/{id}")
     public String updateBlood( BloodBank blood, @PathVariable Long id, RedirectAttributes redirectAttributes, Long hospitalId){
         Optional<BloodBank> blood1 = bloodBankRepository.findById(id);
         Hospital hospital = hospitalRepository.getOne(hospitalId);
@@ -127,5 +127,18 @@ public class InfirmierController {
         System.out.println("bloodBankRepository id: " + bloodBank.getId());
         bloodBankRepository.delete(bloodBank);
         return "redirect:/infirmier/blood/lists/"+bloodBank.getHospital().getId();
+    }
+
+    @GetMapping("/blood/active/{id}")
+    public String active(@PathVariable Long id, HttpSession session){
+        BloodBank blood = bloodBankRepository.getOne(id);
+        if (blood.getStatus()== true){
+            blood.setStatus(false);
+        }else {
+            blood.setStatus(true);
+        }
+
+        bloodBankRepository.save(blood);
+        return "redirect:/infirmier/bloods/lists/"+blood.getId() ;
     }
 }

@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}"><head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Armoires</title>
 </head>
 <body>
-$END$
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-sm-4 col-3">
+            <h4 class="page-title">Armoires</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-border table-striped custom-table datatable mb-0">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Hopital Name</th>
+                        <th>Date</th>
+                        <th>File</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="armoire,i: ${lists}">
+                        <input type="hidden" name="id" th:value="${armoire.id}"/>
+                        <td th:text="${i.count}"></td>
+                        <td th:text="${armoire.title}"></td>
+                        <td th:text="${armoire.hospitalName}"></td>
+                        <td th:text="${armoire.date}"></td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

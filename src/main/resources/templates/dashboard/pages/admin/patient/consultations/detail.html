@@ -1,10 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Consultation detail</title>
 </head>
 <body>
+<div class="content" layout:fragment="content">
 
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="chart-title">
+                        <h4>Consultation detail</h4>
+                    </div>
+                    <span th:text="${consultation.date}"></span>
+                    <span th:text="${consultation.height}"></span>
+                    <span th:text="${consultation.pressure}"></span>
+                    <span th:text="${consultation.weight}"></span>
+                    <span th:text="${consultation.temperature}"></span>
+                    <span th:text="${consultation.sex}"></span>
+                    <span th:text="${consultation.age}"></span>
+                    <span th:text="${consultation.tension}"></span>
+                    <span th:text="${consultation.observations}"></span>
+                    <div class="timeline-content">
+
+                        <a th:href="@{/patient/examen/lists/}+${dosMedical.id}" class="name">
+                            <span>Vous avez </span>
+                            <span th:text="${personnel.getConsultations().size()}"></span>
+                            <span>consultation(s)</span>
+                        </a>
+                        <div></div>
+                        <span class="time"></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="chart-title">
+                        <h4>Dossier Medical detail</h4>
+                    </div>
+                    <span th:text="${dosMedical.rhesus}"></span>
+                    <span th:text="${dosMedical.birthDate}"></span>
+                    <span th:text="${dosMedical.hereditaryDiseases}"></span>
+                    <span th:text="${dosMedical.height}"></span>
+                    <span th:text="${dosMedical.description}"></span>
+                    <span th:text="${dosMedical.sex}"></span>
+                    <span th:text="${dosMedical.code}"></span>
+                    <span th:text="${dosMedical.bloodType}"></span>
+                    <span th:text="${dosMedical.name}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
