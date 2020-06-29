@@ -14,4 +14,5 @@ public interface IncubatorRepository extends JpaRepository<Incubator,Long> {
     Page<Incubator> findAll(Pageable pageable);
     List<Incubator> findByNumberLike(String incubatorNo);
     List<Incubator> findByHospital(Hospital hospital);
+    List<Incubator> findAllByHospital(Hospital hospital);
 }

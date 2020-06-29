@@ -28,7 +28,7 @@ public class Incubator implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dateObtained;
 
-
+    private int quantity;
     private String status;
 
     private Boolean state;

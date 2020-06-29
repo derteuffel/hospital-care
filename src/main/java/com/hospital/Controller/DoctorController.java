@@ -4,9 +4,8 @@ import com.hospital.entities.Compte;
 import com.hospital.entities.Hospital;
 import com.hospital.entities.Personnel;
 import com.hospital.enums.ERole;
-import com.hospital.repository.CompteRepository;
-import com.hospital.repository.HospitalRepository;
-import com.hospital.repository.PersonnelRepository;
+import com.hospital.repository.*;
+import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +19,24 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin/doctors")
+@RequestMapping("/doctors")
 public class DoctorController {
 
+    @Autowired
+    private IncubatorRepository incubatorRepository;
 
+    @Autowired
+    private ConsultationRepository consultationRepository;
+
+    @Autowired
+    private DosMedicalRepository dos;
+
+    @Autowired
+    private PersonnelRepository personnelRepository;
+
+    @Autowired
+    private HospitalRepository hospitalRepository;
+
+    @Autowired
+    private CompteService compteService;
 }

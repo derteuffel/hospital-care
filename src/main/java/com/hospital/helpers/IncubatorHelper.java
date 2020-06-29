@@ -21,7 +21,7 @@ public class IncubatorHelper {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date dateObtained;
-
+    private int quantity;
     @NotNull
     private String status;
 

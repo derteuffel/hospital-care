@@ -3,7 +3,9 @@ package com.hospital.Controller;
 import com.hospital.entities.BloodBank;
 import com.hospital.entities.Compte;
 import com.hospital.entities.Hospital;
+import com.hospital.entities.Incubator;
 import com.hospital.helpers.BloodBankHelper;
+import com.hospital.helpers.IncubatorHelper;
 import com.hospital.repository.*;
 import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +90,7 @@ public class InfirmierController {
             bloodBankRepository.save(blood);
         }
         redirectAttributes.addFlashAttribute("success", "Your Blood item saved successfully");
-        return "redirect:/infirmier/bloods/lists/"+hospital.getId();
+        return "redirect:/infirmier/hospital/blood/lists/"+hospital.getId();
     }
 
     @GetMapping("/bloods/update/{id}")
@@ -140,5 +142,103 @@ public class InfirmierController {
 
         bloodBankRepository.save(blood);
         return "redirect:/infirmier/bloods/lists/"+blood.getId() ;
+    }
+
+
+    @GetMapping("/hospital/incubator/lists/{id}")
+    public String findAllIncubatorByHospital(Model model, HttpServletRequest request, @PathVariable Long id){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("hospital", hospital);
+        model.addAttribute("compte",compte);
+        model.addAttribute("lists", incubatorRepository.findAllByHospital(hospital));
+        return "dashboard/pages/admin/infirmier/hospital/incubator/lists";
+    }
+
+    @GetMapping("/incubator/add/{id}")
+    public String saveIncubator(Model model, @PathVariable Long id, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("hospital",hospital);
+        model.addAttribute("compte",compte);
+        model.addAttribute("incubator",new IncubatorHelper());
+        return  "dashboard/pages/admin/infirmier/hospital/incubator/add";
+    }
+
+    @PostMapping("/incubator/add/{id}")
+    public String addIncubator(RedirectAttributes redirectAttributes, @PathVariable Long id, @Valid IncubatorHelper incubatorHelper, HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+//        Incubator incubator = incubatorRepository.findByNumberLike();
+        Incubator incubator = new Incubator();
+        if (incubator != null){
+            incubator.setQuantity(incubator.getQuantity() + incubatorHelper.getQuantity());
+            incubatorRepository.save(incubator);
+        }else {
+            incubator.setHospital(hospital);
+           incubator.setDateObtained(incubatorHelper.getDateObtained());
+            incubator.setNumber(incubatorHelper.getNumber());
+            incubator.setState(true);
+            incubator.setStatus(incubatorHelper.getStatus());
+            incubator.setType(incubatorHelper.getType());
+            incubatorRepository.save(incubator);
+        }
+        redirectAttributes.addFlashAttribute("success", "Your Incubator item saved successfully");
+        return "redirect:/infirmier/hospital/incubator/lists/"+hospital.getId();
+    }
+
+    @GetMapping("/incubator/update/{id}")
+    public String updateIncubator(@PathVariable("id") Long id,Model model){
+
+        Incubator incubator = incubatorRepository.getOne(id);
+        model.addAttribute("incubator",incubator);
+        return "dashboard/pages/admin/infirmier/hospital/incubator/update";
+    }
+
+    @PostMapping("/incubator/update/{id}")
+    public String updateIncubator( Incubator incubator, @PathVariable Long id, RedirectAttributes redirectAttributes, Long hospitalId){
+        Optional<Incubator> incubator1 = incubatorRepository.findById(id);
+        Hospital hospital = hospitalRepository.getOne(hospitalId);
+
+        if (incubator1.isPresent()) {
+            Incubator incubator2 = incubator1.get();
+            incubator2.setType(incubator.getType());
+            incubator2.setStatus(incubator.getStatus());
+            incubator2.setNumber(incubator.getNumber());
+            incubator2.setQuantity(incubator.getQuantity());
+            incubator2.setDateObtained(incubator.getDateObtained());
+            incubatorRepository.save(incubator2);
+            redirectAttributes.addFlashAttribute("success", "The incubator has been updated successfully");
+            return "redirect:/infirmier/incubator/lists/"+hospital.getId();
+        }
+        else {
+            redirectAttributes.addFlashAttribute("error","There are no incubator with Id :" +id);
+            return "redirect:/infirmier/incubator/lists/"+hospital.getId();
+        }
+    }
+
+    @GetMapping("/incubator/delete/{id}")
+    public String deleteIncubator(@PathVariable Long id, Model model, HttpSession session) {
+        Incubator incubator = incubatorRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid incubatorRepository id:" +id));
+        System.out.println("incubatorRepository id: " + incubator.getId());
+        incubatorRepository.delete(incubator);
+        return "redirect:/infirmier/incubator/lists/"+incubator.getHospital().getId();
+    }
+
+    @GetMapping("/incubator/active/{id}")
+    public String activeIncubator(@PathVariable Long id, HttpSession session){
+        Incubator incubator = incubatorRepository.getOne(id);
+        if (incubator.getState()== true){
+            incubator.setState(false);
+        }else {
+            incubator.setState(true);
+        }
+
+        incubatorRepository.save(incubator);
+        return "redirect:/infirmier/incubator/lists/"+incubator.getId() ;
     }
 }
