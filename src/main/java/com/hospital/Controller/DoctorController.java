@@ -68,8 +68,10 @@ public class DoctorController {
         Compte compte = compteService.findByUsername(principal.getName());
         model.addAttribute("compte", compte);
         DosMedical dosMedical = dos.findByCode(compte.getUsername());
+        Personnel personnel = personnelRepository.findByEmail(compte.getEmail());
+        Hospital hospital = personnel.getHospital();
         model.addAttribute("dosMedical", dosMedical);
-        return "dashboard/pages/admin/doctor/home";
+        return "redirect:/doctor/hospital/detail/"+hospital.getId();
     }
 
     /** Retrieve all medical records *//*
