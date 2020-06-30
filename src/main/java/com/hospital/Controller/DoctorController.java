@@ -73,7 +73,7 @@ public class DoctorController {
     }
 
     /** Retrieve all medical records */
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/medical-record/all")
     public String getAllMedicalRecords(Model model, HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());

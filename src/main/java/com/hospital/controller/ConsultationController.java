@@ -53,15 +53,7 @@ public class ConsultationController {
     @Autowired
     private PrescriptionRepository prescriptionRepository;
 
-    @Autowired
-    private CompteService compteService;
-
-
-
-    /** owner-developer branch code **/
-
-
-    /** Get all consultations in a medical record */
+    @Autowired    /** Get all consultations in a medical record */
     @GetMapping(value = "/medical-record/{code}")
     public String getAllConsultationsInMedicalRecord(@PathVariable String code, Model model){
         DosMedical dosMedical = dosMedicalRepository.findByCode(code);
@@ -70,6 +62,14 @@ public class ConsultationController {
         model.addAttribute("code",code);
         return "dashboard/pages/admin/consultation/consultation";
     }
+
+    private CompteService compteService;
+
+
+
+    /** owner-developer branch code **/
+
+
 
     /** Get all consultations in an hospital */
     @GetMapping(value = "/hospital/{id}")
