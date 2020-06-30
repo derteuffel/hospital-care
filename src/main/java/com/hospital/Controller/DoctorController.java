@@ -72,7 +72,7 @@ public class DoctorController {
         return "dashboard/pages/admin/doctor/home";
     }
 
-    /** Retrieve all medical records */
+    /** Retrieve all medical records *//*
     @GetMapping(value = "/medical-record/all")
     public String getAllMedicalRecords(Model model, HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
@@ -81,7 +81,7 @@ public class DoctorController {
         if(compte.checkRole(ERole.ROLE_DOCTOR)) model.addAttribute("compte",compte);
         model.addAttribute("dosMedicalList",dos.findAll());
         return "dashboard/pages/admin/doctor/dosMedical";
-    }
+    }*/
 
     /** form for adding a medical-record */
     @GetMapping(value = "/create")
@@ -167,18 +167,7 @@ public class DoctorController {
 
     }
 
-    @GetMapping("/consultation/lists/{id}")
-    public String consultations(@PathVariable Long id, Model model, HttpServletRequest request){
-        Principal principal = request.getUserPrincipal();
-        Compte compte = compteService.findByUsername(principal.getName());
-        model.addAttribute("compte",compte);
-        DosMedical dosMedical = dos.getOne(id);
-        List<Consultation> consultations = consultationRepository.findByDosMedical(dosMedical);
-        model.addAttribute("dosMedical",dosMedical);
-        model.addAttribute("lists",consultations);
-        return "dashboard/pages/admin/doctor/consultations/lists";
 
-    }
 
     @GetMapping("/consultation/detail/{id}")
     public String consultation(@PathVariable Long id, Model model, HttpServletRequest request){
@@ -200,15 +189,15 @@ public class DoctorController {
         Compte compte = compteService.findByUsername(principal.getName());
         DosMedical dosMedical = dosMedicalRepository.findByCode(code);
         List<Consultation> consultations = consultationRepository.findByDosMedical(dosMedical);
-        model.addAttribute("consultationList",consultations);
+        model.addAttribute("lists",consultations);
         model.addAttribute("code",code);
         model.addAttribute("compte",compte);
-        return "dashboard/pages/admin/consultation/consultation";
+        return "dashboard/pages/admin/doctor/consultation/lists";
     }
 
 
     /** Get all consultations in an hospital */
-    @GetMapping(value = "/doctor/{id}")
+    @GetMapping(value = "/consultation/lists/{id}")
     public String getAllConsultationsForDoctor(@PathVariable Long id,Model model){
         Personnel personnel = personnelRepository.getOne(id);
         Compte compte = compteRepository.findByPersonnel_Id(personnel.getId());
@@ -219,7 +208,7 @@ public class DoctorController {
 
         return "dashboard/pages/admin/doctor/consultations";
     }
-    @GetMapping("/delete/{id}")
+    @GetMapping("/consultation/delete/{id}")
     public String deleteConsultationByDoctor(@PathVariable Long id, Model model) {
         Consultation consultation = consultationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid consultation id:" +id));
@@ -242,7 +231,7 @@ public class DoctorController {
         }
         model.addAttribute("lists",examens);
         model.addAttribute("dosMedical",dosMedical);
-        return "dashboard/pages/admin/docotor/examens/lists";
+        return "dashboard/pages/admin/doctor/examens/lists";
 
     }
 
@@ -259,7 +248,7 @@ public class DoctorController {
         }
         model.addAttribute("lists",prescriptions);
         model.addAttribute("dosMedical",dosMedical);
-        return "dashboard/pages/admin/docotor/prescriptions/lists";
+        return "dashboard/pages/admin/doctor/prescriptions/lists";
 
     }
 
@@ -300,7 +289,7 @@ public class DoctorController {
     }
 
 
-    @GetMapping("/rdv/add/{id}")
+   /* @GetMapping("/rdv/add/{id}")
     public ModelAndView showform(HttpServletRequest request, @PathVariable Long id){
 
         Principal principal = request.getUserPrincipal();
@@ -337,13 +326,15 @@ public class DoctorController {
         rdvRepository.save(rdv);
         redirAttrs.addFlashAttribute("message", "Rdv added Successfully");
         return "redirect:/doctor/rdv/lists";
-    }
+    }*/
 
-    @GetMapping("/armoire/lists")
-    public String armoire(HttpServletRequest request, Model model){
+    @GetMapping("/armoire/detail/{id}")
+    public String armoire(HttpServletRequest request, Model model, @PathVariable Long id){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
-        List<Armoire> armoires = armoireRepository.findAllByCompte_Id(compte.getId(),Sort.by(Sort.Direction.DESC,"id"));
+        DosMedical dosMedical = dos.getOne(id);
+        Compte compte1 = dosMedical.getCompte();
+        List<Armoire> armoires = armoireRepository.findAllByCompte_Id(compte1.getId(),Sort.by(Sort.Direction.DESC,"id"));
         model.addAttribute("compte", compte);
         model.addAttribute("lists",armoires);
         return "dashboard/pages/admin/doctor/armoire/lists";

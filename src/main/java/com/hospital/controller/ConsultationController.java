@@ -53,7 +53,7 @@ public class ConsultationController {
     @Autowired
     private PrescriptionRepository prescriptionRepository;
 
-    @Autowired    /** Get all consultations in a medical record */
+    /** Get all consultations in a medical record */
     @GetMapping(value = "/medical-record/{code}")
     public String getAllConsultationsInMedicalRecord(@PathVariable String code, Model model){
         DosMedical dosMedical = dosMedicalRepository.findByCode(code);
