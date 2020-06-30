@@ -99,7 +99,8 @@ public class ConsultationController {
 
     /** form for adding a consultation */
     @GetMapping(value = "/create")
-    public String addConsultation(@RequestParam("code") String code, Model model, HttpServletRequest request, RedirectAttributes redirectAttributes){
+    public String addConsultation(@RequestParam("code") String code, Model model,
+                                  HttpServletRequest request, RedirectAttributes redirectAttributes){
 
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
@@ -136,7 +137,8 @@ public class ConsultationController {
 
     /** Add a consultation */
     @PostMapping(value = "/create")
-    public String saveConsultation(@ModelAttribute @Valid ConsultationHelper consultationHelper, Errors errors, Model model, HttpServletRequest request){
+    public String saveConsultation(@ModelAttribute @Valid ConsultationHelper consultationHelper,
+                                   Errors errors, Model model, HttpServletRequest request){
 
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
@@ -281,4 +283,5 @@ public class ConsultationController {
         return "redirect:/admin/medical-record/all";
 
     }
+
 }

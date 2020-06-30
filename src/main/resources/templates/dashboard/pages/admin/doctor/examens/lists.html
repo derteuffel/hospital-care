@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Examens</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/doctor/examen/lists/}+${dosMedical.id}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Medical Records</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-sm-4 col-3">
+            <h4 class="page-title">Examens</h4>
+        </div>
+    </div>
+    <div th:if="${success}">
+        <div class="alert alert-success" th:text="${success}"></div>
+    </div>
+    <div th:if="${error}">
+        <div class="alert alert-danger" th:text="${error}"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-border table-striped custom-table datatable mb-0">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Test Type</th>
+                        <th>Date Of Testing</th>
+                        <th>Deliver Date</th>
+                        <th>Results</th>
+                        <th>Observations</th>
+                        <th>Hospital</th>
+                        <th>Add results</th>
+                        <!--<th>Hospital</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="examen,i: ${lists}">
+                        <input type="hidden" name="id" th:value="${exam.id}"/>
+                        <td th:text="${i.count}"></td>
+                        <td th:text="${exam.name}"></td>
+                        <td th:text="${exam.testType}"></td>
+                        <td th:text="${exam.dateOfTesting}"></td>
+                        <td th:text="${exam.deliverDate}"></td>
+                        <td >
+                            <span th:if="${exam.results} != null" th:text="${exam.results}"></span>
+                            <span th:unless="${exam.results} != null">Non disponible</span>
+                        </td>
+                        <td >
+                            <span th:if="${exam.description} != null" th:text="${exam.description}"></span>
+                            <span th:unless="${exam.description} != null">Non disponible</span>
+                        </td>
+                        <td th:text="${exam.hospital.name}"></td>
+                        <!--<td th:text="${consultation.hospital.name}"></td>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
