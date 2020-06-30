@@ -1,9 +1,6 @@
 package com.hospital.Controller;
 
-import com.hospital.entities.BloodBank;
-import com.hospital.entities.Compte;
-import com.hospital.entities.Hospital;
-import com.hospital.entities.Incubator;
+import com.hospital.entities.*;
 import com.hospital.helpers.BloodBankHelper;
 import com.hospital.helpers.IncubatorHelper;
 import com.hospital.repository.*;
@@ -21,6 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -47,6 +47,10 @@ public class InfirmierController {
     @Autowired
     private CompteService compteService;
 
+    @GetMapping("/login")
+    public String login(Model model){
+        return "dashboard/pages/admin/doctor/login";
+    }
 
     @GetMapping("/hospital/blood/lists/{id}")
     public String findAllByHospital(Model model, HttpServletRequest request, @PathVariable Long id){
@@ -94,15 +98,19 @@ public class InfirmierController {
     }
 
     @GetMapping("/bloods/update/{id}")
-    public String updateBlood(@PathVariable("id") Long id,Model model){
-
+    public String updateBlood(@PathVariable("id") Long id,Model model, HttpServletRequest request){
+            Principal principal = request.getUserPrincipal();
+            Compte compte = compteService.findByUsername(principal.getName());
             BloodBank blood = bloodBankRepository.getOne(id);
             model.addAttribute("blood",blood);
             return "dashboard/pages/admin/infirmier/hospital/blood/update";
     }
 
     @PostMapping("/bloods/update/{id}")
-    public String updateBlood( BloodBank blood, @PathVariable Long id, RedirectAttributes redirectAttributes, Long hospitalId){
+    public String updateBlood( BloodBank blood, @PathVariable Long id, RedirectAttributes redirectAttributes,
+                               Long hospitalId, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         Optional<BloodBank> blood1 = bloodBankRepository.findById(id);
         Hospital hospital = hospitalRepository.getOne(hospitalId);
 
@@ -132,7 +140,9 @@ public class InfirmierController {
     }
 
     @GetMapping("/blood/active/{id}")
-    public String active(@PathVariable Long id, HttpSession session){
+    public String active(@PathVariable Long id, HttpSession session, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         BloodBank blood = bloodBankRepository.getOne(id);
         if (blood.getStatus()== true){
             blood.setStatus(false);
@@ -191,15 +201,21 @@ public class InfirmierController {
     }
 
     @GetMapping("/incubator/update/{id}")
-    public String updateIncubator(@PathVariable("id") Long id,Model model){
-
+    public String updateIncubator(@PathVariable("id") Long id,Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         Incubator incubator = incubatorRepository.getOne(id);
         model.addAttribute("incubator",incubator);
+        model.addAttribute("compte",compte);
         return "dashboard/pages/admin/infirmier/hospital/incubator/update";
     }
 
     @PostMapping("/incubator/update/{id}")
-    public String updateIncubator( Incubator incubator, @PathVariable Long id, RedirectAttributes redirectAttributes, Long hospitalId){
+    public String updateIncubator( Incubator incubator, @PathVariable Long id,
+                                   RedirectAttributes redirectAttributes, Long hospitalId, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+
         Optional<Incubator> incubator1 = incubatorRepository.findById(id);
         Hospital hospital = hospitalRepository.getOne(hospitalId);
 
@@ -230,7 +246,9 @@ public class InfirmierController {
     }
 
     @GetMapping("/incubator/active/{id}")
-    public String activeIncubator(@PathVariable Long id, HttpSession session){
+    public String activeIncubator(@PathVariable Long id, HttpSession session, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         Incubator incubator = incubatorRepository.getOne(id);
         if (incubator.getState()== true){
             incubator.setState(false);
@@ -240,5 +258,23 @@ public class InfirmierController {
 
         incubatorRepository.save(incubator);
         return "redirect:/infirmier/incubator/lists/"+incubator.getId() ;
+    }
+
+
+    @GetMapping("/hospital/{id}")
+    public String getAllExamensOfHospital(@PathVariable Long id, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+
+        List<Examen> examens = new ArrayList<>();
+        Collection<Consultation> consultations = hospital.getConsultations();
+        for (Consultation consultation : consultations){
+            examens.addAll(consultation.getExamens());
+        }
+        model.addAttribute("lists",examens);
+        model.addAttribute("hospital",hospital);
+        model.addAttribute("compte",compte);
+        return "dashboard/pages/admin/infirmier/hospital/exams";
     }
 }
