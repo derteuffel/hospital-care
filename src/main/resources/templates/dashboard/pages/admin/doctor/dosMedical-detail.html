@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>DosMedical-détail</title>
+</head>
+
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-sm-7 col-6">
+            <h4 class="page-title">Detail du dossier medical</h4>
+            <h4 class="page-title">
+                <span class="text-success" th:text="${message}"></span>
+                <span class="text-danger" th:text="${error}"></span>
+            </h4>
+        </div>
+    </div>
+    <div class="card-box profile-header">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="profile-view">
+                    <div class="profile-basic">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="profile-info-left">
+                                    <h3 class="user-name m-t-0 mb-0">
+                                        <span class="title">Name:</span>
+                                        <span th:text="${dosMedical.name}"></span>
+                                    </h3>
+                                    <hr>
+                                    <h3 class="user-name m-t-0 mb-0">
+                                        <span class="title">BirthDate:</span>
+                                        <span th:text="${dosMedical.birthDate}" ></span>
+                                    </h3>
+                                   <h3 class="user-name m-t-0 mb-0">
+                                       <span class="title">Rhesus:</span>
+                                       <span th:text="${dosMedical.rhesus}"></span>
+                                   </h3>
+                                    <hr>
+                                    <h3 class="user-name m-t-0 mb-0">
+                                        <span class="title">Weight:</span>
+                                        <span th:text="${dosMedical.weight}"></span>
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="personal-info">
+                                    <li>
+                                        <span class="title">Height:</span>
+                                        <span class="text"><a href="#"th:text="${dosMedical.height}"></a></span>
+                                    </li>
+                                    <li>
+                                        <span class="title">Code:</span>
+                                        <span class="text"><a href="#"th:text="${dosMedical.code}"></a></span>
+                                    </li>
+                                    <li>
+                                        <span class="title">Blood Type:</span>
+                                        <span class="text"th:text="${dosMedical.bloodType}"></span>
+                                    </li>
+                                    <li>
+                                        <span class="title">Sexe:</span>
+                                        <span class="text"th:text="${dosMedical.sex}"></span>
+                                    </li>
+                                    <li>
+                                        <span class="title">Description:</span>
+                                        <span class="text"th:text="${dosMedical.description}"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="profile-tabs">
+        <div class="row">
+
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                <a th:href="@{/doctor/medical-record/}+${dosMedical.code}">
+                    <div class="dash-widget">
+                        <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
+                        <div class="dash-widget-info text-right">
+                            <h3 th:text="${consultation.size()}"></h3>
+                            <span class="widget-title1">Consultations <i class="fa fa-check" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                <a th:href="@{/doctor/examen/lists/}+${dosMedical.id}">
+                    <div class="dash-widget">
+                        <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
+                        <div class="dash-widget-info text-right">
+                            <h3 th:text="${examens.size()}"></h3>
+                            <span class="widget-title1">Examens <i class="fa fa-check" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- profile23:03-->
+</html>
