@@ -19,6 +19,7 @@ public class Examen implements Serializable {
     private Long id;
 
     private String name;
+    private  int numero;
 
     private String testType;
 
@@ -43,6 +44,22 @@ public class Examen implements Serializable {
     @ManyToOne
     private Hospital hospital;
 
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public String getResults() {
         return results;

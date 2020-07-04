@@ -44,7 +44,7 @@
             </a>
         </div>
         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
-            <a th:href="@{/admin/exam/hospital/}+${hospital.id}">
+            <a th:href="@{/doctor/examen/lists/}+${hospital.id}">
                 <div class="dash-widget">
                     <span class="dash-widget-bg4"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
@@ -55,12 +55,24 @@
             </a>
         </div>
         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
-            <a th:href="@{/pharmacie/hospital/}+${hospital.id}">
+            <a th:href="@{/doctor/pharmacie/hospital/}+${hospital.id}">
                 <div class="dash-widget">
                     <span class="dash-widget-bg4"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
                         <h3>pharmacy</h3>
                         <span class="widget-title4">pharmacy <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+            <a th:href="@{/doctor/hospital/rdvs/lists}">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg4"><i class="fa fa-meetup" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3>Appointment</h3>
+                        <span class="widget-title4">Appointment <i class="fa fa-check" aria-hidden="true"></i></span>
                     </div>
                 </div>
             </a>

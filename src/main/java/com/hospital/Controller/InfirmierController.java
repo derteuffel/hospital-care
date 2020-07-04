@@ -42,6 +42,9 @@ public class InfirmierController {
     private PersonnelRepository personnelRepository;
 
     @Autowired
+    private ExamenRepository examenRepository;
+
+    @Autowired
     private HospitalRepository hospitalRepository;
 
     @Autowired
@@ -103,6 +106,7 @@ public class InfirmierController {
             Compte compte = compteService.findByUsername(principal.getName());
             BloodBank blood = bloodBankRepository.getOne(id);
             model.addAttribute("blood",blood);
+            model.addAttribute("compte",compte);
             return "dashboard/pages/admin/infirmier/hospital/blood/update";
     }
 
@@ -261,7 +265,7 @@ public class InfirmierController {
     }
 
 
-    @GetMapping("/hospital/{id}")
+    @GetMapping("/hospital/examen/lists/{id}")
     public String getAllExamensOfHospital(@PathVariable Long id, Model model, HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
@@ -276,5 +280,18 @@ public class InfirmierController {
         model.addAttribute("hospital",hospital);
         model.addAttribute("compte",compte);
         return "dashboard/pages/admin/infirmier/hospital/exams";
+    }
+
+    @GetMapping("/hospital/examen/detail/{id}")
+    public String getExamensOfHospital(@PathVariable Long id, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Examen examen = examenRepository.getOne(id);
+        Hospital hospital = examen.getHospital();
+
+        model.addAttribute("examen",examen);
+        model.addAttribute("hospital",hospital);
+        model.addAttribute("compte",compte);
+        return "dashboard/pages/admin/infirmier/hospital/exam";
     }
 }

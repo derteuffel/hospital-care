@@ -25,11 +25,43 @@ public class BloodBankHelper {
 
     private int quantity;
 
+    public String getGroupeSanguin() {
+        return groupeSanguin;
+    }
 
+    public void setGroupeSanguin(String groupeSanguin) {
+        this.groupeSanguin = groupeSanguin;
+    }
 
+    public String getRhesus() {
+        return rhesus;
+    }
 
+    public void setRhesus(String rhesus) {
+        this.rhesus = rhesus;
+    }
 
+    public Date getDate() {
+        return date;
+    }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
+    public String getStatus() {
+        return status;
+    }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }
