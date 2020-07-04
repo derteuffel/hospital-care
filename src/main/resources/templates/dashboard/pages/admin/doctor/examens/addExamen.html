@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Add an Exam</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h4 class="page-title">Add Exam</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <form method="post" action="/admin/exam/create" th:object="${examenHelper}">
+                <input class="form-control" type="hidden" name="idConsultation" th:value="${idConsultation}">
+                <div class="form-group">
+                    <label>Name</label>
+                    <select name="name" class="form-control">
+                        <option value="A" test-type="A-Test">A</option>
+                        <option value="B" test-type="B-Test">B</option>
+                        <option value="C" test-type="C-Test">C</option>
+                        <option value="D" test-type="D-Test">D</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label th:for="testType">Test Type</label>
+                    <input class="form-control" type="text" th:field="*{testType}" required/>
+                    <span class="error" th:errors="*{testType}"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="dateOfTesting">Date Of Testing</label>
+                    <input class="form-control date" type="date" th:field="*{dateOfTesting}" required/>
+                    <span class="error" th:errors="*{dateOfTesting}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Deliver Date</label>
+                    <input class="form-control" type="date" name="deliverDate" />
+                </div>
+                <div class="form-group">
+                    <label>Hospital</label>
+                    <select name="hospitalName" class="form-control">
+                        <th:block th:each="hospital: ${hospitalList}">
+                            <option  th:value="${hospital.name}" th:text="${hospital.name}"></option>
+                        </th:block>
+                    </select>
+                </div>
+                <div class="m-t-20 text-center">
+                    <a th:href="@{/doctor/exam/lists}"class="btn btn-secondary submit-btn">Annuler</a>
+                    <button class="btn btn-primary submit-btn">Create Exam</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

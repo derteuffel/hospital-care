@@ -109,7 +109,7 @@ public class DoctorController {
                                    Errors errors, Model model, HttpServletRequest request){
 
         if(errors.hasErrors()) {
-            return "dashboard/pages/admin/patient/addDosMedical";
+            return "dashboard/pages/admin/doctor/addDosMedical";
         }
         Compte compte = compteRepository.findByEmail(dosMedicalHelper.getEmail());
         DosMedical dosMedical = dos.findByCode(dosMedicalHelper.getCode());
@@ -341,7 +341,7 @@ public class DoctorController {
             Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());
             examenRepository.save(examenHelper.getExamInstance(hospital,consultation));
         }
-        return  "redirect:/doctor/consultation/detail/"+examenHelper.getIdConsultation();
+        return  "redirect:/doctor/examen/lists";
     }
 
     @GetMapping("/ordonances/lists/{id}")
@@ -461,20 +461,6 @@ public class DoctorController {
         return "dashboard/pages/admin/doctor/hospital/detail";
     }
 
-
-   /* @GetMapping(value = "/hospital/lists")
-    public ModelAndView getHospitals(Model model, HttpServletRequest request) {
-
-        Principal principal = request.getUserPrincipal();
-        Compte compte = compteService.findByUsername(principal.getName());
-        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/doctor/hospital/lists");
-
-        List<Hospital> hospitals = hospitalRepository.findAll();
-        modelAndView.addObject("lists",hospitals);
-        modelAndView.addObject("compte", compte);
-
-        return modelAndView;
-    }*/
 
 
 
