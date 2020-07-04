@@ -191,16 +191,7 @@ public class DoctorController {
         return "dashboard/pages/admin/doctor/dosMedical";
     }
 
-   /* @GetMapping("/delete/{id}")
-    public String deleteById(@PathVariable Long id, Model model, String password, HttpServletRequest request) {
-        Principal principal = request.getUserPrincipal();
-        Compte compte = compteService.findByUsername(principal.getName());
-        DosMedical dosMedical = dosMedicalRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid consultation id:" +id));
-        dosMedicalRepository.delete(dosMedical);
-        return "redirect:/doctor/medical-record/all";
 
-    }*/
 
     @GetMapping(value = "/consultaion/create")
     public String addConsultation(@RequestParam("code") String code, Model model,
@@ -489,7 +480,7 @@ public class DoctorController {
         }
         model.addAttribute("lists",prescriptions);
         model.addAttribute("dosMedical",dosMedical);
-        return "dashboard/pages/admin/doctor/prescriptions/lists";
+        return "dashboard/pages/admin/doctor/prescription/lists";
 
     }
 
