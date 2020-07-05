@@ -31,7 +31,7 @@ public class PharmacieSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/pharmacie/login")
                 .loginProcessingUrl("/pharmacie/login")
-                .defaultSuccessUrl("/pharmacie/home")
+                .defaultSuccessUrl("/pharmacie/detail/{id}")
                 .permitAll()
                 .and()
                 .logout()

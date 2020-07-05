@@ -52,7 +52,7 @@ public class PharmacyController {
     }
 
 
-    @GetMapping("/hospital/{id}")
+    /*@GetMapping("/hospital/{id}")
     public String getPharmacyOfHospital(@PathVariable Long id, Model model){
         Optional<Hospital> hospital =  hospitalRepository.findById(id);
         List<Pharmacy> pharmacies = pharmacyRepository.findByHospital(hospital);
@@ -61,6 +61,8 @@ public class PharmacyController {
 
         return "dashboard/pages/admin/pharmacy/list-pharmacy";
     }
+*/
+
 
     @GetMapping("/detail/{id}")
     public String detailPharmacy(@PathVariable Long id, Model model){
@@ -162,31 +164,20 @@ public class PharmacyController {
     @GetMapping("/update/{id}")
     public String showEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs){
 
-        try{
             Pharmacy pharmacy = pharmacyRepository.getOne(id);
             model.addAttribute("pharmacy",pharmacy);
             return "dashboard/pages/admin/pharmacy/updatePharmacy";
-        }catch (Exception e){
-            redirAttrs.addFlashAttribute("error", "This pharmacy seems to not exist");
-            return "redirect:/pharmacie/home";
-        }
     }
 
     @PostMapping("/update/{id}")
     public String updatePharmacy(Pharmacy pharmacy, @PathVariable Long id, RedirectAttributes redirectAttributes){
         Optional<Pharmacy> pharmacy1 = pharmacyRepository.findById(id);
-
-        if (pharmacy1.isPresent()) {
             Pharmacy pharmacy2 = pharmacy1.get();
             pharmacy2.setName(pharmacy.getName());
             pharmacyRepository.save(pharmacy2);
             redirectAttributes.addFlashAttribute("success", "The pharmacy has been updated successfully");
             return "redirect:/pharmacie/detail/"+pharmacy.getId();
-        }
-        else {
-            redirectAttributes.addFlashAttribute("error","There are no pharmacy with Id :" +id);
-            return "redirect:/pharmacie/home";
-        }
+
     }
 
     @GetMapping("/medicament/active/{id}")
