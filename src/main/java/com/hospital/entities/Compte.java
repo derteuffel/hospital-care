@@ -28,6 +28,7 @@ public class Compte implements Serializable {
     private String avatar;
     private Boolean status;
     private String name;
+    private String token;
 
 
     @OneToOne
@@ -58,12 +59,14 @@ public class Compte implements Serializable {
     private List<Armoire> armoires;
 
 
-
-    public Compte(String username, String email, Boolean status, String password) {
+    public Compte(String username, String password, String email, String avatar, Boolean status, String name, String token) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.avatar = avatar;
         this.status = status;
+        this.name = name;
+        this.token = token;
     }
 
     public Compte(){
@@ -180,5 +183,13 @@ public class Compte implements Serializable {
 
     public void setArmoires(List<Armoire> armoires) {
         this.armoires = armoires;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

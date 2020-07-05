@@ -2,16 +2,17 @@ package com.hospital.Controller;
 
 import com.hospital.entities.*;
 import com.hospital.helpers.BloodBankHelper;
+import com.hospital.helpers.CompteRegistrationDto;
+import com.hospital.helpers.DosMedicalHelper;
 import com.hospital.helpers.IncubatorHelper;
 import com.hospital.repository.*;
 import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,11 +50,43 @@ public class InfirmierController {
 
     @Autowired
     private CompteService compteService;
+    @Autowired
+    private CompteRepository compteRepository;
+
+    @Autowired
+    private ArmoireRepository armoireRepository;
+
+    @Autowired
+    private RdvRepository rdvRepository;
 
     @GetMapping("/login")
     public String login(Model model){
         return "dashboard/pages/admin/doctor/login";
     }
+
+    @GetMapping("/home")
+    public String home(HttpServletRequest request, Model model){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte", compte);
+        DosMedical dosMedical = dos.findByCode(compte.getUsername());
+        Personnel personnel = personnelRepository.findByEmail(compte.getEmail());
+        Hospital hospital = personnel.getHospital();
+        model.addAttribute("dosMedical", dosMedical);
+        return "redirect:/infirmier/hospital/detail/"+hospital.getId();
+    }
+
+    @GetMapping("/hospital/detail/{id}")
+    public String getHospital(@PathVariable Long id, Model model, HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hos = hospitalRepository.getOne(id);
+        model.addAttribute("hospital", hos);
+        model.addAttribute("compte", compte);
+        model.addAttribute("lists", personnelRepository.findAllByFunctionAndHospital_Id("INFIRMIER",hos.getId()));
+        return "dashboard/pages/admin/infirmier/hospital/detail";
+    }
+
 
     @GetMapping("/hospital/blood/lists/{id}")
     public String findAllByHospital(Model model, HttpServletRequest request, @PathVariable Long id){
@@ -294,4 +327,294 @@ public class InfirmierController {
         model.addAttribute("compte",compte);
         return "dashboard/pages/admin/infirmier/hospital/exam";
     }
+
+    /** form for adding a medical-record */
+    @GetMapping(value = "/medical-record/create")
+    public String addMedicalRecords(HttpServletRequest request, Model model){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        String code = request.getParameter("code");
+        DosMedicalHelper dosMedicalHelper = new DosMedicalHelper();
+        if(code != null) dosMedicalHelper.setCode(code);
+        model.addAttribute("compte",compte);
+        model.addAttribute("dosMedicalHelper",dosMedicalHelper);
+        return "dashboard/pages/admin/infirmier/addDosMedical";
+    }
+
+    /** Add a medical record */
+    @PostMapping(value = "/medical-record/create")
+    public String addMedicalRecord(@ModelAttribute @Valid DosMedicalHelper dosMedicalHelper,
+                                   Errors errors, Model model, HttpServletRequest request){
+
+        if(errors.hasErrors()) {
+            return "dashboard/pages/admin/infirmier/addDosMedical";
+        }
+        Compte compte = compteRepository.findByEmail(dosMedicalHelper.getEmail());
+        DosMedical dosMedical = dos.findByCode(dosMedicalHelper.getCode());
+
+        if(compte != null){
+            model.addAttribute("error","There is an existing account with the provided email");
+            return "dashboard/pages/admin/infirmier/addDosMedical";
+        }else if (dosMedical != null){
+            model.addAttribute("error","There is an existing medical record with the provided code");
+            return "dashboard/pages/admin/infirmier/addDosMedical";
+        }else {
+            CompteRegistrationDto compteDto = new CompteRegistrationDto();
+            compteDto.setEmail(dosMedicalHelper.getEmail());
+            compteDto.setPassword(dosMedicalHelper.getCode());
+            compteDto.setUsername(dosMedicalHelper.getCode());
+            compteService.savePatient(compteDto,"/img/default.jpeg", dosMedicalHelper.getDosMedicalInstance());
+        }
+
+        model.addAttribute("success","Operation successfully completed");
+        Principal principal = request.getUserPrincipal();
+        Compte loggedAccount = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",loggedAccount);
+
+        return "redirect:/infirmier/medical-record/search?search="+dosMedicalHelper.getCode();
+    }
+
+    /** form for updating a medical-record */
+   /* @GetMapping(value = "/update/{code}")
+    public String updateMedicalRecords(@PathVariable String code, Model model, HttpServletRequest request){
+        DosMedical dosMedical = dos.findByCode(code);
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        model.addAttribute("dosMedicalHelper",DosMedicalHelper.getDosMedicalHelperInstance(dosMedical));
+        return "dashboard/pages/admin/doctor/updateDosMedical";
+    }
+
+    *//** Update a medical record *//*
+    @PostMapping(value = "/update/{code}")
+    public String updateMedicalRecord(@PathVariable String code, @ModelAttribute @Valid DosMedicalHelper dosMedicalHelper, Errors errors, Model model)
+    {
+        if(errors.hasErrors()) {
+            return "dashboard/pages/admin/doctor/updateDosMedical";
+        }
+        DosMedical exDosMedical = dos.findByCode(code);
+        DosMedical newDosMedical = dosMedicalHelper.getDosMedicalInstance();
+        exDosMedical.getCompte().setEmail(dosMedicalHelper.getEmail());
+        newDosMedical.setId(exDosMedical.getId());
+        newDosMedical.setCompte(exDosMedical.getCompte());
+        dos.save(newDosMedical);
+
+        model.addAttribute("success","Operation successfully completed");
+        System.out.println(model.getAttribute("success"));
+        return "redirect:/doctor/all";
+    }*/
+
+    @GetMapping("/medical-record/{id}")
+    public String dosMedicalDetail(@PathVariable Long id, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        DosMedical dosMedical = dos.getOne(id);
+        model.addAttribute("dosMedical",dosMedical);
+        return "dashboard/pages/admin/infirmier/dosMedical-detail";
+    }
+
+    /** search a medical record */
+    @GetMapping(value = "/medical-record/search")
+    public String getMedicalRecord(@RequestParam("search") String search, Model model, RedirectAttributes redirectAttributes){
+        if(search != ""){
+            DosMedical dosMedical = dos.findByCode(search);
+            if(dosMedical != null) {
+
+                model.addAttribute("dosMedicalFound", dosMedical);
+            }else {
+                redirectAttributes.addFlashAttribute("error","There are no account and medical records with provided code. Please add new medical record");
+                return "redirect:/infirmier/medical-record/create";
+            }
+        }
+
+        return "dashboard/pages/admin/infirmier/dosMedical";
+    }
+
+    @GetMapping("/armoire/detail/{id}")
+    public String armoire(HttpServletRequest request, Model model, @PathVariable Long id){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        DosMedical dosMedical = dos.getOne(id);
+        Compte compte1 = dosMedical.getCompte();
+        List<Armoire> armoires = armoireRepository.findAllByCompte_Id(compte1.getId(), Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("compte", compte);
+        model.addAttribute("compte1", compte1);
+        model.addAttribute("lists",armoires);
+        return "dashboard/pages/admin/infirmier/armoire/lists";
+    }
+
+    @GetMapping("/appointment/lists/{id}")
+    public String appointments(HttpServletRequest request, Model model, @PathVariable Long id){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("compte",compte);
+        List<Rdv> rdvs = rdvRepository.findAllByHospital_Id(hospital.getId(), Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("lists",rdvs);
+        return "dashboard/pages/admin/infirmier/appointment/lists";
+    }
+
+
+    @GetMapping("/active/{id}")
+    public String findAllStatusActive(Model model,HttpServletRequest request, @PathVariable Long id){
+        Principal principal =  request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+        List<Rdv> lists = rdvRepository.findAllByHospital_IdAndStatus(hospital.getId(),true,Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("lists", lists);
+        return "dashboard/pages/admin/infirmier/appointment/rdv-actif";
+    }
+
+    @GetMapping("/inactive/{id}")
+    public String findAllStatusInactive(Model model,HttpServletRequest request, @PathVariable Long id){
+        Principal principal =  request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+        List<Rdv> lists = rdvRepository.findAllByHospital_IdAndStatus(hospital.getId(),false,Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("lists", lists);
+        model.addAttribute("compte",compte);
+        return "dashboard/pages/admin/infirmier/appointment/rdv-inactif";
+    }
+
+    @GetMapping("/appointement/detail/{id}")
+    public String appointmentDetail(@PathVariable Long id, HttpServletRequest request, Model model){
+        Principal principal =  request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Rdv rdv = rdvRepository.getOne(id);
+        Hospital hospital = rdv.getHospital();
+        List<Personnel> personnels = personnelRepository.findAllByFunctionAndHospital_Id("DOCTOR",hospital.getId());
+        model.addAttribute("compte",compte);
+        model.addAttribute("rdv",rdv);
+        model.addAttribute("lists",personnels);
+        model.addAttribute("hospital",hospital);
+        return "dashboard/pages/admin/infirmier/appointment/detail";
+
+    }
+
+    @GetMapping("/appointement/assign/{id}/{doctorId}")
+    public String appointmentSignToDoctor(@PathVariable Long id,@PathVariable Long doctorId, HttpServletRequest request, RedirectAttributes redirectAttributes){
+        Principal principal =  request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Rdv rdv = rdvRepository.getOne(id);
+        Hospital hospital = rdv.getHospital();
+        Personnel personnel = personnelRepository.getOne(doctorId);
+        Compte personnelAccount = compteRepository.findByPersonnel_Id(personnel.getId());
+        rdv.getComptes().add(personnelAccount);
+        rdvRepository.save(rdv);
+        redirectAttributes.addFlashAttribute("success", "You successfuly assign this appointment to :"+personnel.getLastName()+" "+personnel.getFirstName());
+        return "redirect:/infirmier/appointment/detail/"+rdv.getId();
+
+    }
+
+    @GetMapping("/personnel/appointment/lists/{id}")
+    public String appointmentsForDoctor(HttpServletRequest request, Model model, @PathVariable Long id){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        Personnel personnel = personnelRepository.getOne(id);
+        Compte compte1 = compteRepository.findByPersonnel_Id(personnel.getId());
+        List<Rdv> rdvs = rdvRepository.findAllByComptes_Id(compte1.getId(), Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("lists",rdvs);
+        return "dashboard/pages/admin/infirmier/appointment/lists";
+    }
+
+    @GetMapping(value = "/medical-record/consultation/{code}")
+    public String getAllConsultationsInMedicalRecord(@PathVariable String code, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        DosMedical dosMedical = dos.findByCode(code);
+        List<Consultation> consultations = consultationRepository.findByDosMedical(dosMedical);
+        model.addAttribute("lists",consultations);
+        model.addAttribute("code",code);
+        model.addAttribute("compte",compte);
+        return "dashboard/pages/admin/infirmier/consultation/lists";
+    }
+
+    @GetMapping("/consultation/examen/lists/{id}")
+    public String examens(@PathVariable Long id, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        Consultation consultation = consultationRepository.getOne(id);
+        DosMedical dosMedical = consultation.getDosMedical();
+        Collection<Examen> examens = consultation.getExamens();
+
+
+        model.addAttribute("lists",examens);
+        model.addAttribute("dosMedical",dosMedical);
+        return "dashboard/pages/admin/infirmier/consultation/examens/lists";
+
+    }
+
+    @GetMapping("/medical-record/examen/lists/{id}")
+    public String examensByDoctor(@PathVariable Long id, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        DosMedical dosMedical = dos.getOne(id);
+        model.addAttribute("compte",compte);
+        Collection<Consultation> consultations = dosMedical.getConsultations();
+        List<Examen> examens = new ArrayList<>();
+
+        for (Consultation consultation : consultations){
+            examens.addAll(consultation.getExamens());
+        }
+
+        model.addAttribute("lists",examens);
+        return "dashboard/pages/admin/infirmier/medical-record/examens/lists";
+
+    }
+
+
+
+    @GetMapping("/consultation/prescription/lists/{id}")
+    public String prescriptions(@PathVariable Long id, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        Consultation consultation = consultationRepository.getOne(id);
+        DosMedical dosMedical = consultation.getDosMedical();
+        Collection<Prescription> prescriptions = consultation.getPrescriptions();
+
+
+        model.addAttribute("lists",prescriptions);
+        model.addAttribute("dosMedical",dosMedical);
+        return "dashboard/pages/admin/infirmier/consultation/prescription/lists";
+
+    }
+
+    @GetMapping("/medical-record/prescription/lists/{id}")
+    public String prescriptionByDoctor(@PathVariable Long id, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        DosMedical dosMedical = dos.getOne(id);
+        model.addAttribute("compte",compte);
+        Collection<Consultation> consultations = dosMedical.getConsultations();
+        List<Prescription> prescriptions = new ArrayList<>();
+
+        for (Consultation consultation : consultations){
+            prescriptions.addAll(consultation.getPrescriptions());
+        }
+
+        model.addAttribute("lists",prescriptions);
+        return "dashboard/pages/admin/infirmier/medical-record/prescription/lists";
+
+    }
+
+    @GetMapping("/personnel/lists/{id}")
+    public String PersonnelDetail(@PathVariable Long id, HttpServletRequest request, Model model){
+        Principal principal =  request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+        List<Personnel> personnels = personnelRepository.findAllByFunctionAndHospital_Id("DOCTOR",hospital.getId());
+        model.addAttribute("compte",compte);
+        model.addAttribute("lists",personnels);
+        model.addAttribute("hospital",hospital);
+        return "dashboard/pages/admin/infirmier/personnel/lists";
+
+    }
+
+
+
+
 }

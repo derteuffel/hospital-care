@@ -17,4 +17,6 @@ public interface RdvRepository extends JpaRepository<Rdv, Long> {
     List<Rdv> findAllByComptes_Id(Long id, Sort sort);
     List<Rdv> findAllByStatusAndComptes_Id(Boolean status, Long id, Sort sort);
     List<Rdv>findByStatus(Boolean status);
+    List<Rdv> findAllByHospital_Id(Long id,Sort sort);
+    List<Rdv> findAllByHospital_IdAndStatus(Long id,Boolean status,Sort sort);
 }

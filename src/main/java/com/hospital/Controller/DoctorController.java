@@ -357,10 +357,11 @@ public class DoctorController {
 
 
     /** Get all consultations in an hospital */
-    @GetMapping(value = "/consultation/lists/{id}")
-    public String getAllConsultationsForDoctor(@PathVariable Long id,Model model){
-        Personnel personnel = personnelRepository.getOne(id);
-        Compte compte = compteRepository.findByPersonnel_Id(personnel.getId());
+    @GetMapping(value = "/consultation/lists")
+    public String getAllConsultationsForDoctor(Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Personnel personnel = compte.getPersonnel();
         List<Consultation> consultations = consultationRepository.findAllByPersonnel_Id(personnel.getId(),Sort.by(Sort.Direction.DESC,"id"));
         model.addAttribute("lists", consultations);
         model.addAttribute("code",compte.getUsername());
@@ -624,6 +625,14 @@ public class DoctorController {
         model.addAttribute("hosptial", hospital);
         model.addAttribute("lists",incubators);
         return "dashboard/pages/admin/doctor/incubator/lists";
+    }
+
+    @GetMapping("/consultation/observation/{id}")
+    public String addObservationToConsultation(@PathVariable Long id, String observation){
+        Consultation consultation = consultationRepository.getOne(id);
+        consultation.setObservations(observation);
+        consultationRepository.save(consultation);
+        return "redirect:/doctor/consultation/detail/"+consultation.getId();
     }
 
 
