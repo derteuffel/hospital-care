@@ -81,12 +81,12 @@ public class PatientController {
         return "dashboard/pages/admin/patient/home";
     }
 
-    @GetMapping("/medical-record/{id}")
-    public String dosMedicalDetail(@PathVariable Long id, Model model, HttpServletRequest request){
+    @GetMapping("/medical-record/{code}")
+    public String dosMedicalDetail(@PathVariable String code, Model model, HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         model.addAttribute("compte",compte);
-        DosMedical dosMedical = dos.getOne(id);
+        DosMedical dosMedical = dos.findByCode(code);
         model.addAttribute("dosMedical",dosMedical);
         return "dashboard/pages/admin/patient/dosMedical";
     }
@@ -151,14 +151,14 @@ public class PatientController {
 
     }
 
-    @GetMapping("/rdv/lists")
+    @GetMapping("/appointment/lists")
     public String appointments(HttpServletRequest request, Model model){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         model.addAttribute("compte",compte);
         List<Rdv> rdvs = rdvRepository.findAllByComptes_Id(compte.getId(), Sort.by(Sort.Direction.DESC,"id"));
         model.addAttribute("lists",rdvs);
-        return "dashboard/pages/admin/rdv/lists";
+        return "dashboard/pages/admin/appointment/lists";
     }
 
     @GetMapping("/hospital/detail/{id}")
@@ -188,7 +188,7 @@ public class PatientController {
     }
 
 
-    @GetMapping("/rdv/add/{id}")
+    @GetMapping("/appointment/add/{id}")
     public ModelAndView showform(HttpServletRequest request, @PathVariable Long id){
 
         Principal principal = request.getUserPrincipal();
@@ -203,7 +203,7 @@ public class PatientController {
         return modelAndView;
     }
 
-    @PostMapping("/rdv/add/{id}")
+    @PostMapping("/appointment/add/{id}")
     public String storeRdv(@ModelAttribute @Valid Rdv rdv, Errors errors, RedirectAttributes redirAttrs, HttpServletRequest request,Model model, @PathVariable Long id){
 
         Principal principal = request.getUserPrincipal();
@@ -224,7 +224,7 @@ public class PatientController {
             rdv.setHospital(hospital);
             rdvRepository.save(rdv);
             redirAttrs.addFlashAttribute("message", "Rdv added Successfully");
-        return "redirect:/patient/rdv/lists";
+        return "redirect:/patient/appointment/lists";
     }
 
     @GetMapping("/armoire/lists")
