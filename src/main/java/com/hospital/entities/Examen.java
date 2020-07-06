@@ -37,6 +37,8 @@ public class Examen implements Serializable {
 
     private String time;
 
+    private Boolean status;
+
     @ManyToOne
     @JsonIgnoreProperties("examens")
     private Consultation consultation;
@@ -44,6 +46,13 @@ public class Examen implements Serializable {
     @ManyToOne
     private Hospital hospital;
 
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     public int getNumero() {
         return numero;

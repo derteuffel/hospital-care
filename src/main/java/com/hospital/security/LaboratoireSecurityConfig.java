@@ -31,7 +31,7 @@ public class LaboratoireSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/laboratoire/login")
                 .loginProcessingUrl("/laboratoire/login")
-                .defaultSuccessUrl("/laboratoire/home")
+                .defaultSuccessUrl("/laboratoire/hospital/examen/lists/{id}")
                 .permitAll()
                 .and()
                 .logout()

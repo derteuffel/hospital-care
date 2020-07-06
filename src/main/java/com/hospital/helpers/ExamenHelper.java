@@ -42,6 +42,8 @@ public class ExamenHelper {
     @NotNull(message = "hospital name must not be blank")
     private String hospitalName;
 
+    private Boolean status;
+
     public ExamenHelper(){
 
     }
@@ -49,7 +51,7 @@ public class ExamenHelper {
     public ExamenHelper(String name, String testType,
                         Date deliverDate, Date dateOfTesting, String results,
                         String description, Long idConsultation,
-                        String hospitalName, String time) {
+                        String hospitalName, String time, Boolean status) {
         this.name = name;
         this.testType = testType;
         this.deliverDate = deliverDate;
@@ -59,13 +61,14 @@ public class ExamenHelper {
         this.idConsultation = idConsultation;
         this.hospitalName = hospitalName;
         this.time = time;
+        this.status = status;
     }
 
     public static ExamenHelper getExamenHelperInstance(Examen exam){
         return new ExamenHelper(exam.getName(),exam.getTestType(),
                 exam.getDeliverDate(),exam.getDateOfTesting(),exam.getResults(),
                 exam.getDescription(),exam.getConsultation().getId(),
-                exam.getHospital().getName(), exam.getTime());
+                exam.getHospital().getName(), exam.getTime(),exam.getStatus());
     }
 
     public Examen getExamInstance(Hospital hospital, Consultation consultation){
@@ -77,12 +80,20 @@ public class ExamenHelper {
         examen.setTestType(getTestType());
         examen.setDescription(getDescription());
         examen.setTime(getTime());
+        examen.setStatus(false);
         examen.setConsultation(consultation);
         examen.setHospital(hospital);
         return examen;
     }
 
 
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     public String getResults() {
         return results;
