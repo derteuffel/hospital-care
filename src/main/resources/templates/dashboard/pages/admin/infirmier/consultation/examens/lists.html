@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}"><head>
+    <meta charset="UTF-8">
+    <title>Exam</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-sm-4 col-3">
+            <h4 class="page-title">Exams</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-border table-striped custom-table datatable mb-0">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Test Type</th>
+                        <th>Date Of Testing</th>
+                        <th>Deliver Date</th>
+                        <th>Results</th>
+                        <th>Observations</th>
+                        <th>Hospital</th>
+                        <th>Add results</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="exam,i: ${lists}">
+                        <input type="hidden" name="id" th:value="${exam.id}"/>
+                        <td th:text="${i.count}"></td>
+                        <td th:text="${exam.name}"></td>
+                        <td th:text="${exam.testType}"></td>
+                        <td th:text="${exam.dateOfTesting}"></td>
+                        <td th:text="${exam.deliverDate}"></td>
+                        <td >
+                            <span th:if="${exam.results} != null" th:text="${exam.results}"></span>
+                            <span th:unless="${exam.results} != null">Non disponible</span>
+                        </td>
+                        <td >
+                            <span th:if="${exam.description} != null" th:text="${exam.description}"></span>
+                            <span th:unless="${exam.description} != null">Non disponible</span>
+                        </td>
+                        <td th:text="${exam.hospital.name}"></td>
+                        <td >
+                            <button type="button" class="btn"  data-toggle="modal" data-target="#add_result" th:attr="data-target='#add_result'+${exam.id}"><i class="fa fa-plus-square m-r-5"></i> Exam results</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-body text-center" layout:fragment="deleteModalBody">
+    <form method="post" action="/admin/exam/cancel">
+        <img src="/assets/img/password.png" alt="" width="50" height="46">
+        <div class="form-group">
+            <label><b>Enter a doctor Username</b></label>
+            <input class="form-control" type="password" name="username" required/>
+            <input type="hidden" name="idConsultation" th:value="${idConsultation}"/>
+        </div>
+        <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+</div>
+
+</body>
+</html>

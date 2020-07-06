@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}"><head>
+    <meta charset="UTF-8">
+    <title>Prescription</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-sm-4 col-3">
+            <h4 class="page-title">Prescriptions</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-border table-striped custom-table datatable mb-0">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Dosage</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="prescription,i: ${lists}">
+                        <input type="hidden" name="id" th:value="${prescription.id}"/>
+                        <td th:text="${i.count}"></td>
+                        <td th:text="${prescription.date}"></td>
+                        <td th:text="${prescription.dosage}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

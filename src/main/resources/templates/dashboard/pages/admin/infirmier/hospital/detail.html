@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+
+    </title>Hospital Detail</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+            <a th:href="@{/infirmier/hospital/incubator/lists/}+${hospital.id}">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg2"><i class="fa fa-user-o"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3 th:text="${hospital.incubators.size()}"></h3>
+                        <span class="widget-title2">Incubators <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+            <a th:href="@{/infirmier/hospital/blood/lists/}+${hospital.id}">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg3"><i class="fa fa-user-md" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3 th:text="${hospital.bloodBanks.size()}"></h3>
+                        <span class="widget-title3">Blood <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+            <a th:href="@{/consultation/examen/lists/}+${consultation.id}">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg4"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3 th:text="${hospital.examens.size()}"></h3>
+                        <span class="widget-title4">Examens <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+            <a th:href="@{/infirmier/appointment/lists/} + ${hospital.id}">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg4"><i class="fa fa-meetup" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3>Appointment</h3>
+                        <span class="widget-title4">Appointment <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-8 col-xl-6">
+            <div class="hospital-barchart">
+                <h3 th:text="${hospital.pays}"></h3>
+                <br>
+                <h4 class="card-title d-inline-block" th:text="${hospital.name}"></h4>
+                <h4 th:text="${hospital.city}"></h4>
+                <br>
+                <h4 th:text="${hospital.neighborhood}"></h4>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 col-xl-6">
+            <div class="hospital-barchart">
+                <h4 class="card-title d-inline-block">Hospital Speciality</h4>
+            </div>
+            <div class="bar-chart">
+                <div class="chart clearfix">
+                    <div class="item"th:each="type : ${hospital.types}">
+                        <div class="bar">
+                            <div class="item-progress">
+                                <span class="title " th:text="${type}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -51,19 +51,6 @@ public class PharmacyController {
         return "dashboard/pages/admin/pharmacy/login";
     }
 
-
-    /*@GetMapping("/hospital/{id}")
-    public String getPharmacyOfHospital(@PathVariable Long id, Model model){
-        Optional<Hospital> hospital =  hospitalRepository.findById(id);
-        List<Pharmacy> pharmacies = pharmacyRepository.findByHospital(hospital);
-        model.addAttribute("lists", pharmacies);
-        model.addAttribute("hospital",hospital.get());
-
-        return "dashboard/pages/admin/pharmacy/list-pharmacy";
-    }
-*/
-
-
     @GetMapping("/detail/{id}")
     public String detailPharmacy(@PathVariable Long id, Model model){
         Pharmacy pharmacy = pharmacyRepository.getOne(id);

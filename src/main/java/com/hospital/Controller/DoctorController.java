@@ -134,35 +134,6 @@ public class DoctorController {
         return "redirect:/doctor/medical-record/search?search="+dosMedicalHelper.getCode();
     }
 
-    /** form for updating a medical-record */
-   /* @GetMapping(value = "/update/{code}")
-    public String updateMedicalRecords(@PathVariable String code, Model model, HttpServletRequest request){
-        DosMedical dosMedical = dos.findByCode(code);
-        Principal principal = request.getUserPrincipal();
-        Compte compte = compteService.findByUsername(principal.getName());
-        model.addAttribute("compte",compte);
-        model.addAttribute("dosMedicalHelper",DosMedicalHelper.getDosMedicalHelperInstance(dosMedical));
-        return "dashboard/pages/admin/doctor/updateDosMedical";
-    }
-
-    *//** Update a medical record *//*
-    @PostMapping(value = "/update/{code}")
-    public String updateMedicalRecord(@PathVariable String code, @ModelAttribute @Valid DosMedicalHelper dosMedicalHelper, Errors errors, Model model)
-    {
-        if(errors.hasErrors()) {
-            return "dashboard/pages/admin/doctor/updateDosMedical";
-        }
-        DosMedical exDosMedical = dos.findByCode(code);
-        DosMedical newDosMedical = dosMedicalHelper.getDosMedicalInstance();
-        exDosMedical.getCompte().setEmail(dosMedicalHelper.getEmail());
-        newDosMedical.setId(exDosMedical.getId());
-        newDosMedical.setCompte(exDosMedical.getCompte());
-        dos.save(newDosMedical);
-
-        model.addAttribute("success","Operation successfully completed");
-        System.out.println(model.getAttribute("success"));
-        return "redirect:/doctor/all";
-    }*/
 
     @GetMapping("/medical-record/{id}")
     public String dosMedicalDetail(@PathVariable Long id, Model model, HttpServletRequest request){
@@ -338,7 +309,7 @@ public class DoctorController {
         DosMedical dosMedical = consultation.getDosMedical();
         model.addAttribute("dosMedical",dosMedical);
         model.addAttribute("consultation",consultation);
-        return "dashboard/pages/admin/doctor/consultations/detail";
+        return "dashboard/pages/admin/doctor/consultation/detail";
 
     }
 

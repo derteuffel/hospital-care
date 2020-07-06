@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -374,35 +375,6 @@ public class InfirmierController {
         return "redirect:/infirmier/medical-record/search?search="+dosMedicalHelper.getCode();
     }
 
-    /** form for updating a medical-record */
-   /* @GetMapping(value = "/update/{code}")
-    public String updateMedicalRecords(@PathVariable String code, Model model, HttpServletRequest request){
-        DosMedical dosMedical = dos.findByCode(code);
-        Principal principal = request.getUserPrincipal();
-        Compte compte = compteService.findByUsername(principal.getName());
-        model.addAttribute("compte",compte);
-        model.addAttribute("dosMedicalHelper",DosMedicalHelper.getDosMedicalHelperInstance(dosMedical));
-        return "dashboard/pages/admin/doctor/updateDosMedical";
-    }
-
-    *//** Update a medical record *//*
-    @PostMapping(value = "/update/{code}")
-    public String updateMedicalRecord(@PathVariable String code, @ModelAttribute @Valid DosMedicalHelper dosMedicalHelper, Errors errors, Model model)
-    {
-        if(errors.hasErrors()) {
-            return "dashboard/pages/admin/doctor/updateDosMedical";
-        }
-        DosMedical exDosMedical = dos.findByCode(code);
-        DosMedical newDosMedical = dosMedicalHelper.getDosMedicalInstance();
-        exDosMedical.getCompte().setEmail(dosMedicalHelper.getEmail());
-        newDosMedical.setId(exDosMedical.getId());
-        newDosMedical.setCompte(exDosMedical.getCompte());
-        dos.save(newDosMedical);
-
-        model.addAttribute("success","Operation successfully completed");
-        System.out.println(model.getAttribute("success"));
-        return "redirect:/doctor/all";
-    }*/
 
     @GetMapping("/medical-record/{id}")
     public String dosMedicalDetail(@PathVariable Long id, Model model, HttpServletRequest request){
@@ -456,6 +428,26 @@ public class InfirmierController {
     }
 
 
+    @GetMapping("/rdv/active/{id}")
+    public String active(@PathVariable Long id, HttpSession session){
+        Rdv rdv = rdvRepository.getOne(id);
+        if (rdv.getStatus() != null) {
+            if (rdv.getStatus() == true) {
+                rdv.setStatus(false);
+            } else {
+                rdv.setStatus(true);
+            }
+            rdvRepository.save(rdv);
+        }else {
+            rdv.setStatus(false);
+            rdvRepository.save(rdv);
+            return "redirect:/infirmier/active/"+rdv.getId();
+        }
+
+
+        return "dashboard/pages/admin/infirmier/appointment/lists" ;
+    }
+
     @GetMapping("/active/{id}")
     public String findAllStatusActive(Model model,HttpServletRequest request, @PathVariable Long id){
         Principal principal =  request.getUserPrincipal();
@@ -463,6 +455,7 @@ public class InfirmierController {
         Hospital hospital = hospitalRepository.getOne(id);
         List<Rdv> lists = rdvRepository.findAllByHospital_IdAndStatus(hospital.getId(),true,Sort.by(Sort.Direction.DESC,"id"));
         model.addAttribute("lists", lists);
+        model.addAttribute("hos", hospital);
         return "dashboard/pages/admin/infirmier/appointment/rdv-actif";
     }
 
@@ -474,6 +467,7 @@ public class InfirmierController {
         List<Rdv> lists = rdvRepository.findAllByHospital_IdAndStatus(hospital.getId(),false,Sort.by(Sort.Direction.DESC,"id"));
         model.addAttribute("lists", lists);
         model.addAttribute("compte",compte);
+        model.addAttribute("hos", hospital);
         return "dashboard/pages/admin/infirmier/appointment/rdv-inactif";
     }
 
@@ -507,6 +501,19 @@ public class InfirmierController {
 
     }
 
+    @ResponseBody
+    @GetMapping("/account")
+    public ModelAndView getAllRdv(HttpServletRequest request){
+
+        Principal principal =  request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+
+        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/infirmier/appointment/lists");
+        List<Rdv> rdvs = rdvRepository.findAllByComptes_Id(compte.getId(),Sort.by(Sort.Direction.DESC, "id"));
+        modelAndView.addObject("lists",rdvs);
+        return modelAndView;
+    }
+
     @GetMapping("/personnel/appointment/lists/{id}")
     public String appointmentsForDoctor(HttpServletRequest request, Model model, @PathVariable Long id){
         Principal principal = request.getUserPrincipal();
@@ -531,6 +538,7 @@ public class InfirmierController {
         return "dashboard/pages/admin/infirmier/consultation/lists";
     }
 
+
     @GetMapping("/consultation/examen/lists/{id}")
     public String examens(@PathVariable Long id, Model model, HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
@@ -539,8 +547,7 @@ public class InfirmierController {
         Consultation consultation = consultationRepository.getOne(id);
         DosMedical dosMedical = consultation.getDosMedical();
         Collection<Examen> examens = consultation.getExamens();
-
-
+        model.addAttribute("consultation", consultation);
         model.addAttribute("lists",examens);
         model.addAttribute("dosMedical",dosMedical);
         return "dashboard/pages/admin/infirmier/consultation/examens/lists";
@@ -564,8 +571,6 @@ public class InfirmierController {
         return "dashboard/pages/admin/infirmier/medical-record/examens/lists";
 
     }
-
-
 
     @GetMapping("/consultation/prescription/lists/{id}")
     public String prescriptions(@PathVariable Long id, Model model, HttpServletRequest request){
@@ -613,8 +618,5 @@ public class InfirmierController {
         return "dashboard/pages/admin/infirmier/personnel/lists";
 
     }
-
-
-
 
 }
