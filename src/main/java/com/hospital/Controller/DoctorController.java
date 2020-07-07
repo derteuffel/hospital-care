@@ -12,18 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -80,6 +74,7 @@ public class DoctorController {
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         model.addAttribute("compte", compte);
+        request.getSession().setAttribute("compte",compte);
         DosMedical dosMedical = dos.findByCode(compte.getUsername());
         Personnel personnel = personnelRepository.findByEmail(compte.getEmail());
         Hospital hospital = personnel.getHospital();
@@ -338,8 +333,25 @@ public class DoctorController {
         model.addAttribute("code",compte.getUsername());
         model.addAttribute("personnel",personnel);
 
-        return "dashboard/pages/admin/doctor/consultations";
+        return "dashboard/pages/admin/doctor/hospital/consultation/lists";
     }
+
+    /** Get all consultations in an hospital */
+    @GetMapping(value = "/hospital/consultation/lists/{id}")
+    public String getAllConsultationsForHospital(Model model, HttpServletRequest request, @PathVariable Long id){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Personnel personnel = compte.getPersonnel();
+        Hospital hospital = hospitalRepository.getOne(id);
+        Collection<Consultation> consultations = hospital.getConsultations();
+        model.addAttribute("lists", consultations);
+        model.addAttribute("code",compte.getUsername());
+        model.addAttribute("personnel",personnel);
+
+        return "dashboard/pages/admin/doctor/hospital/consultation/lists";
+    }
+
+
     @GetMapping("/consultation/delete/{id}")
     public String deleteConsultationByDoctor(@PathVariable Long id, RedirectAttributes redirectAttributes,String password, HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
@@ -357,7 +369,7 @@ public class DoctorController {
 
     }
 
-    @GetMapping("/examen/lists/{id}")
+    @GetMapping("/consultation/examen/lists/{id}")
     public String examens(@PathVariable Long id, Model model, HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
@@ -439,7 +451,7 @@ public class DoctorController {
         return  "redirect:/doctor/examen/lists";
     }
 
-    @GetMapping("/ordonances/lists/{id}")
+    @GetMapping("/consultation/ordonances/lists/{id}")
     public String ordonances(@PathVariable Long id, Model model, HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
@@ -499,7 +511,7 @@ public class DoctorController {
         return  "redirect:/doctor/consultation/prescription/lists/"+prescriptionHelper.getIdConsultation();
     }
 
-    @GetMapping(value = "/update/{idPrescription}")
+    @GetMapping(value = "/prescription/update/{idPrescription}")
     public String updatePrescription(@PathVariable Long idPrescription, @RequestParam("idConsultation") Long idConsultation, Model model){
         model.addAttribute("idConsultation",idConsultation);
         model.addAttribute("prescriptionHelper", PrescriptionHelper.getPrescriptionHelperInstance(prescriptionRepository.getOne(idPrescription)));
@@ -507,7 +519,7 @@ public class DoctorController {
     }
 
     /** Update a prescription */
-    @PostMapping(value = "/update/{idPrescription}")
+    @PostMapping(value = "/prescription/update/{idPrescription}")
     public String updatePrescription(@PathVariable Long idPrescription, @ModelAttribute @Valid PrescriptionHelper prescriptionHelper, Errors errors, Model model){
         if(errors.hasErrors()){
             model.addAttribute("idConsultation",prescriptionHelper.getIdConsultation());
@@ -535,14 +547,34 @@ public class DoctorController {
 
     }
 
-    @GetMapping("/rdv/lists")
+    @GetMapping("/appointment/lists")
     public String appointments(HttpServletRequest request, Model model){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         model.addAttribute("compte",compte);
         List<Rdv> rdvs = rdvRepository.findAllByComptes_Id(compte.getId(), Sort.by(Sort.Direction.DESC,"id"));
         model.addAttribute("lists",rdvs);
-        return "dashboard/pages/admin/doctor/rdv/lists";
+        return "dashboard/pages/admin/doctor/appointment/lists";
+    }
+
+    @GetMapping("/appointment/active/{id}")
+    public String active(@PathVariable Long id, HttpSession session){
+        Rdv rdv = rdvRepository.getOne(id);
+        if (rdv.getStatus() != null) {
+            if (rdv.getStatus() == true) {
+                rdv.setStatus(false);
+            } else {
+                rdv.setStatus(true);
+            }
+            rdvRepository.save(rdv);
+        }else {
+            rdv.setStatus(false);
+            rdvRepository.save(rdv);
+            return "redirect:/doctor/appointment/lists";
+        }
+
+
+        return "redirect:/doctor/appointment/lists" ;
     }
 
     @GetMapping("/hospital/detail/{id}")

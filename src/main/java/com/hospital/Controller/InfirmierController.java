@@ -428,7 +428,7 @@ public class InfirmierController {
     }
 
 
-    @GetMapping("/rdv/active/{id}")
+    @GetMapping("/appointment/actif/{id}")
     public String active(@PathVariable Long id, HttpSession session){
         Rdv rdv = rdvRepository.getOne(id);
         if (rdv.getStatus() != null) {
@@ -441,14 +441,14 @@ public class InfirmierController {
         }else {
             rdv.setStatus(false);
             rdvRepository.save(rdv);
-            return "redirect:/infirmier/active/"+rdv.getId();
+            return "redirect:/infirmier/appointment/active/"+rdv.getId();
         }
 
 
         return "dashboard/pages/admin/infirmier/appointment/lists" ;
     }
 
-    @GetMapping("/active/{id}")
+    @GetMapping("/appointment/active/{id}")
     public String findAllStatusActive(Model model,HttpServletRequest request, @PathVariable Long id){
         Principal principal =  request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
@@ -459,7 +459,7 @@ public class InfirmierController {
         return "dashboard/pages/admin/infirmier/appointment/rdv-actif";
     }
 
-    @GetMapping("/inactive/{id}")
+    @GetMapping("/appointment/inactive/{id}")
     public String findAllStatusInactive(Model model,HttpServletRequest request, @PathVariable Long id){
         Principal principal =  request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
@@ -495,6 +495,7 @@ public class InfirmierController {
         Personnel personnel = personnelRepository.getOne(doctorId);
         Compte personnelAccount = compteRepository.findByPersonnel_Id(personnel.getId());
         rdv.getComptes().add(personnelAccount);
+        rdv.setDoctor(personnelAccount.getName());
         rdvRepository.save(rdv);
         redirectAttributes.addFlashAttribute("success", "You successfuly assign this appointment to :"+personnel.getLastName()+" "+personnel.getFirstName());
         return "redirect:/infirmier/appointment/detail/"+rdv.getId();

@@ -114,8 +114,25 @@
 </div>
 <div class="sidebar" id="sidebar">
     <div class="sidebar-inner slimscroll">
-        <div id="sidebar-menu" class="sidebar-menu">
+        <div id="sidebar-menu" class="sidebar-menu" >
             <ul>
+                <li class="menu-title">Main Dashboard</li>
+                <th:block th:each="role : ${session.compte.roles}">
+                    <th:block th:if="${role.name} == 'ROLE_DOCTOR'">
+                    <li class="active">
+                        <a th:href="@{/doctor/home}"><i class="fa fa-hospital-o"></i> <span>Home</span></a>
+                    </li>
+
+                    <li>
+                        <a th:href="@{/doctor/consultation/lists}"><i class="fa fa-wheelchair-alt"></i> <span>My Consultations</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/doctor/appointment/lists}"><i class="fa fa-calendar"></i> <span>My Appointments</span></a>
+                    </li>
+                </th:block>
+                </th:block>
+            </ul>
+            <ul >
                 <li class="menu-title">Main</li>
                 <li class="active">
                     <a th:href="@{/admin/dashboard}"><i class="fa fa-hospital-o"></i> <span>Home</span></a>

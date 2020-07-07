@@ -9,8 +9,8 @@
 <div class="content" layout:fragment="content">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/doctor/examen/lists/}+${dosMedical.id}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Medical Records</li>
+            <li class="breadcrumb-item"><a th:href="@{/doctor/home}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Examens</li>
         </ol>
     </nav>
     <div class="row">
@@ -39,27 +39,26 @@
                         <th>Observations</th>
                         <th>Hospital</th>
                         <th>Add results</th>
-                        <!--<th>Hospital</th>-->
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="examen,i: ${lists}">
-                        <input type="hidden" name="id" th:value="${exam.id}"/>
+                        <input type="hidden" name="id" th:value="${examen.id}"/>
                         <td th:text="${i.count}"></td>
-                        <td th:text="${exam.name}"></td>
-                        <td th:text="${exam.testType}"></td>
-                        <td th:text="${exam.dateOfTesting}"></td>
-                        <td th:text="${exam.deliverDate}"></td>
+                        <td th:text="${examen.name}"></td>
+                        <td th:text="${examen.testType}"></td>
+                        <td th:text="${examen.dateOfTesting}"></td>
+                        <td th:text="${examen.deliverDate}"></td>
                         <td >
-                            <span th:if="${exam.results} != null" th:text="${exam.results}"></span>
-                            <span th:unless="${exam.results} != null">Non disponible</span>
+                            <span th:if="${examen.results} != null" th:text="${examen.results}"></span>
+                            <span th:unless="${examen.results} != null">Non disponible</span>
                         </td>
                         <td >
-                            <span th:if="${exam.description} != null" th:text="${exam.description}"></span>
-                            <span th:unless="${exam.description} != null">Non disponible</span>
+                            <span th:if="${examen.description} != null" th:text="${examen.description}"></span>
+                            <span th:unless="${examen.description} != null">Non disponible</span>
                         </td>
-                        <td th:text="${exam.hospital.name}"></td>
-                        <!--<td th:text="${consultation.hospital.name}"></td>-->
+                        <td th:text="${examen.hospital.name}"></td>
+                        <td th:text="${examen.consultation.hospital.name}"></td>
                     </tr>
                     </tbody>
                 </table>
