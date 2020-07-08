@@ -389,7 +389,6 @@ public class InfirmierController {
         return "redirect:/infirmier/medical-record/search?search="+dosMedicalHelper.getCode();
     }
 
-
     @GetMapping("/medical-record/{id}")
     public String dosMedicalDetail(@PathVariable Long id, Model model, HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
