@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Update a Prescription</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h4 class="page-title">Update Prescription</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <form method="post" th:action="@{'/root/update/'+${idPrescription}}" th:object="${prescriptionHelper}">
+                <input class="form-control" type="hidden" name="idConsultation" th:value="${idConsultation}">
+                <div class="form-group">
+                    <label th:for="date">Date</label>
+                    <input class="form-control date" type="date" th:field="*{date}" required/>
+                    <span class="error" th:errors="*{date}"></span>
+                </div>
+                <div class="form-group">
+                    <label th:for="dosage">Dosage</label>
+                    <textarea cols="30" rows="4" class="form-control" th:field="*{dosage}"></textarea>
+                </div>
+                <div class="m-t-20 text-center">
+                    <a th:href="@{/root/consultation/}+${consultation.id}" class="btn btn-secondary submit-btn">Annuler</a>
+                    <button class="btn btn-primary submit-btn">Update Prescription</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
