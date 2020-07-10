@@ -152,6 +152,11 @@
                             <a th:href="@{/patient/medical-record/}+${dosMedical.code}"><i class="fa fa-wheelchair"></i><san>My Medical Record</san></a>
                         </li>
                     </th:block>
+                    <th:block th:if="${role.name} == 'ROLE_ROOT'">
+                        <li class="active">
+                            <a th:href="@{/root/home}"><i class="fa fa-hospital-o"></i> <span>Home</span></a>
+                        </li>
+                    </th:block>
                 </th:block>
             </ul>
             <ul >
