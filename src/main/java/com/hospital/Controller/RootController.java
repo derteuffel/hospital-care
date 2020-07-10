@@ -742,5 +742,70 @@ public class RootController {
         return "redirect:/patient/armoire/lists";
     }
 
+    @GetMapping("/appointment/active/{id}")
+    public String findAllStatusActive(Model model,HttpServletRequest request, @PathVariable Long id){
+        Principal principal =  request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+        List<Rdv> lists = rdvRepository.findAllByHospital_IdAndStatus(hospital.getId(),true,Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("lists", lists);
+        model.addAttribute("hos", hospital);
+        return "dashboard/pages/admin/root/appointment/rdv-actif";
+    }
+
+    @GetMapping("/appointment/inactive/{id}")
+    public String findAllStatusInactive(Model model,HttpServletRequest request, @PathVariable Long id){
+        Principal principal =  request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+        List<Rdv> lists = rdvRepository.findAllByHospital_IdAndStatus(hospital.getId(),false,Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("lists", lists);
+        model.addAttribute("compte",compte);
+        model.addAttribute("hos", hospital);
+        return "dashboard/pages/admin/root/appointment/rdv-inactif";
+    }
+
+    @GetMapping("/appointement/detail/{id}")
+    public String appointmentDetail(@PathVariable Long id, HttpServletRequest request, Model model){
+        Principal principal =  request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Rdv rdv = rdvRepository.getOne(id);
+        Hospital hospital = rdv.getHospital();
+        List<Personnel> personnels = personnelRepository.findAllByFunctionAndHospital_Id("DOCTOR",hospital.getId());
+        model.addAttribute("compte",compte);
+        model.addAttribute("rdv",rdv);
+        model.addAttribute("lists",personnels);
+        model.addAttribute("hospital",hospital);
+        return "dashboard/pages/admin/root/appointment/detail";
+
+    }
+
+    @ResponseBody
+    @GetMapping("/account")
+    public ModelAndView getAllRdv(HttpServletRequest request){
+
+        Principal principal =  request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+
+        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/root/appointment/lists");
+        List<Rdv> rdvs = rdvRepository.findAllByComptes_Id(compte.getId(),Sort.by(Sort.Direction.DESC, "id"));
+        modelAndView.addObject("lists",rdvs);
+        return modelAndView;
+    }
+
+    @GetMapping("/personnel/appointment/lists/{id}")
+    public String appointmentsForDoctor(HttpServletRequest request, Model model, @PathVariable Long id){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        Personnel personnel = personnelRepository.getOne(id);
+        Compte compte1 = compteRepository.findByPersonnel_Id(personnel.getId());
+        List<Rdv> rdvs = rdvRepository.findAllByComptes_Id(compte1.getId(), Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("lists",rdvs);
+        return "dashboard/pages/admin/root/appointment/lists";
+    }
+
+
+
 
 }

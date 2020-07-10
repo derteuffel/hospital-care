@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rdv inactifs</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/infirmier/account}">Rendez-vous</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Rendez-vous inactifs</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-8 col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title d-inline-block">Rdv Inactifs</h4>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-border table-striped custom-table datatable mb-0">
+                            <thead class="d-none">
+                            <tr>
+                                <th>Patient username</th>
+                                <th>Medecin</th>
+                                <th>Date</th>
+                                <th>Motif</th>
+                                <th>status</th>
+                                <th class="text-right">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="rdv : ${lists}">
+                                <td style="min-width: 200px;" >
+                                    <p><a href="#" th:text="${rdv.patient}"></a></p>
+                                </td>
+                                <td>
+                                    <p th:text="${rdv.doctor}"></p>
+                                </td>
+                                <td>
+                                    <h5 class="time-title p-0">Heure</h5>
+                                    <p th:text="${{rdv.getDate()}}"></p>
+                                </td>
+                                <td>
+                                    <h5 class="time-title p-0">Motif</h5>
+                                    <p th:text="${{rdv.getMotif()}}"></p>
+                                </td>
+                                <td th:unless="${rdv.getStatus()}==true">
+                                    <span class="custom-badge status-red">inactive</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
