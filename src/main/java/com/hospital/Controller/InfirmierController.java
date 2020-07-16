@@ -1,6 +1,7 @@
 package com.hospital.Controller;
 
 import com.hospital.entities.*;
+import com.hospital.enums.ERole;
 import com.hospital.helpers.BloodBankHelper;
 import com.hospital.helpers.CompteRegistrationDto;
 import com.hospital.helpers.DosMedicalHelper;
@@ -66,13 +67,15 @@ public class InfirmierController {
     }
 
     @GetMapping("/home")
-    public String home(HttpServletRequest request, Model model){
+    public String home(HttpServletRequest request, Model model, Long id){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         model.addAttribute("compte", compte);
+        Personnel pers = personnelRepository.getOne(id);
         DosMedical dosMedical = dos.findByCode(compte.getUsername());
         Personnel personnel = personnelRepository.findByEmail(compte.getEmail());
         Hospital hospital = personnel.getHospital();
+        model.addAttribute("pers",pers);
         model.addAttribute("dosMedical", dosMedical);
         return "redirect:/infirmier/hospital/detail/"+hospital.getId();
     }
@@ -329,6 +332,17 @@ public class InfirmierController {
         return "dashboard/pages/admin/infirmier/hospital/exam";
     }
 
+    /** Retrieve all medical records */
+    @GetMapping(value = "/medical-record/all")
+    public String getAllMedicalRecords(Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+
+        if(compte.checkRole(ERole.ROLE_INFIRMIER)) model.addAttribute("compte",compte);
+        model.addAttribute("dosMedicalList",dos.findAll());
+        return "dashboard/pages/admin/infirmier/dosMedical";
+    }
+
     /** form for adding a medical-record */
     @GetMapping(value = "/medical-record/create")
     public String addMedicalRecords(HttpServletRequest request, Model model){
@@ -374,7 +388,6 @@ public class InfirmierController {
 
         return "redirect:/infirmier/medical-record/search?search="+dosMedicalHelper.getCode();
     }
-
 
     @GetMapping("/medical-record/{id}")
     public String dosMedicalDetail(@PathVariable Long id, Model model, HttpServletRequest request){

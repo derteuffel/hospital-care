@@ -577,6 +577,7 @@ public class DoctorController {
         return "redirect:/doctor/appointment/lists" ;
     }
 
+
     @GetMapping("/hospital/detail/{id}")
     public String getHospital(@PathVariable Long id, Model model, HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();

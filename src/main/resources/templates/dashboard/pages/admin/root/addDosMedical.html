@@ -19,7 +19,7 @@
     </div>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form method="post" th:action="@{/infirmier/medical-record/create}" th:object="${dosMedicalHelper}">
+            <form method="post" th:action="@{/root/create}" th:object="${dosMedicalHelper}">
                 <div th:if="${error}">
                     <div class="alert alert-danger" th:text="${error}"></div>
                 </div>
@@ -104,7 +104,7 @@
                     <textarea cols="30" rows="4" class="form-control" name="description" ></textarea>
                 </div>
                 <div class="m-t-20 text-center">
-                    <a th:href="@{/infirmier/medical-record/all}" class="btn btn-secondary submit-btn">Annuler</a>
+                    <a th:href="@{/doctor/all}" class="btn btn-secondary submit-btn">Annuler</a>
                     <button class="btn btn-primary submit-btn">Create Medical Record</button>
                 </div>
             </form>

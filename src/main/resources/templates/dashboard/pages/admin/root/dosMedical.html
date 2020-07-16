@@ -18,7 +18,7 @@
             <h4 class="page-title">Medical Records</h4>
         </div>
         <div class="col-sm-8 col-9 text-right m-b-20" th:if="${compte}">
-            <a href="/infirmier/medical-record/create" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Medical Record</a>
+            <a href="/root/medical-record/create" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Medical Record</a>
         </div>
     </div>
     <div th:if='${success}'>
@@ -28,7 +28,7 @@
         <div class="alert alert-danger" th:text="${error}"></div>
     </div>
     <div th:unless="${compte}">
-        <form method="get" action="/infirmier/medical-record/search" class="dos-search-form">
+        <form method="get" action="/root/medical-record/search" class="dos-search-form">
             <div class="input-group mb-3" style="text-align: center; width: 300px">
                 <input type="search" class="form-control dos-text" name="search" placeholder="Type a medical record code..." required/>
                 <div class="input-group-append">
@@ -82,8 +82,8 @@
                             <div class="dropdown dropdown-action">
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right menu_">
-                                    <a class="dropdown-item" th:href="@{'/admin/consultation/medical-record/'+${dosMedical.code}}" th:text="@{'View Consultations ('+${dosMedical.consultations.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
-                                    <a class="dropdown-item"  th:href="@{'/admin/medical-record/update/'+${dosMedical.code}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    <a class="dropdown-item" th:href="@{'/root/consultation/medical-record/'+${dosMedical.code}}" th:text="@{'View Consultations ('+${dosMedical.consultations.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
+                                    <a class="dropdown-item"  th:href="@{'/root/medical-record/update/'+${dosMedical.code}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
                                     <a class="dropdown-item" href="#" data-toggle="modal" th:attr="data-target='#deleteModal'+${dosMedical.id}"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-                                            <a th:href="@{/admin/medical-record/delete/}+${dosMedical.id}" class="btn btn-primary">Oui</a>
+                                            <a th:href="@{/root/medical-record/delete/}+${dosMedical.id}" class="btn btn-primary">Oui</a>
                                         </div>
                                     </div>
                                 </div>
@@ -133,7 +133,7 @@
                         <th>Rhesus</th>
                         <!-- <th>HereditaryDiseases</th> -->
                         <th>Description</th>
-                        <!--<th class="text-right">Action</th>-->
+                        <th class="text-right">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -152,16 +152,37 @@
                         <td th:text="${dosMedical.rhesus}"></td>
                         <!-- <td th:text="${dosMedical.hereditaryDiseases}"></td> -->
                         <td th:text="${dosMedical.description}"></td>
-                       <!-- <td class="text-right">
+                        <td class="text-right">
                             <div class="dropdown dropdown-action">
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right menu_">
-                                    <a class="dropdown-item" th:href="@{'/admin/consultation/medical-record/'+${dosMedical.code}}" th:text="@{'View Consultations ('+${dosMedical.consultations.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
-                                    <a class="dropdown-item"  th:href="@{'/admin/medical-record/update/'+${dosMedical.code}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_patient"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                    <a class="dropdown-item" th:href="@{'/root/consultation/lists/'+${personnel.id}}" th:text="@{'View Consultations ('+${dosMedical.consultations.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
+                                    <a class="dropdown-item"  th:href="@{'/root/update/'+${dosMedical.code}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    <a class="dropdown-item"  href="#" data-toggle="modal" th:attr="data-target='#deleteModal'+${dosMedical.id}"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                 </div>
                             </div>
-                        </td>-->
+                            <div class="modal fade" th:id="deleteModal+${dosMedical.id}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel">Suppression d'un dossier médical </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="text-center">Etes vous sure de vouloir supprimer cette element???</p>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                            <a th:href="@{/root/delete/}+${dosMedical.id}" class="btn btn-primary">Oui</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
                     </tr>
                     </tbody>
                 </table>

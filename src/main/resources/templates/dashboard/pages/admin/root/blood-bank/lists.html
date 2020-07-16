@@ -1,17 +1,14 @@
-!mp:;<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{../templates/dashboard/index}"><head>
     <meta charset="UTF-8">
-    <title>Prescription</title>
+    <title>Blood</title>
 </head>
 <body>
 <div class="content" layout:fragment="content">
     <div class="row">
         <div class="col-sm-4 col-3">
-            <h4 class="page-title">Prescriptions</h4>
-        </div>
-        <div class="col-sm-8 col-9 text-right m-b-20">
-            <!--a th:href="@{'/doctor/create?idConsultation='+${idConsultation}}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add a Prescription</a-->
+            <h4 class="page-title">Bloods</h4>
         </div>
     </div>
     <div class="row">
@@ -21,30 +18,43 @@
                     <thead>
                     <tr>
                         <th>#</th>
+                        <th>Groupe Sanguin</th>
+                        <th>Rhésus</th>
                         <th>Date</th>
-                        <th>Dosage</th>
-                        <th class="text-right">Action</th>
+                        <th>Hospital</th>
+                        <th>Status</th>
+                        <!--<th class="text-right">Action</th>-->
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="prescription,i: ${lists}">
-                        <input type="hidden" name="id" th:value="${prescription.id}"/>
+                    <tr th:each="blood,i: ${lists}">
+                        <input type="hidden" name="id" th:value="${blood.id}"/>
                         <td th:text="${i.count}"></td>
-                        <td th:text="${prescription.date}"></td>
-                        <td th:text="${prescription.dosage}"></td>
-                        <td class="text-right">
+                        <td th:text="${blood.groupeSanguin}"></td>
+                        <td th:text="${blood.rhesus}"></td>
+                        <td th:text="${blood.date}"></td>
+                        <td th:text="${blood.hospital.name}"></td>
+                        <td th:if="${blood.getStatus()== true}">
+                            <span class="custom-badge status-green">Disponible</span>
+                            <!--<a th:href="@{/admin/blood/active/{id}(id=${blood.id})}"> <i class="fa fa-check-circle"></i></a>-->
+                        </td>
+                        <td th:unless="${blood.getStatus()== true}">
+                            <span class="custom-badge status-red">Non Disponible</span>
+                            <!--<a th:href="@{/admin/blood/active/{id}(id=${blood.id})}"> <i class="fa fa-check-circle-o"></i></a>-->
+                        </td>
+                       <!-- <td class="text-right">
                             <div class="dropdown dropdown-action">
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right menu_">
-                                    <a class="dropdown-item" th:href="@{'/doctor/prescription/update/'+${prescription.id}+'?idConsultation='+${idConsultation}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                    <a class="dropdown-item" href="#" data-toggle="modal" th:attr="data-target='#deleteModal'+${prescription.id}"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                    <a class="dropdown-item" th:href="@{/admin/blood/update/{id}(id = ${blood.id})}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" th:attr="data-target='#deleteModal'+${blood.id}"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                 </div>
                             </div>
-                            <div class="modal fade" th:id="deleteModal+${prescription.id}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal fade" th:id="deleteModal+${blood.id}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteModalLabel">Suppression d'une prescription </h5>
+                                            <h5 class="modal-title" id="deleteModalLabel">Suppression d'une couveuse </h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -55,13 +65,13 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-                                            <a th:href="@{/doctor/prescription/delete/}+${prescription.id}" class="btn btn-primary">Oui</a>
+                                            <a th:href="@{/admin/blood/delete/}+${blood.id}" class="btn btn-primary">Oui</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                        </td>
+                        </td>-->
                     </tr>
                     </tbody>
                 </table>
@@ -71,3 +81,4 @@
 </div>
 </body>
 </html>
+

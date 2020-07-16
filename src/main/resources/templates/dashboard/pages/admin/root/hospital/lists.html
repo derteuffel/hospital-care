@@ -3,13 +3,21 @@
       layout:decorate="~{../templates/dashboard/index}">
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
     <title>Root hospital lists</title>
+=======
+    <title>DashBoard</title>
+>>>>>>> 57d39c9893c5bd0c36fb133c7e8ed70e6c665a71
 </head>
 <body>
 <div class="content" layout:fragment="content">
     <div class="row">
         <div class="col-sm-5">
+<<<<<<< HEAD
             <h4 class="page-title">Hospitals lists</h4>
+=======
+            <h4 class="page-title">Hospitals</h4>
+>>>>>>> 57d39c9893c5bd0c36fb133c7e8ed70e6c665a71
         </div>
     </div>
 
@@ -29,11 +37,16 @@
             </button>
         </div>
     </div>
+<<<<<<< HEAD
 
     <div class="row filter-row">
         <div class="col-sm-12 col-12 text-right m-b-20">
             <a th:href="@{/root/hospital/add}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Hospital</a>
         </div>
+=======
+    <div class="row filter-row">
+
+>>>>>>> 57d39c9893c5bd0c36fb133c7e8ed70e6c665a71
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -41,6 +54,10 @@
                 <table class="table table-striped datatable custom-table mb-0">
                     <thead>
                     <tr>
+<<<<<<< HEAD
+=======
+                        <th>#</th>
+>>>>>>> 57d39c9893c5bd0c36fb133c7e8ed70e6c665a71
                         <th>Hospital name</th>
                         <th>City</th>
                         <th>Spécialités</th>
@@ -48,9 +65,16 @@
                     </tr>
                     </thead>
                     <tbody>
+<<<<<<< HEAD
                     <tr th:each="hospital : ${lists}">
                         <td th:text="${hospital.name}"></td>
                         <td th:text="${hospital.city}"></td>
+=======
+                    <tr th:each="hospital : ${hospitals}">
+                        <td th:text="${{hospital.id}}"></td>
+                        <td th:text="${{hospital.name}}"></td>
+                        <td th:text="${{hospital.city}}"></td>
+>>>>>>> 57d39c9893c5bd0c36fb133c7e8ed70e6c665a71
                         <td> <ul th:each="item : ${hospital.types}">
                             <li><span th:text="${item}"></span></li>
                         </ul></td>
@@ -60,6 +84,7 @@
                                 <div class="dropdown-menu dropdown-menu-right menu_">
                                     <a class="dropdown-item" th:href="@{'/root/hospital/detail/'+${hospital.id}}"><i class="fa fa-eye m-r-5"></i> Show</a>
 
+<<<<<<< HEAD
                                     <!--<a class="dropdown-item" th:href="@{'/admin/incubator/hospital/'+${hospital.id}}" th:text="@{'View Incubators ('+${hospital.incubators.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
                                     <a class="dropdown-item" th:href="@{'/admin/get/blood/hospital/'+${hospital.id}}" th:text="@{'View Bloods ('+${hospital.bloods.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>-->
                                     <a class="dropdown-item" th:href="@{'/root/hospital/update/'+${hospital.id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
@@ -88,6 +113,10 @@
                                     </div>
                                 </div>
 -->
+=======
+                                </div>
+
+>>>>>>> 57d39c9893c5bd0c36fb133c7e8ed70e6c665a71
                             </div>
                         </td>
                     </tr>
@@ -96,6 +125,7 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
     <div  th:id="${'delete_department-'+ {hospital.getId()}}" class="modal fade delete-modal" role="dialog" th:each="hospital : ${hospitals}">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -118,6 +148,8 @@
             </div>
         </div>
     </div>
+=======
+>>>>>>> 57d39c9893c5bd0c36fb133c7e8ed70e6c665a71
 </div>
 </div>
 </body>
