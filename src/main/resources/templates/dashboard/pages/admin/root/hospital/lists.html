@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Root hospital lists</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-sm-5">
+            <h4 class="page-title">Hospitals lists</h4>
+        </div>
+    </div>
+
+    <div class="row" th:if="${message}">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <p th:text="${message}"></p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <div class="row" th:if="${error}">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <p th:text="${error}"></p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="row filter-row">
+        <div class="col-sm-12 col-12 text-right m-b-20">
+            <a th:href="@{/root/hospital/add}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Hospital</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-striped datatable custom-table mb-0">
+                    <thead>
+                    <tr>
+                        <th>Hospital name</th>
+                        <th>City</th>
+                        <th>Spécialités</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="hospital : ${lists}">
+                        <td th:text="${hospital.name}"></td>
+                        <td th:text="${hospital.city}"></td>
+                        <td> <ul th:each="item : ${hospital.types}">
+                            <li><span th:text="${item}"></span></li>
+                        </ul></td>
+                        <td class="text-right">
+                            <div class="dropdown dropdown-action">
+                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right menu_">
+                                    <a class="dropdown-item" th:href="@{'/root/hospital/detail/'+${hospital.id}}"><i class="fa fa-eye m-r-5"></i> Show</a>
+
+                                    <!--<a class="dropdown-item" th:href="@{'/admin/incubator/hospital/'+${hospital.id}}" th:text="@{'View Incubators ('+${hospital.incubators.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
+                                    <a class="dropdown-item" th:href="@{'/admin/get/blood/hospital/'+${hospital.id}}" th:text="@{'View Bloods ('+${hospital.bloods.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>-->
+                                    <a class="dropdown-item" th:href="@{'/root/hospital/update/'+${hospital.id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    <!--<a class="dropdown-item" href="#" data-toggle="modal" th:attr="data-target='#deleteModal'+${hospital.id}"><i class="fa fa-trash-o m-r-5"></i> Delete</a>-->
+                                    <a class="dropdown-item" href="#" data-toggle="modal" th:data-target="${'#delete_department-'+ {hospital.getId()}}"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                </div>
+<!--
+                                <div class="modal fade" th:id="deleteModal+${hospital.id}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel">Suppression d'un Doctor </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="text-center">Etes vous sure de vouloir supprimer cette element???</p>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                                <a th:href="@{/admin/hospital/delete/}+${hospital.id}" class="btn btn-primary">Oui</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+-->
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div  th:id="${'delete_department-'+ {hospital.getId()}}" class="modal fade delete-modal" role="dialog" th:each="hospital : ${hospitals}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <img th:src="@{/assets/img/sent.png}" alt="" width="50" height="46">
+                    <div class="form-group">
+                        <label><b>Enter a doctor Username</b></label>
+                        <input class="form-control" type="password" name="username" required/>
+                    </div>
+                    <h3>Are you sure want to delete this Hospital?</h3>
+                    <div class="m-t-20">
+                        <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                    </div>
+                    <div  class="m-t-20">
+                        <form th:action="@{/root/hospital/delete/}+${hospital.id}" th:object="${hospital}" method="post">
+                            <button type="submit" class="btn btn-danger" >Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>
