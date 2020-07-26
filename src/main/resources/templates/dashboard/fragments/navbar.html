@@ -120,7 +120,7 @@
                 <th:block th:each="role : ${session.compte.roles}">
                     <th:block th:if="${role.name} == 'ROLE_DOCTOR'">
                         <li class="active">
-                            <a th:href="@{/doctor/home}"><i class="fa fa-hospital-o"></i> <span>Home</span></a>
+                            <a th:href="@{/doctor/home}"><i class="fa fa-hospital-o"></i> <span>Doctor Home</span></a>
                         </li>
 
                         <li>
@@ -132,7 +132,7 @@
                      </th:block>
                      <th:block th:if="${role.name} == 'ROLE_INFIRMIER'">
                             <li class="active">
-                                <a th:href="@{/infirmier/home}"><i class="fa fa-hospital-o"></i> <span>Home</span></a>
+                                <a th:href="@{/infirmier/home}"><i class="fa fa-hospital-o"></i> <span>Infirmier Home</span></a>
                             </li>
 
                          <li>
@@ -146,77 +146,27 @@
 
                     <th:block th:if="${role.name} == 'ROLE_PATIENT'">
                         <li class="active">
-                            <a th:href="@{/patient/home}"><i class="fa fa-hospital-o"></i> <span>Home</span></a>
+                            <a th:href="@{/patient/home}"><i class="fa fa-hospital-o"></i> <span>Patient Home</span></a>
                         </li>
                         <li>
-                            <a th:href="@{/patient/medical-record/}+${dosMedical.code}"><i class="fa fa-wheelchair"></i><san>My Medical Record</san></a>
+                            <a th:href="@{/patient/medical-record/}+${compte.username}"><i class="fa fa-wheelchair"></i><san>My Medical Record</san></a>
                         </li>
                     </th:block>
                     <th:block th:if="${role.name} == 'ROLE_ROOT'">
                         <li class="active">
                             <a th:href="@{/root/home}"><i class="fa fa-hospital-o"></i> <span>Home</span></a>
                         </li>
+                        <li >
+                            <a th:href="@{/root/medical-record/lists}"><i class="fa fa-heartbeat"></i> <span>Medical records</span></a>
+                        </li>
+                        <li >
+                            <a th:href="@{/root/appointment/lists}"><i class="fa fa-meetup"></i> <span>Appointments</span></a>
+                        </li>
+                        <li >
+                            <a th:href="@{/root/compte/lists}"><i class="fa fa-users"></i> <span>Accounts</span></a>
+                        </li>
                     </th:block>
                 </th:block>
-            </ul>
-            <ul >
-                <li class="menu-title">Main</li>
-                <li class="active">
-                    <a th:href="@{/admin/dashboard}"><i class="fa fa-hospital-o"></i> <span>Home</span></a>
-                </li>
-
-                <li>
-                    <a th:href="@{/admin/staff/lists/doctors}"><i class="fa fa-user-md"></i> <span>Doctors</span></a>
-                </li>
-                <li>
-                    <a th:href="@{/admin/staff/lists/simples}"><i class="fa fa-user-md"></i> <span>Others staffs</span></a>
-                </li>
-                <li>
-                    <a th:href="@{/admin/medical-record/all}"><i class="fa fa-wheelchair"></i> <span>Patients</span></a>
-                </li>
-                <li>
-                    <a th:href="@{/patient/rdv/lists}"><i class="fa fa-calendar"></i> <span>Appointments</span></a>
-                </li>
-                <li>
-                    <a th:href="@{/admin/hospital/all}"><i class="fa fa-hospital-o"></i> <span>Hospitals</span></a>
-                </li>
-                <li>
-                    <a th:href="@{/admin/hospital/add}"><i class="fa fa-hospital-o"></i> <span>Add Hospital</span></a>
-                </li>
-<!--                <li class="submenu">
-                    <a href="#"><i class="fa fa-user"></i> <span> Employees </span> <span class="menu-arrow"></span></a>
-                    <ul style="display: none;">
-                        <li><a href="employees.html">Employees List</a></li>
-                        <li><a href="leaves.html">Leaves</a></li>
-                        <li><a href="holidays.html">Holidays</a></li>
-                        <li><a href="attendance.html">Attendance</a></li>
-                    </ul>
-                </li>
-                <li class="submenu">
-                    <a href="#"><i class="fa fa-money"></i> <span> Accounts </span> <span class="menu-arrow"></span></a>
-                    <ul style="display: none;">
-                        <li><a href="invoices.html">Invoices</a></li>
-                        <li><a href="payments.html">Payments</a></li>
-                        <li><a href="expenses.html">Expenses</a></li>
-                        <li><a href="taxes.html">Taxes</a></li>
-                        <li><a href="provident-fund.html">Provident Fund</a></li>
-                    </ul>
-                </li>
-                <li class="submenu">
-                    <a href="#"><i class="fa fa-book"></i> <span> Payroll </span> <span class="menu-arrow"></span></a>
-                    <ul style="display: none;">
-                        <li><a href="salary.html"> Employee Salary </a></li>
-                        <li><a href="salary-view.html"> Payslip </a></li>
-                    </ul>
-                </li>-->
-                <li>
-                    <a th:href="@{/admin/conversation/lists}"><i class="fa fa-comments"></i> <span>Chat</span> <span class="badge badge-pill bg-primary float-right">5</span></a>
-                </li>
-
-                <li>
-                    <a href="#"><i class="fa fa-cube"></i> <span>Accounts</span></a>
-                </li>
-
             </ul>
         </div>
     </div>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Examen details</title>
+</head>
+
+<body>
+<div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/root/home}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Examen details</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-sm-7 col-6">
+            <h4 class="page-title">Examen details</h4>
+            <h4 class="page-title">
+                <span class="text-success" th:text="${message}"></span>
+                <span class="text-danger" th:text="${error}"></span>
+            </h4>
+        </div>
+    </div>
+    <div class="card-box profile-header">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="profile-view">
+                    <div class="profile-basic">
+                        <div class="row">
+                            <div class="personal-info col-xl-12">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>Name</td>
+                                        <td th:text="${examen.name}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Number</td>
+                                        <td th:text="${examen.numero}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Type of Exam</td>
+                                        <td th:text="${examen.testType}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Date of exam</td>
+                                        <td th:text="${examen.dateOfTesting}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Deliver Date</td>
+                                        <td th:text="${examen.deliverDate}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Days hours</td>
+                                        <td th:text="${examen.time}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Results</td>
+                                        <td th:text="${examen.results}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Observations</td>
+                                        <td th:text="${examen.description}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Consultation number</td>
+                                        <td th:text="${examen.consultation.dosMedical.code}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Hospital</td>
+                                        <td th:text="${examen.hospital.name}"></td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- profile23:03-->
+</html>

@@ -152,8 +152,22 @@ public class CompteServiceImpl implements CompteService {
     public Compte saveSimple(PersonnelHelper personnelHelper, String s, DosMedical dosMedical, Personnel personnel) {
         Compte compte = new Compte();
         Optional<Role> role = roleRepository.findByName(ERole.ROLE_PATIENT.toString());
-        Optional<Role> role1 = roleRepository.findByName(ERole.ROLE_PERSONNEL.toString());
+        Optional<Role> role1 = roleRepository.findByName(ERole.ROLE_INFIRMIER.toString());
 
+        if (!(role.isPresent())){
+            Role role2 = new Role();
+            role2.setName(ERole.ROLE_PATIENT.toString());
+            roleRepository.save(role2);
+
+            if (!(role1.isPresent())){
+                Role role3 = new Role();
+                role3.setName(ERole.ROLE_INFIRMIER.toString());
+                roleRepository.save(role3);
+                compte.setRoles(Arrays.asList(role3,role2));
+            }
+        }else {
+            compte.setRoles(Arrays.asList(role.get(),role1.get()));
+        }
         compte.setAvatar(s);
         compte.setEmail(personnelHelper.getEmail());
         compte.setPassword(passwordEncoder.encode(personnelHelper.getCode()));
@@ -161,34 +175,10 @@ public class CompteServiceImpl implements CompteService {
         compte.setStatus(true);
         compte.setName(personnel.getFirstName());
         compte.setPersonnel(personnel);
+        compte.setRoles(Arrays.asList());
         compteRepository.save(compte);
         dosMedical.setCompte(compte);
         dosMedicalRepository.save(dosMedical);
-
-        if (!(role.isPresent())){
-            Role role2 = new Role();
-            role2.setName(ERole.ROLE_PATIENT.toString());
-            roleRepository.save(role2);
-            compte.getRoles().add(role2);
-            compteRepository.save(compte);
-        }else {
-            compte.getRoles().add(role.get());
-            compteRepository.save(compte);
-        }
-
-        if (!(role1.isPresent())){
-            Role role2 = new Role();
-            role2.setName(ERole.ROLE_PERSONNEL.toString());
-            roleRepository.save(role2);
-            compte.getRoles().add(role2);
-            compteRepository.save(compte);
-        }else {
-            compte.getRoles().add(role1.get());
-            compteRepository.save(compte);
-        }
-
-
-
         return compte;
     }
 

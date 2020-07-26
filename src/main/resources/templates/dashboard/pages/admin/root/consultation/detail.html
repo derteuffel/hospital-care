@@ -3,14 +3,20 @@
       layout:decorate="~{../templates/dashboard/index}">
 <head>
     <meta charset="UTF-8">
-    <title>détail Consultation</title>
+    <title>Consultation details</title>
 </head>
 
 <body>
 <div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/root/home}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Consultation details</li>
+        </ol>
+    </nav>
     <div class="row">
         <div class="col-sm-7 col-6">
-            <h4 class="page-title">Detail du dossier medical</h4>
+            <h4 class="page-title">Consultation details</h4>
             <h4 class="page-title">
                 <span class="text-success" th:text="${message}"></span>
                 <span class="text-danger" th:text="${error}"></span>
@@ -23,47 +29,47 @@
                 <div class="profile-view">
                     <div class="profile-basic">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="profile-info-left">
-                                    <h3 class="user-name m-t-0 mb-0">
-                                        <span class="title">Height:</span>
-                                        <span th:text="${consultation.height}"></span>
-                                    </h3>
-                                    <hr>
-                                    <h3 class="user-name m-t-0 mb-0">
-                                        <span class="title">Pressure:</span>
-                                        <span th:text="${consultation.pressure}" ></span>
-                                    </h3>
-                                    <h3 class="user-name m-t-0 mb-0">
-                                        <span class="title">Weight:</span>
-                                        <span th:text="${consultation.weight}"></span>
-                                    </h3>
-                                    <hr>
-                                    <h3 class="user-name m-t-0 mb-0">
-                                        <span class="title">Temperature:</span>
-                                        <span th:text="${consultation.temperature}"></span>
-                                    </h3>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <ul class="personal-info">
-                                    <li>
-                                        <span class="title">Observations:</span>
-                                        <span class="text"><a href="#"th:text="${consultation.observations}"></a></span>
-                                    </li>
-                                    <li>
-                                        <span class="title">Date:</span>
-                                        <span class="text"><a href="#"th:text="${consultation.date}"></a></span>
-                                    </li>
-                                    <li>
-                                        <span class="title">Tension:</span>
-                                        <span class="text"th:text="${consultation.tension}"></span>
-                                    </li>
-                                    <li>
-                                        <span class="title">Sexe:</span>
-                                        <span class="text"th:text="${consultation.sex}"></span>
-                                    </li>
-                                </ul>
+                            <div class="personal-info col-xl-12">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>Height</td>
+                                        <td ><span th:text="${consultation.height}"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pressure</td>
+                                        <td > <span th:text="${consultation.pressure}" ></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Weight</td>
+                                        <td ><span th:text="${consultation.weight}"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Temperature</td>
+                                        <td ><span th:text="${consultation.temperature}"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tension</td>
+                                        <td ><span class="text"th:text="${consultation.tension}"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sexe</td>
+                                        <td ><span class="text"th:text="${consultation.sex}"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Date</td>
+                                        <td ><span class="text" th:text="${consultation.date}"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Observations</td>
+                                        <td ><span class="text" th:text="${consultation.observations}"></span></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Hospital</td>
+                                        <td th:text="${consultation.hospital.name}"></td>
+                                    </tr>
+
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -71,15 +77,15 @@
             </div>
         </div>
     </div>
-    <div class="profile-tabs">
+    <div class="profile-tabs my-3">
         <div class="row">
 
             <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
-                <a th:href="@{/root/examen/lists/}">
+                <a th:href="@{/root/consultation/examen/lists/}+${consultation.id}">
                     <div class="dash-widget">
                         <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
                         <div class="dash-widget-info text-right">
-                            <h3 th:text="${examens.size()}"></h3>
+                            <h3 th:text="${consultation.examens.size()}"></h3>
                             <span class="widget-title1">Examens <i class="fa fa-check" aria-hidden="true"></i></span>
                         </div>
                     </div>
@@ -91,7 +97,7 @@
                     <div class="dash-widget">
                         <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
                         <div class="dash-widget-info text-right">
-                            <h3 th:text="${prescriptions.size()}"></h3>
+                            <h3 th:text="${consultation.prescriptions.size()}"></h3>
                             <span class="widget-title1">Prescriptions <i class="fa fa-check" aria-hidden="true"></i></span>
                         </div>
                     </div>

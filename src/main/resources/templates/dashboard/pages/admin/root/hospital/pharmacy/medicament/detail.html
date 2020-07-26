@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Drug details</title>
+</head>
+
+<body>
+<div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/root/home}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Drug details</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-sm-7 col-6">
+            <h4 class="page-title">Drug details</h4>
+            <h4 class="page-title">
+                <span class="text-success" th:text="${message}"></span>
+                <span class="text-danger" th:text="${error}"></span>
+            </h4>
+        </div>
+    </div>
+    <div class="card-box profile-header">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="profile-view">
+                    <div class="profile-basic">
+                        <div class="row">
+                            <div class="personal-info col-xl-12">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>Name</td>
+                                        <td th:text="${medicament.name}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Drug Type</td>
+                                        <td th:text="${medicament.drugType}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Grammage</td>
+                                        <td th:text="${medicament.grammage}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Stock quantity</td>
+                                        <td th:text="${medicament.stockQuantity}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Unity price</td>
+                                        <td th:text="${medicament.pricingUnit}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Disponibility</td>
+                                        <td>
+                                            <span th:if="${medicament.status}==true">Available</span>
+                                            <span th:unless="${medicament.status}==true">Unavailable</span>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Pharmacy</td>
+                                        <td th:text="${medicament.pharmacy.name}"></td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- profile23:03-->
+</html>

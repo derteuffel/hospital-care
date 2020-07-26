@@ -6,6 +6,12 @@
 </head>
 <body>
 <div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/root/home}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Blood banks</li>
+        </ol>
+    </nav>
     <div class="row">
         <div class="col-sm-4 col-3">
             <h4 class="page-title">Bloods</h4>

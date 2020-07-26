@@ -7,5 +7,7 @@ public enum ERole {
     ROLE_INFIRMIER,
     ROLE_PERSONNEL,
     ROLE_PATIENT,
+    ROLE_LABORATOIRE,
+    ROLE_PHARMACY,
     ROLE_ADMIN
 }

@@ -6,18 +6,27 @@ import com.hospital.helpers.*;
 import com.hospital.repository.*;
 import com.hospital.services.CompteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -62,6 +71,9 @@ public class DoctorController {
 
     @Autowired
     private ExamenRepository examenRepository;
+
+    @Value("${file.upload-dir}")
+    private  String fileStorage;
 
 
     @GetMapping("/login")
@@ -331,7 +343,23 @@ public class DoctorController {
         List<Consultation> consultations = consultationRepository.findAllByPersonnel_Id(personnel.getId(),Sort.by(Sort.Direction.DESC,"id"));
         model.addAttribute("lists", consultations);
         model.addAttribute("code",compte.getUsername());
+        model.addAttribute("compte",compte);
         model.addAttribute("personnel",personnel);
+
+        return "dashboard/pages/admin/doctor/hospital/consultation/lists";
+    }
+
+    /** Get all consultations in an hospital */
+    @GetMapping(value = "/consultation/lists/{id}")
+    public String getAllConsultationsByDoctor(Model model, HttpServletRequest request, @PathVariable Long id){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Personnel personnel = personnelRepository.getOne(id);
+        List<Consultation> consultations = consultationRepository.findAllByPersonnel_Id(personnel.getId(),Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("lists", consultations);
+        model.addAttribute("code",compte.getUsername());
+        model.addAttribute("personnel",personnel);
+        model.addAttribute("compte",compte);
 
         return "dashboard/pages/admin/doctor/hospital/consultation/lists";
     }
@@ -347,6 +375,7 @@ public class DoctorController {
         model.addAttribute("lists", consultations);
         model.addAttribute("code",compte.getUsername());
         model.addAttribute("personnel",personnel);
+        model.addAttribute("compte",compte);
 
         return "dashboard/pages/admin/doctor/hospital/consultation/lists";
     }
@@ -385,6 +414,21 @@ public class DoctorController {
         return "dashboard/pages/admin/doctor/examens/lists";
 
     }
+
+    @GetMapping("/examen/detail/{id}")
+    public String examensDetail(@PathVariable Long id, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Personnel personnel = compte.getPersonnel();
+        model.addAttribute("compte",compte);
+        Examen examen = examenRepository.getOne(id);
+        Hospital hospital = examen.getHospital();
+        model.addAttribute("hospital",hospital);
+        model.addAttribute("examen", examen);
+        return "dashboard/pages/admin/doctor/examens/detail";
+
+    }
+
     @GetMapping("/hospital/examen/lists/{id}")
     public String examensInHospital(@PathVariable Long id, Model model, HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
@@ -557,6 +601,17 @@ public class DoctorController {
         return "dashboard/pages/admin/doctor/appointment/lists";
     }
 
+    @GetMapping("/appointment/lists/{id}")
+    public String appointmentsByDoctor(HttpServletRequest request, Model model, @PathVariable Long id){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        Compte compte1 = compteRepository.getOne(id);
+        List<Rdv> rdvs = rdvRepository.findAllByComptes_Id(compte1.getId(), Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("lists",rdvs);
+        return "dashboard/pages/admin/doctor/appointment/lists";
+    }
+
     @GetMapping("/appointment/active/{id}")
     public String active(@PathVariable Long id, HttpSession session){
         Rdv rdv = rdvRepository.getOne(id);
@@ -585,7 +640,8 @@ public class DoctorController {
         Hospital hos = hospitalRepository.getOne(id);
         model.addAttribute("hospital", hos);
         model.addAttribute("compte", compte);
-        model.addAttribute("lists", personnelRepository.findAllByFunctionAndHospital_Id("DOCTOR",hos.getId()));
+        model.addAttribute("doctors", personnelRepository.findAllByFunctionAndHospital_Id("DOCTOR",hos.getId()));
+        model.addAttribute("simples", personnelRepository.findAllByFunctionAndHospital_Id("SIMPLE",hos.getId()));
         return "dashboard/pages/admin/doctor/hospital/detail";
     }
 
@@ -637,6 +693,326 @@ public class DoctorController {
         consultation.setObservations(observation);
         consultationRepository.save(consultation);
         return "redirect:/doctor/consultation/detail/"+consultation.getId();
+    }
+
+    @GetMapping(value = "/hospital/doctor/lists/{id}")
+    public String getHospitalDoctors(@PathVariable Long id, Model model,HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hos = hospitalRepository.getOne(id);
+        model.addAttribute("hospital", hos);
+        model.addAttribute("compte",compte);
+        model.addAttribute("lists", personnelRepository.findAllByFunctionAndHospital_Id("DOCTOR",hos.getId()));
+        return "dashboard/pages/admin/doctor/hospital/doctor/lists";
+    }
+
+    @GetMapping(value = "/hospital/other/lists/{id}")
+    public String getHospitalOthers(@PathVariable Long id, Model model,HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hos = hospitalRepository.getOne(id);
+        model.addAttribute("hospital", hos);
+        model.addAttribute("compte",compte);
+        model.addAttribute("lists", personnelRepository.findAllByFunctionAndHospital_Id("SIMPLE",hos.getId()));
+        return "dashboard/pages/admin/doctor/hospital/other/lists";
+    }
+
+    @GetMapping(value = "/hospital/doctor/detail/{id}")
+    public String getHospitalDoctor(@PathVariable Long id, Model model,HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Personnel personnel = personnelRepository.getOne(id);
+        Compte personnelAccount = compteRepository.findByPersonnel_Id(personnel.getId());
+        List<Rdv> appointments = rdvRepository.findAllByComptes_Id(personnelAccount.getId(), Sort.by(Sort.Direction.DESC,"id"));
+        Hospital hos = personnel.getHospital();
+        model.addAttribute("hospital", hos);
+        model.addAttribute("compte",compte);
+        model.addAttribute("personnel", personnel);
+        model.addAttribute("appointments",appointments);
+        model.addAttribute("personnelAccount",personnelAccount);
+        return "dashboard/pages/admin/doctor/hospital/doctor/detail";
+    }
+
+    @GetMapping(value = "/hospital/other/detail/{id}")
+    public String getHospitalOther(@PathVariable Long id, Model model,HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Personnel personnel = personnelRepository.getOne(id);
+        Compte personnelAccount = compteRepository.findByPersonnel_Id(personnel.getId());
+        List<Rdv> appointments = rdvRepository.findAllByComptes_Id(personnelAccount.getId(), Sort.by(Sort.Direction.DESC,"id"));
+        Hospital hos = personnel.getHospital();
+        model.addAttribute("hospital", hos);
+        model.addAttribute("compte",compte);
+        model.addAttribute("personnel", personnel);
+        model.addAttribute("appointments",appointments);
+        model.addAttribute("personnelAccount",personnelAccount);
+        return "dashboard/pages/admin/doctor/hospital/other/detail";
+    }
+
+    @GetMapping("/hospital/doctor/add/{id}")
+    public String addDoctor(@PathVariable Long id,Model model,HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("hospital",hospital);
+        model.addAttribute("compte",compte);
+        model.addAttribute("form",new PersonnelHelper());
+        return "dashboard/pages/admin/doctor/hospital/doctor/form";
+    }
+
+    @PostMapping("/hospital/doctor/add/{id}")
+    public String saveDoctor(@Valid PersonnelHelper form, Model model,
+                             BindingResult bindingResult,HttpServletRequest request,
+                             @RequestParam("file") MultipartFile file, @PathVariable Long id, RedirectAttributes redirectAttributes) throws ParseException {
+        Principal principal = request.getUserPrincipal();
+        Compte compte1 = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+        Personnel persExists = personnelRepository.findByEmailOrPhone(form.getEmail(), form.getPhone());
+        Compte compte = compteRepository.findByEmail(form.getEmail());
+        Personnel personnel = new Personnel();
+        DosMedical dosMedical = new DosMedical();
+
+        if (persExists != null){
+            bindingResult
+                    .rejectValue("email", "error.personnel",
+                            "there is already a personnel registered with that email or name or telephone provided ");
+        }else if (compte != null){
+            bindingResult
+                    .rejectValue("email","error.compte","There are existing account with the provided email");
+        }
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("compte",compte1);
+            model.addAttribute("hospital",hospital);
+            model.addAttribute("form",new PersonnelHelper());
+            return  "dashboard/pages/admin/doctor/hospital/doctor/form";
+        }else {
+            if (!(file.isEmpty())){
+                try {
+                    byte[] bytes = file.getBytes();
+                    Path path = Paths.get(fileStorage + file.getOriginalFilename());
+                    Files.write(path, bytes);
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                personnel.setAvatar("/downloadFile/"+file.getOriginalFilename());
+            }else {
+                personnel.setAvatar("/img/default.jpeg");
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy",Locale.ENGLISH);
+            Date now = sdf.parse(sdf.format(new Date()));
+            Date secondDate = sdf.parse(sdf.format(form.getBirthDate()));
+            long difference = Math.abs(now.getTime()-secondDate.getTime());
+            long days = TimeUnit.DAYS.convert(difference,TimeUnit.MILLISECONDS);
+            personnel.setHospital(hospital);
+            personnel.setAddress(form.getAddress());
+            personnel.setEmail(form.getEmail());
+            personnel.setLastName(form.getLastName());
+            personnel.setFirstName(form.getFirstName());
+            personnel.setAge(Math.round(days/365));
+            personnel.setCity(form.getCity());
+            personnel.setFunction("DOCTOR");
+            personnel.setQualifier(form.getQualifier());
+            personnel.setPhone(form.getPhone());
+            personnel.setGender(form.getGender());
+            //personnel.setLocalisation(form.getLocalisation());
+            personnelRepository.save(personnel);
+            dosMedical.setSex(form.getGender());
+            dosMedical.setName(personnel.getLastName()+" "+personnel.getFirstName());
+            dosMedical.setBloodType(form.getBloodType());
+            dosMedical.setHeight(Integer.parseInt(form.getHeight()));
+            dosMedical.setWeight(Integer.parseInt(form.getWeight()));
+            dosMedical.setBirthDate(form.getBirthDate());
+            dosMedical.setRhesus(form.getRhesus());
+            dosMedical.setHereditaryDiseases(form.getHereditaryDiseases());
+            dosMedical.setDescription(form.getDescription());
+            dosMedical.setCode(form.getCode());
+            dos.save(dosMedical);
+            compteService.saveDoctor(form,personnel.getAvatar(),dosMedical,personnel);
+            System.out.println(personnel.getLastName());
+        }
+
+        redirectAttributes.addFlashAttribute("success","You saved this doctor successfuly");
+        return "redirect:/doctor/hospital/doctor/lists/"+hospital.getId();
+
+    }
+
+    @GetMapping("/hospital/other/add/{id}")
+    public String addOther(@PathVariable Long id,Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+        model.addAttribute("hospital",hospital);
+        model.addAttribute("compte",compte);
+        model.addAttribute("form",new PersonnelHelper());
+        return "dashboard/pages/admin/doctor/hospital/other/form";
+    }
+
+    @PostMapping("/hospital/other/add/{id}")
+    public String saveOther( @Valid PersonnelHelper form, Model model,
+                             BindingResult bindingResult,HttpServletRequest request,
+                             @RequestParam("file") MultipartFile file, @PathVariable Long id, RedirectAttributes redirectAttributes) throws ParseException {
+        Principal principal = request.getUserPrincipal();
+        Compte compte1 = compteService.findByUsername(principal.getName());
+        Hospital hospital = hospitalRepository.getOne(id);
+        Personnel persExists = personnelRepository.findByEmailOrPhone(form.getEmail(), form.getPhone());
+        Compte compte = compteRepository.findByEmail(form.getEmail());
+        Personnel personnel = new Personnel();
+        DosMedical dosMedical = new DosMedical();
+
+        if (persExists != null){
+            bindingResult
+                    .rejectValue("email", "error.personnel",
+                            "there is already a personnel registered with that email or name or telephone provided ");
+        }else if (compte != null){
+            bindingResult
+                    .rejectValue("email","error.compte","There are existing account with the provided email");
+        }
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("compte",compte1);
+            model.addAttribute("hospital",hospital);
+            model.addAttribute("form",new PersonnelHelper());
+            return  "dashboard/pages/admin/doctor/hospital/other/form";
+        }else {
+            if (!(file.isEmpty())){
+                try {
+                    byte[] bytes = file.getBytes();
+                    Path path = Paths.get(fileStorage + file.getOriginalFilename());
+                    Files.write(path, bytes);
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                personnel.setAvatar("/downloadFile/"+file.getOriginalFilename());
+            }else {
+                personnel.setAvatar("/img/default.jpeg");
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy",Locale.ENGLISH);
+            Date now = sdf.parse(sdf.format(new Date()));
+            Date secondDate = sdf.parse(sdf.format(form.getBirthDate()));
+            long difference = Math.abs(now.getTime()-secondDate.getTime());
+            long days = TimeUnit.DAYS.convert(difference,TimeUnit.MILLISECONDS);
+            personnel.setHospital(hospital);
+            personnel.setAddress(form.getAddress());
+            personnel.setEmail(form.getEmail());
+            personnel.setLastName(form.getLastName());
+            personnel.setFirstName(form.getFirstName());
+            personnel.setAge(Math.round(days/365));
+            personnel.setCity(form.getCity());
+            personnel.setFunction("SIMPLE");
+            personnel.setQualifier(form.getQualifier());
+            personnel.setPhone(form.getPhone());
+            personnel.setGender(form.getGender());
+            //personnel.setLocalisation(form.getLocalisation());
+            personnelRepository.save(personnel);
+            dosMedical.setSex(form.getGender());
+            dosMedical.setName(personnel.getLastName()+" "+personnel.getFirstName());
+            dosMedical.setBloodType(form.getBloodType());
+            dosMedical.setHeight(Integer.parseInt(form.getHeight()));
+            dosMedical.setWeight(Integer.parseInt(form.getWeight()));
+            dosMedical.setBirthDate(form.getBirthDate());
+            dosMedical.setRhesus(form.getRhesus());
+            dosMedical.setHereditaryDiseases(form.getHereditaryDiseases());
+            dosMedical.setDescription(form.getDescription());
+            dosMedical.setCode(form.getCode());
+            dos.save(dosMedical);
+            compteService.saveSimple(form,personnel.getAvatar(),dosMedical,personnel);
+            System.out.println(personnel.getLastName());
+        }
+
+        redirectAttributes.addFlashAttribute("success","You saved this user successfuly");
+        return "redirect:/doctor/hospital/other/lists/"+hospital.getId();
+
+    }
+
+    @GetMapping("/hospital/doctor/update/{id}")
+    public String doctorEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs){
+
+        Personnel personnel = personnelRepository.getOne(id);
+        Hospital hospital =  personnel.getHospital();
+        try{
+            model.addAttribute("personnel",personnel);
+            model.addAttribute("hospital",hospital);
+            return "dashboard/pages/admin/doctor/hospital/doctor/update";
+        }catch (Exception e){
+            redirAttrs.addFlashAttribute("error", "This doctor seems to not exist in that hospital");
+            return "redirect:/doctor/hospital/doctor/lists/"+hospital.getId();
+        }
+    }
+
+    @GetMapping("/hospital/other/update/{id}")
+    public String otherEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs){
+
+        Personnel personnel = personnelRepository.getOne(id);
+        Hospital hospital =  personnel.getHospital();
+        try{
+            model.addAttribute("personnel",personnel);
+            return "dashboard/pages/admin/doctor/hospital/other/update";
+        }catch (Exception e){
+            redirAttrs.addFlashAttribute("error", "This user seems to not exist in that hospital");
+            return "redirect:/doctor/hospital/other/lists/"+hospital.getId();
+        }
+    }
+
+    @PostMapping("/hospital/doctor/update/{id}")
+    public String updateUser(Personnel personnel, RedirectAttributes redirectAttributes,
+                             @RequestParam("file") MultipartFile file, @PathVariable Long id){
+        Compte compte = compteRepository.findByEmail(personnel.getEmail());
+        DosMedical dosMedical = dos.findByCode(compte.getUsername());
+        Hospital hospital = hospitalRepository.getOne(id);
+
+        if (!(file.isEmpty())){
+            try{
+                // Get the file and save it somewhere
+                byte[] bytes = file.getBytes();
+                Path path = Paths.get(fileStorage + file.getOriginalFilename());
+                Files.write(path, bytes);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            personnel.setAvatar("/downloadFile/"+file.getOriginalFilename());
+        }else {
+            personnel.setAvatar(personnel.getAvatar());
+        }
+        personnel.setHospital(hospital);
+        personnelRepository.save(personnel);
+        dosMedical.setName(personnel.getLastName()+" "+personnel.getFirstName());
+        dosMedical.setBirthDate(personnel.getBirthDate());
+        dos.save(dosMedical);
+        redirectAttributes.addFlashAttribute("success", "The personnel has been updated successfully");
+        return "redirect:/doctor/hospital/doctor/detail/"+personnel.getId();
+
+    }
+
+
+    @PostMapping("/hospital/other/update/{id}")
+    public String updateOther(Personnel personnel, RedirectAttributes redirectAttributes,
+                              @RequestParam("file") MultipartFile file, @PathVariable Long id){
+        Compte compte = compteRepository.findByEmail(personnel.getEmail());
+        DosMedical dosMedical = dos.findByCode(compte.getUsername());
+        Hospital hospital = hospitalRepository.getOne(id);
+
+        if (!(file.isEmpty())){
+            try{
+                // Get the file and save it somewhere
+                byte[] bytes = file.getBytes();
+                Path path = Paths.get(fileStorage + file.getOriginalFilename());
+                Files.write(path, bytes);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            personnel.setAvatar("/downloadFile/"+file.getOriginalFilename());
+        }else {
+            personnel.setAvatar(personnel.getAvatar());
+        }
+        personnel.setHospital(hospital);
+        personnelRepository.save(personnel);
+        dosMedical.setName(personnel.getLastName()+" "+personnel.getFirstName());
+        dosMedical.setBirthDate(personnel.getBirthDate());
+        dos.save(dosMedical);
+        redirectAttributes.addFlashAttribute("success", "The personnel has been updated successfully");
+        return "redirect:/doctor/hospital/other/detail/"+personnel.getId();
+
     }
 
 

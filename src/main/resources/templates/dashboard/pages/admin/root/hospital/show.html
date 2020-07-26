@@ -8,84 +8,90 @@
 </head>
 <body>
 <div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/root/home}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Hospital details</li>
+        </ol>
+    </nav>
     <div class="row">
 
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
                 <a th:href="@{/root/hospital/doctor/lists/}+${hospital.id}">
                 <div class="dash-widget">
                     <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
-                        <h3 th:text="${doctors.size()}"></h3>
-                        <span class="widget-title1">Doctors <i class="fa fa-check" aria-hidden="true"></i></span>
+                        <h3 ><span>Doctors</span>  <span th:text="${doctors.size()}" class="badge badge-info-border"></span>  </h3>
+                        <span class="widget-title3">Doctors <i class="fa fa-check" aria-hidden="true"></i></span>
                     </div>
                 </div>
                 </a>
             </div>
 
-        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
             <a th:href="@{/root/hospital/other/lists/}+${hospital.id}">
                 <div class="dash-widget">
                     <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
-                        <h3 th:text="${simples.size()}"></h3>
-                        <span class="widget-title1">Others staffs <i class="fa fa-check" aria-hidden="true"></i></span>
+                        <h3 ><span>Other Staffs</span>  <span th:text="${simples.size()}" class="badge badge-info-border"></span> </h3>
+                        <span class="widget-title3">Others staffs <i class="fa fa-check" aria-hidden="true"></i></span>
                     </div>
                 </div>
             </a>
         </div>
 
-        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
             <a th:href="@{/root/hospital/incubator/lists/}+${hospital.id}">
                 <div class="dash-widget">
-                    <span class="dash-widget-bg1"><i class="fa fa-user-o"></i></span>
+                    <span class="dash-widget-bg1"><i class="fa fa-archive"></i></span>
                     <div class="dash-widget-info text-right">
-                        <h3 th:text="${hospital.incubators.size()}"></h3>
-                        <span class="widget-title2">Incubators <i class="fa fa-check" aria-hidden="true"></i></span>
+                        <h3 ><span>Incubators</span>  <span th:text="${hospital.incubators.size()}" class="badge badge-info-border"></span></h3>
+                        <span class="widget-title3">Incubators <i class="fa fa-check" aria-hidden="true"></i></span>
                     </div>
                 </div>
                 </a>
             </div>
 
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
                 <a th:href="@{/root/hospital/blood/lists/}+${hospital.id}">
                 <div class="dash-widget">
-                    <span class="dash-widget-bg1"><i class="fa fa-user-md" aria-hidden="true"></i></span>
+                    <span class="dash-widget-bg1"><i class="fa fa-archive" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
-                        <h3 th:text="${hospital.bloodBanks.size()}"></h3>
+                        <h3 ><span>Blood</span>  <span th:text="${hospital.bloodBanks.size()}" class="badge badge-info-border"></span></h3>
                         <span class="widget-title3">Blood <i class="fa fa-check" aria-hidden="true"></i></span>
                     </div>
                 </div>
                 </a>
             </div>
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
                 <a th:href="@{/root/hospital/consultation/lists/}+${hospital.id}">
                 <div class="dash-widget">
                     <span class="dash-widget-bg1"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
-                        <h3 th:text="${hospital.consultations.size()}"></h3>
-                        <span class="widget-title4">Consultations <i class="fa fa-check" aria-hidden="true"></i></span>
+                        <h3 ><span>Consultations</span>  <span th:text="${hospital.consultations.size()}" class="badge badge-info-border"></span></h3>
+                        <span class="widget-title3">Consultations <i class="fa fa-check" aria-hidden="true"></i></span>
                     </div>
                 </div>
                 </a>
             </div>
-        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
-            <a th:href="@{/root/hospital/exams/lists/}+${hospital.id}">
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+            <a th:href="@{/root/hospital/examen/lists/}+${hospital.id}">
             <div class="dash-widget">
                 <span class="dash-widget-bg1"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
                 <div class="dash-widget-info text-right">
-                    <h3 th:text="${hospital.examens.size()}"></h3>
-                    <span class="widget-title4">Examens <i class="fa fa-check" aria-hidden="true"></i></span>
+                    <h3 ><span>Examens</span>  <span th:text="${hospital.examens.size()}" class="badge badge-info-border"></span></h3>
+                    <span class="widget-title3">Examens <i class="fa fa-check" aria-hidden="true"></i></span>
                 </div>
             </div>
             </a>
         </div>
-        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
             <a th:href="@{/root/hospital/pharmacie/}+${hospital.id}">
                 <div class="dash-widget">
-                    <span class="dash-widget-bg1"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
+                    <span class="dash-widget-bg1"><i class="fa fa-hospital-o" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
                         <h3>Pharmacy</h3>
-                        <span class="widget-title4">Pharmacy <i class="fa fa-check" aria-hidden="true"></i></span>
+                        <span class="widget-title3">Pharmacy <i class="fa fa-check" aria-hidden="true"></i></span>
                     </div>
                 </div>
             </a>
@@ -96,10 +102,11 @@
         <div class="col-12 col-md-6 col-lg-8 col-xl-6">
             <div class="hospital-barchart">
                 <h3 th:text="${hospital.pays}"></h3>
-                <br>
+                <hr>
                 <h4 class="card-title d-inline-block" th:text="${hospital.name}"></h4>
+                <hr>
                 <h4 th:text="${hospital.city}"></h4>
-                <br>
+                <hr>
                 <h4 th:text="${hospital.neighborhood}"></h4>
             </div>
         </div>

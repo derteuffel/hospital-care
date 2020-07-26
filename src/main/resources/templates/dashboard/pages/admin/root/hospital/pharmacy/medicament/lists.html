@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}"><head>
+    <meta charset="UTF-8">
+    <title>Medicaments</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div class="row">
+        <div class="col-sm-4 col-3">
+            <h4 class="page-title">Drugs</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-border table-striped custom-table datatable mb-0">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Quantity</th>
+                        <th>Grammage</th>
+                        <th>Drug type</th>
+                        <th>Name</th>
+                        <th>stock Quantity</th>
+                        <th>Prix unitaire</th>
+                        <th>Status</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="drug,i: ${lists}">
+                        <input type="hidden" name="id" th:value="${drug.id}"/>
+                        <td th:text="${i.count}"></td>
+                        <td th:text="${drug.quantity}"></td>
+                        <td th:text="${drug.grammage}"></td>
+                        <td th:text="${drug.drugType}"></td>
+                        <td th:text="${drug.name}"></td>
+                        <td th:text="${drug.stockQuantity}"></td>
+                        <td th:text="${drug.pricingUnit}"></td>
+                        <td th:if="${drug.status== true}">
+                            <span class="custom-badge status-green">Disponible</span>
+                        </td>
+                        <td th:unless="${drug.status== true}">
+                            <span class="custom-badge status-red">Non Disponible</span>
+                        </td>
+                        <td class="text-right">
+                            <div class="dropdown dropdown-action">
+                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right menu_">
+                                    <a class="dropdown-item" th:href="@{/root/hospital/pharmacie/medicament/detail/{id}(id = ${drug.id})}"><i class="fa fa-eye m-r-5"></i> detail</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

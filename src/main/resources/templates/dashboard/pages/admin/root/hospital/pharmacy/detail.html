@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+
+    </title>Pharmacie Detail</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/root/home}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Pharmacy</li>
+        </ol>
+    </nav>
+    <div class="row">
+
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+            <a th:href="@{/root/pharmacie/medicament/lists/}+${pharmacy?.id}">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3 th:if="${pharmacy}!= null" th:text="${pharmacy?.medicaments.size()}"></h3>
+                        <span class="widget-title1">Medicaments <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+            <a href="#">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3 th:if="${pharmacy}!= null" th:text="${pharmacy?.factures.size()}"></h3>
+                        <span class="widget-title1">Factures <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-8 col-xl-12">
+            <div class="hospital-barchart">
+                <h3 class="card-title d-inline-block" th:text="${pharmacy?.name}"></h3>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

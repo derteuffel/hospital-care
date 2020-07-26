@@ -1,4 +1,4 @@
-!mp:;<!DOCTYPE html>
+!<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{../templates/dashboard/index}"><head>
     <meta charset="UTF-8">
@@ -6,6 +6,12 @@
 </head>
 <body>
 <div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/root/home}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Prescriptions</li>
+        </ol>
+    </nav>
     <div class="row">
         <div class="col-sm-4 col-3">
             <h4 class="page-title">Prescriptions</h4>
