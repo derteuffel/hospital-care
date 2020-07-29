@@ -78,6 +78,10 @@
                                                 <span class="text"th:text="${personnel.address}"></span>
                                             </li>
                                             <li>
+                                                <span class="title">Neighborhood:</span>
+                                                <span class="text"th:text="${personnel.neighborhood}"></span>
+                                            </li>
+                                            <li>
                                                 <span class="title">Gender:</span>
                                                 <span th:if="${personnel.gender}=='M'" class="text" >MASCULIN</span>
                                                 <span th:unless="${personnel.gender}=='M'" class="text" >FEMININ</span>

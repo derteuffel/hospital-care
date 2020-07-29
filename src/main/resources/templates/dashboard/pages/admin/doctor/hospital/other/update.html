@@ -9,7 +9,7 @@
 <div class="content" layout:fragment="content">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/root/home}">Home</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/doctor/home}">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Other user update</li>
         </ol>
     </nav>
@@ -20,7 +20,7 @@
     </div>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form method="post" th:action="@{/root/hospital/other/update/}+${hospital.id}" enctype="multipart/form-data" th:object="${personnel}">
+            <form method="post" th:action="@{/doctor/hospital/other/update/}+${hospital.id}" enctype="multipart/form-data" th:object="${personnel}">
                 <div th:if="${error}">
                     <div class="alert alert-danger" th:text="${error}"></div>
                 </div>
@@ -87,7 +87,7 @@
                     <input type="text" th:field="*{avatar}" style="display: none">
                 </div>
                 <div class="m-t-20 text-center">
-                    <a th:href="@{/root/hospital/other/detail/}+${personnel.id}" class="btn btn-secondary submit-btn">Annuler</a>
+                    <a th:href="@{/doctor/hospital/other/detail/}+${personnel.id}" class="btn btn-secondary submit-btn">Annuler</a>
 
                     <button type="submit" class="btn btn-primary submit-btn">Save User</button>
                 </div>

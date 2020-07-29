@@ -63,11 +63,12 @@
                                             <li>
                                                 <span class="title">Birthday:</span>
                                                 <span th:if="${personnel.birthDate}!= null" class="text" th:text="${personnel.birthDate}">Ici date de naissance</span>
-                                                <span th:unless="${personnel.birthDate}!= null" class="text" >Non definie</span>
+                                                <span th:unless="${personnel.birthDate}!= null" class="text" >Undifined</span>
                                             </li>
                                             <li>
                                                 <span class="title">Age:</span>
-                                                <span class="text"th:text="${personnel.age}"></span>
+                                                <span class="text" th:if="${personnel.age}!= null" th:text="${personnel.age}"></span>
+                                                <span class="text" th:unless="${personnel.age}!= null" >Undifined</span>
                                             </li>
                                             <li>
                                                 <span class="title">Ville:</span>
@@ -76,6 +77,10 @@
                                             <li>
                                                 <span class="title">Address:</span>
                                                 <span class="text"th:text="${personnel.address}"></span>
+                                            </li>
+                                            <li>
+                                                <span class="title">Neighborhood:</span>
+                                                <span class="text"th:text="${personnel.neighborhood}"></span>
                                             </li>
                                             <li>
                                                 <span class="title">Gender:</span>

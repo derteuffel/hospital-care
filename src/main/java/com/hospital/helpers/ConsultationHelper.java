@@ -34,11 +34,7 @@ public class ConsultationHelper {
 
     @NotNull(message = "age field must not be null")
     private int age;
-
-    @NotNull(message = "name must not be null")
     private String DoctorName;
-
-    @NotNull(message = "phone number field must not be null")
     private String DoctorPhone;
 
     private String observations;

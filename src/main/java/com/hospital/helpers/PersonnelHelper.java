@@ -58,6 +58,24 @@ public class PersonnelHelper {
 
     private String description;
 
+    private String neighborhood;
+
+    public String getQualifier() {
+        return qualifier;
+    }
+
+    public void setQualifier(String qualifier) {
+        this.qualifier = qualifier;
+    }
+
+    public String getNeighborhood() {
+        return neighborhood;
+    }
+
+    public void setNeighborhood(String neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
     public String getLastName() {
         return lastName;
     }

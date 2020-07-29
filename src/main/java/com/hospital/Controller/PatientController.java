@@ -88,7 +88,7 @@ public class PatientController {
         model.addAttribute("compte",compte);
         DosMedical dosMedical = dos.findByCode(code);
         model.addAttribute("dosMedical",dosMedical);
-        return "dashboard/pages/admin/patient/mpedical-record/dosMedical";
+        return "dashboard/pages/admin/patient/medical-record/dosMedical";
     }
 
     @GetMapping("/consultation/lists/{id}")

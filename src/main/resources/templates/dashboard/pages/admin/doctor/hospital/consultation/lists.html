@@ -62,30 +62,9 @@
                             <div class="dropdown dropdown-action">
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right menu_">
-                                    <a class="dropdown-item" th:href="@{/doctor/consultation/examen/lists/}+${consultation.dosMedical.id}" th:text="@{'View Exams ('+${consultation.examens.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
-                                    <a class="dropdown-item" th:href="@{/doctor/consultation/ordonances/lists/}+${consultation.dosMedical.id}" th:text="@{'View Prescriptions ('+${consultation.prescriptions.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
-                                    <a class="dropdown-item" th:href="@{/doctor/consultation/update/}+${consultation.id}+'?code='+${code}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_patient"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                </div>
-                            </div>
-                            <div class="modal fade" th:id="deleteModal+${consultation.id}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteModalLabel">Suppression d'une couveuse </h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p class="text-center">Etes vous sure de vouloir supprimer cette element???</p>
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-                                            <a th:href="@{/doctor/consultation/delete/}+${consultation.id}" class="btn btn-primary">Oui</a>
-                                        </div>
-                                    </div>
+                                    <a class="dropdown-item" th:href="@{/doctor/hospital/consultation/detail/}+${consultation.id}" th:text="@{'Consultation details'}"><i class="fa fa-eye m-r-5"></i></a>
+                                    <a class="dropdown-item" th:href="@{/doctor/hospital/consultation/examen/lists/}+${consultation.id}" th:text="@{'View Exams ('+${consultation.examens.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
+                                    <a class="dropdown-item" th:href="@{/doctor/hospital/consultation/ordonances/lists/}+${consultation.id}" th:text="@{'View Prescriptions ('+${consultation.prescriptions.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
                                 </div>
                             </div>
                         </td>

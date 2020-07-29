@@ -433,6 +433,8 @@ public class RootController {
             personnel.setQualifier(form.getQualifier());
             personnel.setPhone(form.getPhone());
             personnel.setGender(form.getGender());
+            personnel.setBirthDate(form.getBirthDate());
+            personnel.setNeighborhood(form.getNeighborhood());
             //personnel.setLocalisation(form.getLocalisation());
             personnelRepository.save(personnel);
             dosMedical.setSex(form.getGender());
@@ -516,6 +518,8 @@ public class RootController {
             personnel.setQualifier(form.getQualifier());
             personnel.setPhone(form.getPhone());
             personnel.setGender(form.getGender());
+            personnel.setBirthDate(form.getBirthDate());
+            personnel.setNeighborhood(form.getNeighborhood());
             //personnel.setLocalisation(form.getLocalisation());
             personnelRepository.save(personnel);
             dosMedical.setSex(form.getGender());

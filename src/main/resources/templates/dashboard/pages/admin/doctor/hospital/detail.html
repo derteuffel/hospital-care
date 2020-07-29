@@ -8,6 +8,12 @@
 </head>
 <body>
 <div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/doctor/home}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Hospital details</li>
+        </ol>
+    </nav>
     <div class="row">
         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
             <a th:href="@{/doctor/hospital/doctor/lists/}+${hospital.id}">
@@ -77,25 +83,27 @@
                 </div>
             </a>
         </div>
-        <!--<div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
-            <a th:href="@{/doctor/pharmacie/hospital/}+${hospital.id}">
-                <div class="dash-widget">
-                    <span class="dash-widget-bg4"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
-                    <div class="dash-widget-info text-right">
-                        <h3>pharmacy</h3>
-                        <span class="widget-title4">pharmacy <i class="fa fa-check" aria-hidden="true"></i></span>
-                    </div>
-                </div>
-            </a>
-        </div>-->
+
 
         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
-            <a th:href="@{/doctor/appointment/lists}">
+            <a th:href="@{/doctor/hospital/appointment/lists/}+${hospital.id}">
                 <div class="dash-widget">
                     <span class="dash-widget-bg3"><i class="fa fa-meetup" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
                         <h3><span >Appointment</span>&nbsp;<span th:text="${hospital.rdvs.size()}" class="badge badge-info-border"></span></h3>
                         <span class="widget-title3">Appointment <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+            <a th:href="@{/doctor/medical-record/lists}">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg3"><i class="fa fa-search" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3><span >Medical record</span>&nbsp;<span th:text="${'0'}" class="badge badge-info-border"></span></h3>
+                        <span class="widget-title3">Medical record <i class="fa fa-check" aria-hidden="true"></i></span>
                     </div>
                 </div>
             </a>

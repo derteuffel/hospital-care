@@ -10,7 +10,7 @@
     <div class="content" layout:fragment="content">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/root/home}">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/doctor/home}">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Other user details</li>
             </ol>
         </nav>
@@ -24,7 +24,7 @@
             </div>
 
                 <div class="col-sm-5 col-6 text-right m-b-30">
-                    <a th:href="@{/root/hospital/other/update/{id}(id = ${personnel.id})}" class="btn btn-primary btn-rounded"><i class="fa fa-edit"></i> Edit Profile</a>
+                    <a th:href="@{/doctor/hospital/other/update/{id}(id = ${personnel.id})}" class="btn btn-primary btn-rounded"><i class="fa fa-edit"></i> Edit Profile</a>
                 </div>
             </div>
             <div class="card-box profile-header">
@@ -63,12 +63,12 @@
                                             <li>
                                                 <span class="title">Birthday:</span>
                                                 <span th:if="${personnel.birthDate}!= null" class="text" th:text="${personnel.birthDate}">Ici date de naissance</span>
-                                                <span th:unless="${personnel.birthDate}!= null" class="text" >Non definie</span>
+                                                <span th:unless="${personnel.birthDate}!= null" class="text" >Undifined</span>
                                             </li>
                                             <li>
                                                 <span class="title">Age:</span>
-                                                <span th:if="${personnel.age}== null" class="text"th:text="${personnel.age}"></span>
-                                                <span th:unless="${personnel.age}== null" class="text" >Non <defini></defini></span>
+                                                <span th:if="${personnel.age}!= null" class="text" th:text="${personnel.age}"></span>
+                                                <span th:unless="${personnel.age}!= null" class="text" >Undifined</span>
                                             </li>
                                             <li>
                                                 <span class="title">Ville:</span>
@@ -112,7 +112,7 @@
                                                 <div class="experience-content">
                                                     <div class="timeline-content">
 
-                                                        <a th:href="@{/root/other/consultation/lists/}+${personnel.id}" class="name">
+                                                        <a th:href="@{/doctor/consultation/lists/}+${personnel.id}" class="name">
                                                             <span>Vous avez </span>
                                                             <span th:text="${personnel.getConsultations().size()}"></span>
                                                             <span>consultation(s)</span>
@@ -138,7 +138,7 @@
                                                 <div class="experience-content">
                                                     <div class="timeline-content">
 
-                                                        <a th:href="@{/root/other/appointment/lists/}+${personnelAccount.id}" class="name">
+                                                        <a th:href="@{/doctor/appointment/lists/}+${personnelAccount.id}" class="name">
                                                             <span>Vous avez </span>
                                                             <span th:text="${#lists.size(appointments)}"></span>
                                                             <span>Rendez-vous(s)</span>
