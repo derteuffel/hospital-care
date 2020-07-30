@@ -15,32 +15,40 @@ public class PrescriptionHelper {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    @NotNull(message = "you must specify a date")
     private Date date;
     
+    private String name;
     private String dosage;
 
-    @NotNull(message = "idConsultation field must not be null")
     private Long idConsultation;
 
     public PrescriptionHelper(){
 
     }
 
-    public PrescriptionHelper(Date date, String dosage, Long idConsultation) {
+    public PrescriptionHelper(@NotNull(message = "you must specify a date") Date date, String name, String dosage,  Long idConsultation) {
         this.date = date;
+        this.name = name;
         this.dosage = dosage;
         this.idConsultation = idConsultation;
     }
 
     public Prescription getPrescriptionInstance(Consultation consultation){
-        return new Prescription(date,dosage,consultation);
+        return new Prescription(date,name,dosage,consultation);
     }
 
     public static PrescriptionHelper getPrescriptionHelperInstance(Prescription prescription){
-        return new PrescriptionHelper(prescription.getDate(),prescription.getDosage(),prescription.getConsultation().getId());
+        return new PrescriptionHelper(prescription.getDate(),prescription.getName(),prescription.getDosage(),prescription.getConsultation().getId());
     }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Date getDate() {
         return date;

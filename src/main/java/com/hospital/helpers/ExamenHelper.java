@@ -36,10 +36,8 @@ public class ExamenHelper {
 
     private String time;
 
-    @NotNull(message = "idConsultation field must not be null")
     private Long idConsultation;
 
-    @NotNull(message = "hospital name must not be blank")
     private String hospitalName;
 
     private Boolean status;

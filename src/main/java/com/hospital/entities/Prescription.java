@@ -19,6 +19,8 @@ public class Prescription implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
+    private String name;
+
     private String dosage;
 
     @ManyToOne
@@ -29,10 +31,19 @@ public class Prescription implements Serializable {
 
     }
 
-    public Prescription(Date date, String dosage, Consultation consultation){
+    public Prescription(Date date, String name, String dosage, Consultation consultation) {
         this.date = date;
+        this.name = name;
         this.dosage = dosage;
         this.consultation = consultation;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getId() {

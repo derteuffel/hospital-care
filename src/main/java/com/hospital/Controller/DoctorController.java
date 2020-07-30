@@ -501,9 +501,7 @@ public class DoctorController {
         Compte compte = compteService.findByUsername(principal.getName());
         Consultation consultation = consultationRepository.getOne(Long.parseLong(""+idConsultation));
         if (compte.getPersonnel() != null) {
-            List<Hospital> hospitals = hospitalRepository.findAll();
             model.addAttribute("idConsultation", idConsultation);
-            model.addAttribute("lists", hospitals);
             model.addAttribute("compte",compte);
             model.addAttribute("hospital",compte.getPersonnel().getHospital());
             model.addAttribute(new ExamenHelper());
@@ -515,18 +513,26 @@ public class DoctorController {
     }
 
     /** Add an exam */
-    @PostMapping("/examen/create")
-    public String saveExam(@ModelAttribute @Valid ExamenHelper examenHelper,Errors errors, Model model){
+    @PostMapping("/consultation/examen/create")
+    public String saveExam(@ModelAttribute @Valid ExamenHelper examenHelper,Errors errors, Model model,
+                           int idConsultation, HttpServletRequest request, RedirectAttributes redirectAttributes){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         if(errors.hasErrors()){
-            model.addAttribute("lists",hospitalRepository.findAll());
-            model.addAttribute("idConsultation",examenHelper.getIdConsultation());
-            return "dashboard/pages/admin/doctor/examens/addExam";
+            model.addAttribute("compte",compte);
+            model.addAttribute("idConsultation",idConsultation);
+            model.addAttribute("hospital",compte.getPersonnel().getHospital());
+            model.addAttribute(new ExamenHelper());
+            return "dashboard/pages/admin/doctor/examens/form";
         }else{
-            Consultation consultation = consultationRepository.getOne(examenHelper.getIdConsultation());
-            Hospital hospital = hospitalRepository.findByName(examenHelper.getHospitalName());
+            Consultation consultation = consultationRepository.getOne(Long.parseLong(idConsultation+""));
+            Hospital hospital = compte.getPersonnel().getHospital();
+            System.out.println(hospital.getName());
+            examenHelper.setHospitalName(hospital.getName());
+            examenHelper.setStatus(false);
             examenRepository.save(examenHelper.getExamInstance(hospital,consultation));
         }
-        return  "redirect:/doctor/consultation/examen/lists";
+        return  "redirect:/doctor/consultation/examen/lists/"+idConsultation;
     }
 
     @GetMapping("/hospital/consultation/ordonances/lists/{id}")
@@ -547,7 +553,7 @@ public class DoctorController {
     }
 
     /** form for adding an prescription */
-    @GetMapping(value = "/prescription/create")
+    @GetMapping(value = "/consultation/prescription/create")
     public String addOrdonances(@RequestParam("idConsultation") int  idConsultation, Model model,
                                 HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
@@ -555,7 +561,7 @@ public class DoctorController {
         model.addAttribute("compte",compte);
         model.addAttribute("idConsultation",idConsultation);
         model.addAttribute(new PrescriptionHelper());
-        return "dashboard/pages/admin/doctor/prescription/addPrescription";
+        return "dashboard/pages/admin/doctor/prescription/form";
     }
 
     /** Get all prescriptions of a consultation */
@@ -586,46 +592,49 @@ public class DoctorController {
     }
 
     /** Add an prescription */
-    @PostMapping("/prescription/create")
-    public String savePrescription(@ModelAttribute @Valid PrescriptionHelper prescriptionHelper,
-                                   Errors errors, Model model, HttpServletRequest request){
+    @PostMapping("/consultation/prescription/save")
+    public String savePrescription( @Valid PrescriptionHelper prescriptionHelper,
+                                   Errors errors, Model model, HttpServletRequest request, int idConsultation){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
+        System.out.println("je suis "+idConsultation);
+        Consultation consultation = consultationRepository.getOne(Long.parseLong(idConsultation+""));
+        System.out.println(consultation.getObservations());
         model.addAttribute("compte",compte);
         if(errors.hasErrors()){
-            model.addAttribute("idConsultation",prescriptionHelper.getIdConsultation());
-            return "dashboard/pages/admin/doctor/prescription/addPrescription";
+            System.out.println(errors.getAllErrors());
+            model.addAttribute("idConsultation",consultation.getId());
+            model.addAttribute(new PrescriptionHelper());
+            return "dashboard/pages/admin/doctor/prescription/form";
         }else{
-            Consultation consultation = consultationRepository.getOne(prescriptionHelper.getIdConsultation());
+            prescriptionHelper.setDate(new Date());
             prescriptionRepository.save(prescriptionHelper.getPrescriptionInstance(consultation));
         }
         return  "redirect:/doctor/consultation/prescription/lists/"+prescriptionHelper.getIdConsultation();
     }
 
-    @GetMapping(value = "/prescription/update/{idPrescription}")
-    public String updatePrescription(@PathVariable Long idPrescription, @RequestParam("idConsultation") Long idConsultation, Model model){
+    @GetMapping(value = "/consultation/prescription/update/{id}")
+    public String updatePrescription(@PathVariable Long id, @RequestParam("idConsultation") Long idConsultation, Model model,HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         model.addAttribute("idConsultation",idConsultation);
-        model.addAttribute("prescriptionHelper", PrescriptionHelper.getPrescriptionHelperInstance(prescriptionRepository.getOne(idPrescription)));
-        return "dashboard/pages/admin/doctor/prescription/updatePrescription";
+        model.addAttribute("compte",compte);
+        model.addAttribute("prescription", prescriptionRepository.getOne(id));
+        return "dashboard/pages/admin/doctor/prescription/update";
     }
 
     /** Update a prescription */
-    @PostMapping(value = "/prescription/update/{idPrescription}")
-    public String updatePrescription(@PathVariable Long idPrescription, @ModelAttribute @Valid PrescriptionHelper prescriptionHelper, Errors errors, Model model){
-        if(errors.hasErrors()){
-            model.addAttribute("idConsultation",prescriptionHelper.getIdConsultation());
-            return "dashboard/pages/admin/doctor/prescription/updatePrescription";
-        }else{
-            Consultation consultation = consultationRepository.getOne(prescriptionHelper.getIdConsultation());
-            Prescription exPrescription = prescriptionRepository.getOne(idPrescription);
-            Prescription newPrescription = prescriptionHelper.getPrescriptionInstance(consultation);
-            newPrescription.setId(exPrescription.getId());
-            prescriptionRepository.save(newPrescription);
-        }
+    @PostMapping(value = "/consultation/prescription/update/{id}")
+    public String updatePrescription(@PathVariable Long id, @Valid Prescription prescription, Model model, Long idConsultation){
+
+            Consultation consultation = consultationRepository.getOne(idConsultation);
+            prescription.setConsultation(consultation);
+            prescription.setDate(new Date());
+            prescriptionRepository.save(prescription);
 
         model.addAttribute("success","Operation successfully completed");
         System.out.println(model.getAttribute("success"));
-        return  "redirect:/doctor/consultation/prescription/lists/"+prescriptionHelper.getIdConsultation();
+        return  "redirect:/doctor/consultation/prescription/lists/"+consultation.getId();
     }
 
     @GetMapping("/prescription/delete/{id}")
