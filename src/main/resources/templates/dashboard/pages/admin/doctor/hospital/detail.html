@@ -11,9 +11,14 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a th:href="@{/doctor/home}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Hospital details</li>
+            <li class="breadcrumb-item active" aria-current="page">Doctor home</li>
         </ol>
     </nav>
+    <div class="row">
+        <div class="col-sm-4 col-3">
+            <h4 class="page-title">Doctor home</h4>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
             <a th:href="@{/doctor/hospital/doctor/lists/}+${hospital.id}">

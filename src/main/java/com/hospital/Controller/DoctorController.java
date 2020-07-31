@@ -637,12 +637,13 @@ public class DoctorController {
         return  "redirect:/doctor/consultation/prescription/lists/"+consultation.getId();
     }
 
-    @GetMapping("/prescription/delete/{id}")
-    public String deletePrescriptionById(@PathVariable Long id, Model model) {
+    @GetMapping("/consultation/prescription/delete/{id}")
+    public String deletePrescriptionById(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         Prescription prescription = prescriptionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid prescription id:" +id));
         Consultation consultation = prescription.getConsultation();
         prescriptionRepository.delete(prescription);
+        redirectAttributes.addFlashAttribute("success","Your delete action has been successfuly");
         return "redirect:/doctor/consultation/prescription/lists/"+consultation.getId();
 
     }
@@ -755,12 +756,12 @@ public class DoctorController {
         return "dashboard/pages/admin/doctor/incubator/lists";
     }
 
-    @GetMapping("/consultation/observation/{id}")
-    public String addObservationToConsultation(@PathVariable Long id, String observation){
-        Consultation consultation = consultationRepository.getOne(id);
-        consultation.setObservations(observation);
-        consultationRepository.save(consultation);
-        return "redirect:/doctor/consultation/detail/"+consultation.getId();
+    @GetMapping("/consultation/examen/observation/{id}")
+    public String addObservationToExamen(@PathVariable Long id, String observation){
+        Examen examen = examenRepository.getOne(id);
+        examen.setDescription(observation);
+        examenRepository.save(examen);
+        return "redirect:/doctor/examen/detail/"+examen.getId();
     }
 
     @GetMapping(value = "/hospital/doctor/lists/{id}")
@@ -867,17 +868,17 @@ public class DoctorController {
             }else {
                 personnel.setAvatar("/img/default.jpeg");
             }
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy",Locale.ENGLISH);
-            Date now = sdf.parse(sdf.format(new Date()));
-            Date secondDate = sdf.parse(sdf.format(form.getBirthDate()));
-            long difference = Math.abs(now.getTime()-secondDate.getTime());
-            long days = TimeUnit.DAYS.convert(difference,TimeUnit.MILLISECONDS);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy",Locale.ENGLISH);
+            String now = sdf.format(new Date());
+            String secondDate = sdf.format(form.getBirthDate());
+            Integer now1 = Integer.parseInt(now);
+            Integer secondDate1 = Integer.parseInt(secondDate);
             personnel.setHospital(hospital);
             personnel.setAddress(form.getAddress());
             personnel.setEmail(form.getEmail());
             personnel.setLastName(form.getLastName());
             personnel.setFirstName(form.getFirstName());
-            personnel.setAge(Math.round(days/365));
+            personnel.setAge(now1 - secondDate1);
             personnel.setCity(form.getCity());
             personnel.setFunction("DOCTOR");
             personnel.setQualifier(form.getQualifier());
@@ -957,17 +958,17 @@ public class DoctorController {
             }else {
                 personnel.setAvatar("/img/default.jpeg");
             }
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy",Locale.ENGLISH);
-            Date now = sdf.parse(sdf.format(new Date()));
-            Date secondDate = sdf.parse(sdf.format(form.getBirthDate()));
-            long difference = Math.abs(now.getTime()-secondDate.getTime());
-            long days = TimeUnit.DAYS.convert(difference,TimeUnit.MILLISECONDS);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy",Locale.ENGLISH);
+            String now = sdf.format(new Date());
+            String secondDate = sdf.format(form.getBirthDate());
+            Integer now1 = Integer.parseInt(now);
+            Integer secondDate1 = Integer.parseInt(secondDate);
             personnel.setHospital(hospital);
             personnel.setAddress(form.getAddress());
             personnel.setEmail(form.getEmail());
             personnel.setLastName(form.getLastName());
             personnel.setFirstName(form.getFirstName());
-            personnel.setAge(Math.round(days/365));
+            personnel.setAge(now1 - secondDate1);
             personnel.setCity(form.getCity());
             personnel.setFunction("SIMPLE");
             personnel.setQualifier(form.getQualifier());

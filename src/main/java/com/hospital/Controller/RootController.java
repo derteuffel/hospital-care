@@ -417,17 +417,17 @@ public class RootController {
             }else {
                 personnel.setAvatar("/img/default.jpeg");
             }
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy",Locale.ENGLISH);
-            Date now = sdf.parse(sdf.format(new Date()));
-            Date secondDate = sdf.parse(sdf.format(form.getBirthDate()));
-            long difference = Math.abs(now.getTime()-secondDate.getTime());
-            long days = TimeUnit.DAYS.convert(difference,TimeUnit.MILLISECONDS);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy",Locale.ENGLISH);
+            String now = sdf.format(new Date());
+            String secondDate = sdf.format(form.getBirthDate());
+            Integer now1 = Integer.parseInt(now);
+            Integer secondDate1 = Integer.parseInt(secondDate);
             personnel.setHospital(hospital);
             personnel.setAddress(form.getAddress());
             personnel.setEmail(form.getEmail());
             personnel.setLastName(form.getLastName());
             personnel.setFirstName(form.getFirstName());
-            personnel.setAge(Math.round(days/365));
+            personnel.setAge(now1 - secondDate1);
             personnel.setCity(form.getCity());
             personnel.setFunction("DOCTOR");
             personnel.setQualifier(form.getQualifier());
@@ -502,17 +502,17 @@ public class RootController {
             }else {
                 personnel.setAvatar("/img/default.jpeg");
             }
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy",Locale.ENGLISH);
-            Date now = sdf.parse(sdf.format(new Date()));
-            Date secondDate = sdf.parse(sdf.format(form.getBirthDate()));
-            long difference = Math.abs(now.getTime()-secondDate.getTime());
-            long days = TimeUnit.DAYS.convert(difference,TimeUnit.MILLISECONDS);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy",Locale.ENGLISH);
+            String now = sdf.format(new Date());
+            String secondDate = sdf.format(form.getBirthDate());
+            Integer now1 = Integer.parseInt(now);
+            Integer secondDate1 = Integer.parseInt(secondDate);
             personnel.setHospital(hospital);
             personnel.setAddress(form.getAddress());
             personnel.setEmail(form.getEmail());
             personnel.setLastName(form.getLastName());
             personnel.setFirstName(form.getFirstName());
-            personnel.setAge(Math.round(days/365));
+            personnel.setAge(now1 - secondDate1);
             personnel.setCity(form.getCity());
             personnel.setFunction("SIMPLE");
             personnel.setQualifier(form.getQualifier());
