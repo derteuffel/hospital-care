@@ -18,7 +18,7 @@
             <h4 class="page-title">Medical Records</h4>
         </div>
         <div class="col-sm-8 col-9 text-right m-b-20" th:if="${compte}">
-            <a href="/admin/medical-record/create" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Medical Record</a>
+            <a href="/doctor/medical-record/create" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Medical Record</a>
         </div>
     </div>
     <div th:if='${success}'>
@@ -83,8 +83,8 @@
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right menu_">
                                     <a class="dropdown-item" th:href="@{'/doctor/medical-record/'+${dosMedical.id}}" th:text="@{'Medical record details'}"><i class="fa fa-pencil m-r-5"></i></a>
-                                    <a class="dropdown-item" th:href="@{'/doctor/consultation/medical-record/'+${dosMedical.code}}" th:text="@{'View Consultations ('+${dosMedical.consultations.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
-                                    <a class="dropdown-item"  th:href="@{'/doctor/medical-record/update/'+${dosMedical.code}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    <a class="dropdown-item" th:href="@{'/doctor/medical-record/consultation/lists/'+${dosMedical.code}}" th:text="@{'View Consultations ('+${dosMedical.consultations.size()}+')'}"><i class="fa fa-pencil m-r-5"></i></a>
+                                    <!--a class="dropdown-item"  th:href="@{'/doctor/medical-record/update/'+${dosMedical.id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a-->
                                 </div>
                             </div>
                         </td>

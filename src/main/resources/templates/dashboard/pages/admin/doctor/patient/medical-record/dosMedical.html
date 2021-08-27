@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/dashboard/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Medical record détails</title>
+</head>
+
+<body>
+<div class="content" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/doctor/patien/home}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Medical Record details</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-sm-7 col-6">
+            <h4 class="page-title">Medical record détails</h4>
+            <h4 class="page-title">
+                <span class="text-success" th:text="${message}"></span>
+                <span class="text-danger" th:text="${error}"></span>
+            </h4>
+        </div>
+    </div>
+    <div class="card-box profile-header">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="profile-view">
+                    <div class="profile-basic">
+                        <div class="row">
+                            <div class="personal-info col-xl-12">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>Name</td>
+                                        <td th:text="${dosMedical.name}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Code</td>
+                                        <td th:text="${dosMedical.code}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>BirthDate</td>
+                                        <td th:text="${dosMedical.birthDate}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Rhesus</td>
+                                        <td th:text="${dosMedical.rhesus}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Weight</td>
+                                        <td th:text="${dosMedical.weight}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Height</td>
+                                        <td th:text="${dosMedical.height}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Blood Type</td>
+                                        <td th:text="${dosMedical.bloodType}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sexe</td>
+                                        <td th:text="${dosMedical.sex}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Description</td>
+                                        <td th:text="${dosMedical.description}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Consultations Observation</td>
+                                        <td >
+                                            <ul th:each="item : ${dosMedical.consultations}">
+                                                <li><span th:text="${item.date}"></span></br><span th:text="${item.observations}"></span></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Exam result Observations</td>
+                                        <td >
+                                            <th:block th:each="item : ${dosMedical.consultations}">
+                                                <ul th:each="item1 : ${item.examens}">
+                                                    <li><span th:text="${item1.deliverDate}"></span></br><span th:text="${'Results : '+item1.results}"></span></br><span th:text="${'Observations : '+item1.description}"></span></li>
+                                                </ul>
+                                            </th:block>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="profile-tabs my-3">
+        <div class="row">
+
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                <a th:href="@{/doctor/patient/medical-record/consultation/lists/}+${dosMedical.code}">
+                    <div class="dash-widget">
+                        <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
+                        <div class="dash-widget-info text-right">
+                            <h3 th:text="${dosMedical.consultations.size()}"></h3>
+                            <span class="widget-title1">Consultations <i class="fa fa-check" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                <a th:href="@{/doctor/patient/medical-record/armoire/lists/}+${dosMedical.id}">
+                    <div class="dash-widget">
+                        <span class="dash-widget-bg1"><i class="fa fa-archive" aria-hidden="true"></i></span>
+                        <div class="dash-widget-info text-right">
+                            <h3 th:text="${dosMedical.compte.armoires.size()}"></h3>
+                            <span class="widget-title1">Armoire <i class="fa fa-check" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- profile23:03-->
+</html>

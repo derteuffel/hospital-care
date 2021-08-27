@@ -12,6 +12,7 @@
 	<artifactId>hospital-care</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>hospital-care</name>
+	<packaging>war</packaging>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -90,6 +91,10 @@
 			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>
 			<version>4.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.webjars.bower/fontawesome -->
 		<dependency>

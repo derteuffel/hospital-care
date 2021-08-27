@@ -3,18 +3,18 @@
       layout:decorate="~{../templates/dashboard/index}">
 <head>
     <meta charset="UTF-8">
-    <title>add Medical Record</title>
+    <title>New Medical Record</title>
 </head>
 <body>
 <div class="content" layout:fragment="content">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">Créer dossier medical</li>
+            <li class="breadcrumb-item active" aria-current="page">Medical record Form</li>
         </ol>
     </nav>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <h4 class="page-title">Add Medical Record</h4>
+            <h4 class="page-title">New Medical Record</h4>
         </div>
     </div>
     <div class="row">
@@ -104,8 +104,8 @@
                     <textarea cols="30" rows="4" class="form-control" name="description" ></textarea>
                 </div>
                 <div class="m-t-20 text-center">
-                    <a th:href="@{/doctor/all}" class="btn btn-secondary submit-btn">Annuler</a>
-                    <button class="btn btn-primary submit-btn">Create Medical Record</button>
+                    <a th:href="@{/doctor/home}" class="btn btn-secondary submit-btn">Annuler</a>
+                    <button class="btn btn-primary submit-btn">Save Medical Record</button>
                 </div>
             </form>
         </div>

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -28,6 +29,12 @@ public class WebConfig implements WebMvcConfigurer {
         auth.setUserDetailsService(compteService);
         auth.setPasswordEncoder(bCryptPasswordEncoder());
         return auth;
+    }
+
+
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/downloadFile/**").addResourceLocations("file:downloadFile/");
     }
 
 

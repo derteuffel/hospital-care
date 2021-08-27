@@ -118,19 +118,23 @@
     <div class="row">
         <div class="col-12 col-md-6 col-lg-8 col-xl-6">
             <div class="hospital-barchart">
-                <h4>
-                    <span th:if="${hospital.pays}" th:text="${hospital.pays}"></span>
-                    <span th:unless="${hospital.pays}" >Pays non defini</span>
-                </h4>
+                <h3 th:text="${hospital.pays}"></h3>
                 <hr>
                 <h4 class="card-title d-inline-block" th:text="${hospital.name}"></h4>
                 <hr>
+                <h4 th:text="${hospital.category}"></h4>
+                <hr>
                 <h4 th:text="${hospital.city}"></h4>
                 <hr>
-                <h4>
-                    <span th:if="${hospital.neighborhood}" th:text="${hospital.neighborhood}"></span>
-                    <span th:unless="${hospital.neighborhood}" >Non defini</span>
-                </h4>
+                <h4 th:text="${hospital.neighborhood}"></h4>
+                <hr>
+                <h4 th:text="${hospital.addresse}"></h4>
+                <hr>
+                <h4 th:text="${hospital.email}"></h4>
+                <hr>
+                <h4 th:text="${hospital.telephone}"></h4>
+                <hr>
+                <h4 th:text="${hospital.siteInternet}"></h4>
             </div>
         </div>
         <div class="col-12 col-md-6 col-lg-4 col-xl-6">

@@ -36,10 +36,10 @@ public class Consultation implements Serializable {
     private Double tension;
     private String observations;
 
-    @OneToMany(mappedBy = "consultation")
+    /*@OneToMany(mappedBy = "consultation")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Collection<Examen>examens;
+    private Collection<Examen>examens;*/
 
     @ManyToOne
     @JsonIgnoreProperties("consultations")
@@ -100,13 +100,13 @@ public class Consultation implements Serializable {
         this.dosMedical = dosMedical;
     }
 
-    public Collection<Examen> getExamens() {
+    /*public Collection<Examen> getExamens() {
         return examens;
     }
 
     public void setExamens(Collection<Examen> examens) {
         this.examens = examens;
-    }
+    }*/
 
     public Date getDate() {
         return date;

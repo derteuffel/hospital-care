@@ -104,26 +104,32 @@ public class RootController {
     }
 
     @GetMapping(value = "/hospital/lists")
-    public ModelAndView getHospitals(Model model) {
+    public ModelAndView getHospitals(Model model, HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
 
         ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/root/hospital/lists");
 
         List<Hospital> hospitals = hospitalRepository.findAll();
         modelAndView.addObject("lists",hospitals);
+        modelAndView.addObject("compte", compte);
 
         return modelAndView;
     }
 
     @GetMapping("/hospital/add")
-    public ModelAndView showForm() {
+    public ModelAndView showForm(HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         Hospital hospital = new Hospital();
         ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/root/hospital/form");
         modelAndView.addObject("hospital", hospital);
+        modelAndView.addObject("compte", compte);
 
         return modelAndView;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/hospital/add")
     public String addHospital(@Valid Hospital hospital, BindingResult bindingResult, Model model, RedirectAttributes redirAttrs){
 
         ModelAndView modelAndView = new ModelAndView();
@@ -162,8 +168,10 @@ public class RootController {
     }
 
     @GetMapping("/hospital/pharmacie/medicament/lists/{id}")
-    public String findAllByPharmacy(Model model, @PathVariable Long id){
+    public String findAllByPharmacy(Model model, @PathVariable Long id, HttpServletRequest request){
         Pharmacy pharmacy = pharmacyRepository.getOne(id);
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
 
         List<Medicament> medicaments = medicamentRepository.findAllByPharmacy_Id(pharmacy.getId(), Sort.by(Sort.Direction.DESC,"id"));
         for (Medicament medicament : medicaments){
@@ -173,26 +181,31 @@ public class RootController {
             }
         }
         model.addAttribute("pharmacy", pharmacy);
+        model.addAttribute("compte", compte);
         model.addAttribute("lists", medicaments);
         return "dashboard/pages/admin/root/hospital/pharmacy/medicament/lists";
     }
 
     @GetMapping("/hospital/pharmacie/medicament/detail/{id}")
-    public String medicamentDetail(Model model, @PathVariable Long id){
+    public String medicamentDetail(Model model, @PathVariable Long id, HttpServletRequest request){
         Medicament  medicament = medicamentRepository.getOne(id);
-
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         Pharmacy pharmacy = medicament.getPharmacy();
         model.addAttribute("pharmacy", pharmacy);
+        model.addAttribute("compte", compte);
         model.addAttribute("medicament", medicament);
         return "dashboard/pages/admin/root/hospital/pharmacy/medicament/detail";
     }
 
     @GetMapping("/hospital/update/{id}")
-    public String showEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs){
-
+    public String showEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         try{
             Hospital hospital = hospitalRepository.getOne(id);
             model.addAttribute("hospital",hospital);
+            model.addAttribute("compte",compte);
             return "dashboard/pages/admin/root/hospital/update";
         }catch (Exception e){
             redirAttrs.addFlashAttribute("error", "This hospital seems to not exist");
@@ -373,9 +386,12 @@ public class RootController {
     }
 
     @GetMapping("/hospital/doctor/add/{id}")
-    public String addDoctor(@PathVariable Long id,Model model){
+    public String addDoctor(@PathVariable Long id,Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         Hospital hospital = hospitalRepository.getOne(id);
         model.addAttribute("hospital",hospital);
+        model.addAttribute("compte",compte);
         model.addAttribute("form",new PersonnelHelper());
         return "dashboard/pages/admin/root/hospital/doctor/form";
     }
@@ -402,6 +418,7 @@ public class RootController {
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("hospital",hospital);
+            model.addAttribute("compte",compte);
             model.addAttribute("form",new PersonnelHelper());
             return  "dashboard/pages/admin/root/hospital/doctor/form";
         }else {
@@ -458,9 +475,12 @@ public class RootController {
     }
 
     @GetMapping("/hospital/other/add/{id}")
-    public String addOther(@PathVariable Long id,Model model){
+    public String addOther(@PathVariable Long id,Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         Hospital hospital = hospitalRepository.getOne(id);
         model.addAttribute("hospital",hospital);
+        model.addAttribute("compte",compte);
         model.addAttribute("form",new PersonnelHelper());
         return "dashboard/pages/admin/root/hospital/other/form";
     }
@@ -487,6 +507,7 @@ public class RootController {
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("hospital",hospital);
+            model.addAttribute("compte",compte);
             model.addAttribute("form",new PersonnelHelper());
             return  "dashboard/pages/admin/root/hospital/other/form";
         }else {
@@ -543,12 +564,14 @@ public class RootController {
     }
 
     @GetMapping("/hospital/doctor/update/{id}")
-    public String doctorEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs){
-
+    public String doctorEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         Personnel personnel = personnelRepository.getOne(id);
         Hospital hospital =  personnel.getHospital();
         try{
             model.addAttribute("personnel",personnel);
+            model.addAttribute("compte",compte);
             model.addAttribute("hospital",hospital);
             return "dashboard/pages/admin/root/hospital/doctor/update";
         }catch (Exception e){
@@ -558,12 +581,15 @@ public class RootController {
     }
 
     @GetMapping("/hospital/other/update/{id}")
-    public String otherEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs){
+    public String otherEditForm(@PathVariable("id") Long id,Model model,RedirectAttributes redirAttrs, HttpServletRequest request){
 
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         Personnel personnel = personnelRepository.getOne(id);
         Hospital hospital =  personnel.getHospital();
         try{
             model.addAttribute("personnel",personnel);
+            model.addAttribute("compte",compte);
             return "dashboard/pages/admin/root/hospital/other/update";
         }catch (Exception e){
             redirAttrs.addFlashAttribute("error", "This user seems to not exist in that hospital");
@@ -646,11 +672,14 @@ public class RootController {
 
     /** search a medical record */
     @GetMapping(value = "/medical-record/detail/{id}")
-    public String getMedicalRecord(@PathVariable Long id,Model model, RedirectAttributes redirectAttributes){
-            DosMedical dosMedical = dos.getOne(id);
+    public String getMedicalRecord(@PathVariable Long id,Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        DosMedical dosMedical = dos.getOne(id);
             if(dosMedical != null) {
 
                 model.addAttribute("dosMedical", dosMedical);
+                model.addAttribute("compte", compte);
             }else {
                 redirectAttributes.addFlashAttribute("error","There are no account and medical records with provided code. Please add new medical record");
                 return "redirect:/root/medical-record/lists";
@@ -692,13 +721,16 @@ public class RootController {
 
     /** Get all consultations in an hospital */
     @GetMapping(value = "/doctor/consultation/lists/{id}")
-    public String getAllConsultationsForDoctor(Model model, @PathVariable Long id){
+    public String getAllConsultationsForDoctor(Model model, @PathVariable Long id, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte1 = compteService.findByUsername(principal.getName());
         Personnel personnel = personnelRepository.getOne(id);
         Compte compte = compteRepository.findByPersonnel_Id(personnel.getId());
         List<Consultation> consultations = consultationRepository.findAllByPersonnel_Id(personnel.getId(),Sort.by(Sort.Direction.DESC,"id"));
         model.addAttribute("lists", consultations);
         model.addAttribute("code",compte.getUsername());
         model.addAttribute("personnel",personnel);
+        model.addAttribute("compte",compte1);
 
         return "dashboard/pages/admin/root/hospital/consultation/lists";
     }
@@ -713,6 +745,7 @@ public class RootController {
         Collection<Consultation> consultations = hospital.getConsultations();
         model.addAttribute("lists", consultations);
         model.addAttribute("code",compte.getUsername());
+        model.addAttribute("compte", compte);
         model.addAttribute("personnel",personnel);
 
         return "dashboard/pages/admin/root/hospital/consultation/lists";
@@ -888,6 +921,7 @@ public class RootController {
         ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/root/appointment/lists");
         List<Rdv> rdvs = rdvRepository.findAllByComptes_Id(compte.getId(),Sort.by(Sort.Direction.DESC, "id"));
         modelAndView.addObject("lists",rdvs);
+        modelAndView.addObject("compte",compte);
         return modelAndView;
     }
 

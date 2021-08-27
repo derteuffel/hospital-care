@@ -10,7 +10,7 @@
 <div class="content" layout:fragment="content">
     <div class="row">
         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
-            <a th:href="@{/infirmier/hospital/incubator/lists/}+${hospital.id}">
+            <a th:href="@{/admin/incubator/lists/incubators}+${hospital.id}">
                 <div class="dash-widget">
                     <span class="dash-widget-bg2"><i class="fa fa-user-o"></i></span>
                     <div class="dash-widget-info text-right">
@@ -22,7 +22,7 @@
         </div>
 
         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
-            <a th:href="@{/infirmier/hospital/blood/lists/}+${hospital.id}">
+            <a th:href="@{/admin/blood/lists/bloods/}+${hospital.id}">
                 <div class="dash-widget">
                     <span class="dash-widget-bg3"><i class="fa fa-user-md" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
@@ -32,8 +32,19 @@
                 </div>
             </a>
         </div>
-        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
-            <a th:href="@{/consultation/examen/lists/}+${hospital.id}">
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+            <a th:href="@{/admin/consultation/hospital/}+${hospital.id}">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg4"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3 th:text="${hospital.consultations.size()}"></h3>
+                        <span class="widget-title4">Consultations <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+            <a th:href="@{/admin/exam/hospital/}+${hospital.id}">
                 <div class="dash-widget">
                     <span class="dash-widget-bg4"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
@@ -43,14 +54,13 @@
                 </div>
             </a>
         </div>
-
-        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
-            <a th:href="@{/infirmier/appointment/lists/} + ${hospital.id}">
+        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+            <a th:href="@{/pharmacie/hospital/}+${hospital.id}">
                 <div class="dash-widget">
-                    <span class="dash-widget-bg4"><i class="fa fa-meetup" aria-hidden="true"></i></span>
+                    <span class="dash-widget-bg4"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
                     <div class="dash-widget-info text-right">
-                        <h3>Appointment</h3>
-                        <span class="widget-title4">Appointment <i class="fa fa-check" aria-hidden="true"></i></span>
+                        <h3>pharmacy</h3>
+                        <span class="widget-title4">pharmacy <i class="fa fa-check" aria-hidden="true"></i></span>
                     </div>
                 </div>
             </a>
@@ -61,22 +71,11 @@
         <div class="col-12 col-md-6 col-lg-8 col-xl-6">
             <div class="hospital-barchart">
                 <h3 th:text="${hospital.pays}"></h3>
-                <hr>
+                <br>
                 <h4 class="card-title d-inline-block" th:text="${hospital.name}"></h4>
-                <hr>
-                <h4 th:text="${hospital.category}"></h4>
-                <hr>
                 <h4 th:text="${hospital.city}"></h4>
-                <hr>
+                <br>
                 <h4 th:text="${hospital.neighborhood}"></h4>
-                <hr>
-                <h4 th:text="${hospital.addresse}"></h4>
-                <hr>
-                <h4 th:text="${hospital.email}"></h4>
-                <hr>
-                <h4 th:text="${hospital.telephone}"></h4>
-                <hr>
-                <h4 th:text="${hospital.siteInternet}"></h4>
             </div>
         </div>
         <div class="col-12 col-md-6 col-lg-4 col-xl-6">

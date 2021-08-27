@@ -63,19 +63,19 @@ public class InfirmierController {
 
     @GetMapping("/login")
     public String login(Model model){
-        return "dashboard/pages/admin/doctor/login";
+        return "dashboard/pages/admin/infirmier/login";
     }
 
     @GetMapping("/home")
-    public String home(HttpServletRequest request, Model model, Long id){
+    public String home(HttpServletRequest request, Model model){
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         model.addAttribute("compte", compte);
-        Personnel pers = personnelRepository.getOne(id);
         DosMedical dosMedical = dos.findByCode(compte.getUsername());
         Personnel personnel = personnelRepository.findByEmail(compte.getEmail());
         Hospital hospital = personnel.getHospital();
-        model.addAttribute("pers",pers);
+        model.addAttribute("pers",personnel);
+        request.getSession().setAttribute("pers",personnel);
         model.addAttribute("dosMedical", dosMedical);
         return "redirect:/infirmier/hospital/detail/"+hospital.getId();
     }
@@ -85,7 +85,10 @@ public class InfirmierController {
         Principal principal = request.getUserPrincipal();
         Compte compte = compteService.findByUsername(principal.getName());
         Hospital hos = hospitalRepository.getOne(id);
+        List<Examen> examens = examenRepository.findByHospital(hos);
+        System.out.println(examens);
         model.addAttribute("hospital", hos);
+        model.addAttribute("examens", examens);
         model.addAttribute("compte", compte);
         model.addAttribute("lists", personnelRepository.findAllByFunctionAndHospital_Id("INFIRMIER",hos.getId()));
         return "dashboard/pages/admin/infirmier/hospital/detail";
@@ -339,7 +342,7 @@ public class InfirmierController {
         Compte compte = compteService.findByUsername(principal.getName());
 
         if(compte.checkRole(ERole.ROLE_INFIRMIER)) model.addAttribute("compte",compte);
-        model.addAttribute("dosMedicalList",dos.findAll());
+        model.addAttribute("dosMedicalFound",new ArrayList<>());
         return "dashboard/pages/admin/infirmier/dosMedical";
     }
 
@@ -401,12 +404,15 @@ public class InfirmierController {
 
     /** search a medical record */
     @GetMapping(value = "/medical-record/search")
-    public String getMedicalRecord(@RequestParam("search") String search, Model model, RedirectAttributes redirectAttributes){
+    public String getMedicalRecord(@RequestParam("search") String search, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
         if(search != ""){
             DosMedical dosMedical = dos.findByCode(search);
             if(dosMedical != null) {
 
                 model.addAttribute("dosMedicalFound", dosMedical);
+                model.addAttribute("compte", compte);
             }else {
                 redirectAttributes.addFlashAttribute("error","There are no account and medical records with provided code. Please add new medical record");
                 return "redirect:/infirmier/medical-record/create";

@@ -24,6 +24,12 @@ public class Hospital implements Serializable {
 
 
     private String name;
+    private String province;
+    private String category;
+    private String addresse;
+    private String email;
+    private String telephone;
+    private String siteInternet;
 
 
 
@@ -65,11 +71,18 @@ public class Hospital implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Consultation>consultations;
 
-    @OneToMany(mappedBy = "hospital")
+    /*@OneToMany(mappedBy = "hospital")
     @OnDelete(action= OnDeleteAction.NO_ACTION)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Collection<Examen> examens;
+    private Collection<Examen> examens;*/
 
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -78,12 +91,50 @@ public class Hospital implements Serializable {
     public Hospital() {
     }
 
-    public Hospital(String name, String city, String pays, String neighborhood, ArrayList<String> types) {
+    public Hospital(String name, String province, String category, String addresse, String email,
+                    String telephone, String siteInternet, String city, String pays, String neighborhood) {
         this.name = name;
+        this.province = province;
+        this.category = category;
+        this.addresse = addresse;
+        this.email = email;
+        this.telephone = telephone;
+        this.siteInternet = siteInternet;
         this.city = city;
         this.pays = pays;
         this.neighborhood = neighborhood;
-        this.types = types;
+    }
+
+    public String getAddresse() {
+        return addresse;
+    }
+
+    public void setAddresse(String addresse) {
+        this.addresse = addresse;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getSiteInternet() {
+        return siteInternet;
+    }
+
+    public void setSiteInternet(String siteInternet) {
+        this.siteInternet = siteInternet;
     }
 
     public void setId(Long id) {
@@ -154,11 +205,19 @@ public class Hospital implements Serializable {
         this.consultations = consultations;
     }
 
-    public Collection<Examen> getExamens() {
+    /*public Collection<Examen> getExamens() {
         return examens;
     }
 
     public void setExamens(Collection<Examen> examens) {
         this.examens = examens;
+    }*/
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

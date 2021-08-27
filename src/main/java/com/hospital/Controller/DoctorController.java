@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -161,6 +162,8 @@ public class DoctorController {
         model.addAttribute("dosMedical",dosMedical);
         return "dashboard/pages/admin/doctor/dosMedical-detail";
     }
+
+
 
     /** search a medical record */
     @GetMapping(value = "/medical-record/search")
@@ -1094,6 +1097,214 @@ public class DoctorController {
         redirectAttributes.addFlashAttribute("success", "The personnel has been updated successfully");
         return "redirect:/doctor/hospital/other/detail/"+personnel.getId();
 
+    }
+
+
+    //----- Patient
+
+    @GetMapping("/patient/home")
+    public String patienHome(HttpServletRequest request, Model model){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte", compte);
+        DosMedical dosMedical = dos.findByCode(compte.getUsername());
+        model.addAttribute("dosMedical", dosMedical);
+        return "dashboard/pages/admin/doctor/patient/home";
+    }
+
+    @GetMapping("/patient/medical-record/{code}")
+    public String dosMedicalDetail(@PathVariable String code, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        DosMedical dosMedical = dos.findByCode(code);
+        model.addAttribute("dosMedical",dosMedical);
+        return "dashboard/pages/admin/doctor/patient/medical-record/dosMedical";
+    }
+
+    @GetMapping("/patient/consultation/lists/{id}")
+    public String consultations(@PathVariable Long id, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        DosMedical dosMedical = dos.getOne(id);
+        List<Consultation> consultations = consultationRepository.findByDosMedical(dosMedical);
+        model.addAttribute("dosMedical",dosMedical);
+        model.addAttribute("lists",consultations);
+        return "dashboard/pages/admin/doctor/patient/consultations/lists";
+
+    }
+
+    @GetMapping("/patient/consultation/detail/{id}")
+    public String patientConsultation(@PathVariable Long id, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        Consultation consultation = consultationRepository.getOne(id);
+        DosMedical dosMedical = consultation.getDosMedical();
+        model.addAttribute("dosMedical",dosMedical);
+        model.addAttribute("consultation",consultation);
+        return "dashboard/pages/admin/doctor/patient/consultations/detail";
+
+    }
+
+    @GetMapping("/patient/examen/lists/{id}")
+    public String patientExamens(@PathVariable Long id, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        DosMedical dosMedical = dos.getOne(id);
+        List<Examen> examens = new ArrayList<>();
+        List<Consultation> consultations = consultationRepository.findByDosMedical(dosMedical);
+        for (Consultation consultation : consultations){
+            examens.addAll(consultation.getExamens());
+        }
+        model.addAttribute("lists",examens);
+        model.addAttribute("dosMedical",dosMedical);
+        return "dashboard/pages/admin/doctor/patient/examens/lists";
+
+    }
+
+    @GetMapping("/patient/ordonances/lists/{id}")
+    public String patentOrdonances(@PathVariable Long id, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        DosMedical dosMedical = dos.getOne(id);
+        List<Prescription> prescriptions = new ArrayList<>();
+        List<Consultation> consultations = consultationRepository.findByDosMedical(dosMedical);
+        for (Consultation consultation : consultations){
+            prescriptions.addAll(consultation.getPrescriptions());
+        }
+        model.addAttribute("lists",prescriptions);
+        model.addAttribute("dosMedical",dosMedical);
+        return "dashboard/pages/admin/doctor/patient/prescriptions/lists";
+
+    }
+
+    @GetMapping("/patient/appointment/lists")
+    public String patientAppointments(HttpServletRequest request, Model model){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        model.addAttribute("compte",compte);
+        List<Rdv> rdvs = rdvRepository.findAllByComptes_Id(compte.getId(), Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("lists",rdvs);
+        return "dashboard/pages/admin/doctor/appointment/lists";
+    }
+
+    @GetMapping("/patient/hospital/detail/{id}")
+    public String getHospitalPatient(@PathVariable Long id, Model model, HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        Hospital hos = hospitalRepository.getOne(id);
+        model.addAttribute("hospital", hos);
+        model.addAttribute("compte", compte);
+        model.addAttribute("lists", personnelRepository.findAllByFunctionAndHospital_Id("DOCTOR",hos.getId()));
+        return "dashboard/pages/admin/doctor/patient/hospital/detail";
+    }
+
+
+    @GetMapping(value = "/patient/hospital/lists")
+    public ModelAndView getHospitals(Model model, HttpServletRequest request) {
+
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        ModelAndView modelAndView = new ModelAndView("/dashboard/pages/admin/doctor/patient/hospital/lists");
+
+        List<Hospital> hospitals = hospitalRepository.findAll();
+        modelAndView.addObject("lists",hospitals);
+        modelAndView.addObject("compte", compte);
+
+        return modelAndView;
+    }
+
+
+    @GetMapping("/patient/appointment/add/{id}")
+    public ModelAndView showform(HttpServletRequest request, @PathVariable Long id){
+
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        ModelAndView modelAndView = new ModelAndView("dashboard/pages/admin/doctor/patient/appointment/add-rdv");
+        Rdv rdv = new Rdv();
+        Hospital hospital = hospitalRepository.getOne(id);
+        modelAndView.addObject("hospital",hospital);
+        modelAndView.addObject("rdv", rdv);
+        modelAndView.addObject("compte",compte);
+//        modelAndView.addObject("appointments", rdvRepository.findAll());
+        return modelAndView;
+    }
+
+    @PostMapping("/patient/appointment/add/{id}")
+    public String storeRdv(@ModelAttribute @Valid Rdv rdv, Errors errors, RedirectAttributes redirAttrs, HttpServletRequest request,Model model, @PathVariable Long id){
+
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        if(errors.hasErrors()){
+            return "dashboard/pages/admin/doctor/patient/appointment/add-rdv";
+        }
+
+        Hospital hospital = hospitalRepository.getOne(id);
+
+        SimpleDateFormat heure = new SimpleDateFormat("hh:mm");
+
+        rdv.setComptes(Arrays.asList(compte));
+        rdv.setStatus(false);
+        rdv.setDate(rdv.getDate());
+        rdv.setHeure(heure.format(rdv.getHeure()));
+        rdv.setPatient(compte.getName());
+        rdv.setHospital(hospital);
+        rdvRepository.save(rdv);
+        redirAttrs.addFlashAttribute("message", "Rdv added Successfully");
+        return "redirect:/doctor/patient/appointment/lists";
+    }
+
+    @GetMapping("/patient/armoire/lists")
+    public String armoire(HttpServletRequest request, Model model){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        List<Armoire> armoires = armoireRepository.findAllByCompte_Id(compte.getId(),Sort.by(Sort.Direction.DESC,"id"));
+        model.addAttribute("compte", compte);
+        model.addAttribute("lists",armoires);
+        return "dashboard/pages/admin/doctor/patient/armoire/lists";
+    }
+
+    @GetMapping("/patient/armoire/add")
+    public String newArmoire(Model model){
+        model.addAttribute("armoire",new Armoire());
+        return "dashboard/pages/admin/doctor/patient/armoire/new";
+    }
+
+    @PostMapping("/patient/armoire/add")
+    public String saveArmoire(@Valid Armoire armoire, @RequestParam("files") MultipartFile[] files, Model model, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        Compte compte = compteService.findByUsername(principal.getName());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        armoire.setDate(sdf.format(new Date()));
+        armoire.setCompte(compte);
+        ArrayList<String> pieces = new ArrayList<>();
+        if (files.length != 0){
+            for (MultipartFile  file : files){
+                if (!(file.isEmpty())){
+                    try{
+                        // Get the file and save it somewhere
+                        byte[] bytes = file.getBytes();
+                        Path path = Paths.get(fileStorage + file.getOriginalFilename());
+                        Files.write(path, bytes);
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+                }
+                pieces.add("/downloadFile/"+file.getOriginalFilename());
+            }
+            armoire.setFichiers(pieces);
+        }else {
+            model.addAttribute("error", "Your do not have file in your consultation, please add file image for consultation pictures");
+            model.addAttribute("armoire", new Armoire());
+            return "dashboard/pages/admin/doctor/patient/armoire/new";
+        }
+
+        armoireRepository.save(armoire);
+        return "redirect:/doctor/patient/armoire/lists";
     }
 
 

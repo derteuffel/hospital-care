@@ -113,28 +113,18 @@ public class CompteServiceImpl implements CompteService {
     @Override
     public Compte saveDoctor(PersonnelHelper personnelHelper, String s, DosMedical dosMedical, Personnel personnel) {
         Compte compte = new Compte();
-        Optional<Role> role = roleRepository.findByName(ERole.ROLE_PATIENT.toString());
         Optional<Role> role1 = roleRepository.findByName(ERole.ROLE_DOCTOR.toString());
-        if (!(role.isPresent())){
-            Role role2 = new Role();
-            role2.setName(ERole.ROLE_PATIENT.toString());
-            roleRepository.save(role2);
 
             if (!(role1.isPresent())){
                 Role role3 = new Role();
                 role3.setName(ERole.ROLE_DOCTOR.toString());
                 roleRepository.save(role3);
-                compte.setRoles(Arrays.asList(role3,role2));
+                compte.setRoles(Arrays.asList(role3));
             }
-        }else {
-            compte.setRoles(Arrays.asList(role.get(),role1.get()));
-        }
-
-
-
-
-
-        compte.setAvatar(s);
+            else {
+            compte.setRoles(Arrays.asList(role1.get()));
+            }
+            compte.setAvatar(s);
         compte.setEmail(personnelHelper.getEmail());
         compte.setPassword(passwordEncoder.encode(personnelHelper.getCode()));
         compte.setUsername(personnelHelper.getCode());
@@ -151,23 +141,19 @@ public class CompteServiceImpl implements CompteService {
     @Override
     public Compte saveSimple(PersonnelHelper personnelHelper, String s, DosMedical dosMedical, Personnel personnel) {
         Compte compte = new Compte();
-        Optional<Role> role = roleRepository.findByName(ERole.ROLE_PATIENT.toString());
         Optional<Role> role1 = roleRepository.findByName(ERole.ROLE_INFIRMIER.toString());
 
-        if (!(role.isPresent())){
-            Role role2 = new Role();
-            role2.setName(ERole.ROLE_PATIENT.toString());
-            roleRepository.save(role2);
+
 
             if (!(role1.isPresent())){
                 Role role3 = new Role();
                 role3.setName(ERole.ROLE_INFIRMIER.toString());
                 roleRepository.save(role3);
-                compte.setRoles(Arrays.asList(role3,role2));
+                compte.setRoles(Arrays.asList(role3));
             }
-        }else {
-            compte.setRoles(Arrays.asList(role.get(),role1.get()));
-        }
+            else {
+            compte.setRoles(Arrays.asList(role1.get()));
+            }
         compte.setAvatar(s);
         compte.setEmail(personnelHelper.getEmail());
         compte.setPassword(passwordEncoder.encode(personnelHelper.getCode()));

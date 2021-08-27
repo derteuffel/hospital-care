@@ -20,7 +20,7 @@
     </div>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <form method="post" action="/admin/exam/create" th:object="${examenHelper}">
+            <form method="post" th:action="@{/doctor/consultation/examen/create}" th:object="${examenHelper}">
                 <input class="form-control" type="hidden" name="idConsultation" th:value="${idConsultation}">
                 <div class="form-group">
                     <label>Name</label>
